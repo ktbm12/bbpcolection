@@ -24,10 +24,12 @@
                 <button class="text-black hover:text-yellow-600 transition">
                     <i class="fas fa-user text-xl"></i>
                 </button>
+                <a href="{% url 'product:cart_detail' %}">
                 <button class="text-black hover:text-yellow-600 transition relative">
                     <i class="fas fa-shopping-bag text-xl"></i>
                     <span class="absolute -top-2 -right-2 bg-yellow-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
                 </button>
+                </a>
                 <button id="mobile-menu-btn" class="md:hidden text-black hover:text-yellow-600 transition">
                     <i class="fas fa-bars text-2xl"></i>
                 </button>
