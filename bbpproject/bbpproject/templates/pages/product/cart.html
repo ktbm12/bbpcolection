@@ -80,7 +80,7 @@
 <nav class="bg-gray-50 py-6 mt-20">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ol class="flex items-center space-x-3 text-sm">
-            <li><a href="{% url 'home' %}" class="text-gray-600 hover:text-yellow-600">Accueil</a></li>
+            <li><a href="{% url 'users:home' %}" class="text-gray-600 hover:text-yellow-600">Accueil</a></li>
             <li><i class="fas fa-chevron-right text-gray-400 text-xs"></i></li>
             <li class="font-semibold text-black">Panier</li>
         </ol>
@@ -159,7 +159,7 @@
                 {% endfor %}
 
                 <div class="mt-8">
-                    <a href="{% url 'product_list' %}" class="inline-flex items-center gap-2 text-black hover:text-yellow-600 font-medium">
+                    <a href="{% url 'product:product_list' %}" class="inline-flex items-center gap-2 text-black hover:text-yellow-600 font-medium">
                         <i class="fas fa-arrow-left"></i> Continuer mes achats
                     </a>
                 </div>
@@ -250,7 +250,7 @@
             <p class="text-gray-600 mb-10 max-w-lg mx-auto">
                 Parcourez notre collection exclusive de mèches 100% naturelles premium
             </p>
-            <a href="{% url 'product_list' %}" class="inline-block bg-yellow-600 hover:bg-yellow-700 text-black px-12 py-5 rounded-full font-bold text-lg transition shadow-xl hover:shadow-2xl">
+            <a href="{% url 'product:product_list' %}" class="inline-block bg-yellow-600 hover:bg-yellow-700 text-black px-12 py-5 rounded-full font-bold text-lg transition shadow-xl hover:shadow-2xl">
                 Découvrir la collection
             </a>
         </div>

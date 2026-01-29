@@ -33,7 +33,7 @@ class CartDetailView(LoginRequiredMixin, TemplateView):
     """
     Vue principale du panier (affichage + contexte)
     """
-    template_name = "cart/cart_detail.html"
+    template_name = "pages/product/cart.html"
     login_url = "account_login"
 
     def get_context_data(self, **kwargs):
