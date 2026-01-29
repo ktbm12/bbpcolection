@@ -28,10 +28,81 @@
                     <i class="fas fa-shopping-bag text-xl"></i>
                     <span class="absolute -top-2 -right-2 bg-yellow-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
                 </button>
-                <button class="md:hidden text-black">
+                <button id="mobile-menu-btn" class="md:hidden text-black hover:text-yellow-600 transition">
                     <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden overflow-hidden transition-all duration-300 ease-in-out">
+            <div class="px-2 pt-2 pb-4 space-y-2 border-t border-gray-200">
+                <a href="/" class="block px-4 py-3 text-black hover:bg-yellow-50 hover:text-yellow-600 font-medium transition rounded-lg">
+                    <i class="fas fa-home mr-3 text-yellow-600"></i>Accueil
+                </a>
+                <a href="#collections" class="block px-4 py-3 text-black hover:bg-yellow-50 hover:text-yellow-600 font-medium transition rounded-lg">
+                    <i class="fas fa-images mr-3 text-yellow-600"></i>Collections
+                </a>
+                <a href="/about" class="block px-4 py-3 text-black hover:bg-yellow-50 hover:text-yellow-600 font-medium transition rounded-lg">
+                    <i class="fas fa-info-circle mr-3 text-yellow-600"></i>À Propos
+                </a>
+                <a href="#contact" class="block px-4 py-3 text-black hover:bg-yellow-50 hover:text-yellow-600 font-medium transition rounded-lg">
+                    <i class="fas fa-envelope mr-3 text-yellow-600"></i>Contact
+                </a>
+                <hr class="my-2">
+                <button class="w-full text-left px-4 py-3 text-black hover:bg-yellow-50 hover:text-yellow-600 font-medium transition rounded-lg">
+                    <i class="fas fa-user mr-3 text-yellow-600"></i>Mon Compte
                 </button>
             </div>
         </div>
     </div>
 </nav>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    if (mobileMenuBtn && mobileMenu) {
+        mobileMenuBtn.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
+            
+            // Smooth animation
+            if (mobileMenu.classList.contains('hidden')) {
+                mobileMenu.style.maxHeight = '0px';
+            } else {
+                mobileMenu.style.maxHeight = mobileMenu.scrollHeight + 'px';
+            }
+        });
+
+        // Close menu when clicking on a link
+        const menuLinks = mobileMenu.querySelectorAll('a, button');
+        menuLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                mobileMenu.classList.add('hidden');
+                mobileMenu.style.maxHeight = '0px';
+            });
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('nav')) {
+                mobileMenu.classList.add('hidden');
+                mobileMenu.style.maxHeight = '0px';
+            }
+        });
+    }
+});
+</script>
+
+<style>
+#mobile-menu {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out;
+}
+
+#mobile-menu:not(.hidden) {
+    max-height: 400px;
+}
+</style>
