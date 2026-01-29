@@ -13,9 +13,11 @@ from rest_framework.authtoken.views import obtain_auth_token
 urlpatterns = [
  
     # Django Admin, use {% url 'admin:index' %}
+
     path(settings.ADMIN_URL, admin.site.urls),
     # User management
-    path("", include("bbpproject.users.urls")),           # ← sans "users/" et sans namespace pour l'instant
+    path("", include("bbpproject.users.urls")),   
+     path("product", include("product.urls")),         # ← sans "users/" et sans namespace pour l'instant
     
     path("accounts/", include("allauth.urls")),
     # Your stuff: custom urls includes go here
