@@ -1,0 +1,372 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Nos Produits - LuxeHair{% endblock %}
+
+{% block extra_css %}
+<style>
+    .product-card {
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .product-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+        transition: left 0.6s;
+        z-index: 1;
+    }
+    
+    .product-card:hover::before {
+        left: 100%;
+    }
+    
+    .product-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+    }
+    
+    .product-image {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .product-image::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 40%);
+        opacity: 0;
+        transition: opacity 0.4s;
+    }
+    
+    .product-card:hover .product-image::after {
+        opacity: 1;
+    }
+    
+    .quick-view-btn {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.4s;
+    }
+    
+    .product-card:hover .quick-view-btn {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
+    .filter-btn.active {
+        background: black;
+        color: #d4af37;
+    }
+    
+    .badge-new {
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.8; }
+    }
+    
+    .animate-fadeIn {
+        animation: fadeIn 0.6s ease-out forwards;
+    }
+    
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    .animate-slideIn {
+        animation: slideIn 0.5s ease-out;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Banner -->
+<section class="relative h-80 flex items-center justify-center bg-black overflow-hidden">
+    <div class="absolute inset-0 opacity-20">
+        <div class="absolute inset-0" style="background: linear-gradient(135deg, #d4af37 0%, #f4e5c3 50%, #d4af37 100%);"></div>
+    </div>
+    <div class="relative z-10 text-center">
+        <p class="text-yellow-500 text-sm tracking-widest uppercase mb-2 font-medium">Notre Collection</p>
+        <h1 class="text-5xl md:text-6xl font-serif font-bold text-white mb-4">Nos Produits</h1>
+        <p class="text-gray-300 text-lg max-w-2xl mx-auto px-4">
+            Découvrez notre gamme complète de mèches haut de gamme 100% naturelles
+        </p>
+    </div>
+    <div class="absolute bottom-0 left-0 right-0 h-1" style="background: linear-gradient(135deg, #d4af37 0%, #f4e5c3 50%, #d4af37 100%);"></div>
+</section>
+
+<!-- Filters & Products Section -->
+<section class="py-12 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Filter Bar -->
+        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-12">
+            
+            <!-- Category Filters -->
+            <div class="flex flex-wrap gap-3">
+                <a href="?" class="filter-btn {% if not category %}active{% endif %} px-6 py-2.5 rounded-full border-2 border-black text-sm font-semibold transition-all hover:bg-black hover:text-yellow-600">
+                    Tous
+                </a>
+                <a href="?category=lisse" class="filter-btn {% if category == 'lisse' %}active{% endif %} px-6 py-2.5 rounded-full border-2 border-black text-sm font-semibold transition-all hover:bg-black hover:text-yellow-600">
+                    Lisses
+                </a>
+                <a href="?category=ondulee" class="filter-btn {% if category == 'ondulee' %}active{% endif %} px-6 py-2.5 rounded-full border-2 border-black text-sm font-semibold transition-all hover:bg-black hover:text-yellow-600">
+                    Ondulées
+                </a>
+                <a href="?category=bouclee" class="filter-btn {% if category == 'bouclee' %}active{% endif %} px-6 py-2.5 rounded-full border-2 border-black text-sm font-semibold transition-all hover:bg-black hover:text-yellow-600">
+                    Bouclées
+                </a>
+                <a href="?category=premium" class="filter-btn {% if category == 'premium' %}active{% endif %} px-6 py-2.5 rounded-full border-2 border-black text-sm font-semibold transition-all hover:bg-black hover:text-yellow-600">
+                    Premium
+                </a>
+            </div>
+            
+            <!-- Sort -->
+            <div class="flex gap-3">
+                <form method="get" class="flex gap-3">
+                    {% if category %}
+                    <input type="hidden" name="category" value="{{ category }}">
+                    {% endif %}
+                    <select name="sort" onchange="this.form.submit()" class="px-4 py-2.5 border-2 border-black rounded-full font-medium text-sm focus:outline-none focus:border-yellow-600">
+                        <option value="">Trier par: Popularité</option>
+                        <option value="price_asc" {% if request.GET.sort == 'price_asc' %}selected{% endif %}>Prix: Croissant</option>
+                        <option value="price_desc" {% if request.GET.sort == 'price_desc' %}selected{% endif %}>Prix: Décroissant</option>
+                        <option value="newest" {% if request.GET.sort == 'newest' %}selected{% endif %}>Nouveautés</option>
+                        <option value="rating" {% if request.GET.sort == 'rating' %}selected{% endif %}>Meilleures Notes</option>
+                    </select>
+                </form>
+            </div>
+        </div>
+
+        <!-- Results Count -->
+        <div class="mb-8">
+            <p class="text-gray-600 font-medium">
+                <span class="text-black font-bold">{{ products.paginator.count }}</span> produit{{ products.paginator.count|pluralize }} disponible{{ products.paginator.count|pluralize }}
+            </p>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            
+            {% for product in products %}
+            <div class="product-card bg-white rounded-2xl overflow-hidden border-2 border-gray-200 hover:border-yellow-600 animate-fadeIn">
+                <div class="product-image relative h-80">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="absolute inset-0 w-full h-full object-cover">
+                    {% else %}
+                        <div class="absolute inset-0 bg-gradient-to-br from-yellow-100 to-gray-100 flex items-center justify-center">
+                            <i class="fas fa-image text-gray-300 text-7xl"></i>
+                        </div>
+                    {% endif %}
+                    
+                    <!-- Badges -->
+                    <div class="absolute top-4 left-4 flex flex-col gap-2 z-10">
+                        {% if product.is_new %}
+                        <span class="badge-new px-3 py-1.5 rounded-full text-xs font-bold uppercase bg-yellow-600 text-black">Nouveau</span>
+                        {% endif %}
+                        {% if product.discount_percentage %}
+                        <span class="bg-black text-white px-3 py-1.5 rounded-full text-xs font-bold uppercase">-{{ product.discount_percentage }}%</span>
+                        {% endif %}
+                        {% if product.is_premium %}
+                        <span class="bg-yellow-600 text-black px-3 py-1.5 rounded-full text-xs font-bold uppercase">Premium</span>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Favorite Button -->
+                    <div class="absolute top-4 right-4 z-10">
+                        <button onclick="toggleFavorite({{ product.id }})" class="w-10 h-10 bg-white rounded-full flex items-center justify-center hover:bg-yellow-600 transition shadow-lg">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Quick View Button -->
+                    <a href="{% url 'product_detail' product.id %}" class="quick-view-btn absolute bottom-4 left-1/2 -translate-x-1/2 bg-white text-black px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-yellow-600 transition shadow-xl z-10">
+                        Aperçu Rapide
+                    </a>
+                </div>
+                
+                <div class="p-5 relative z-10">
+                    <!-- Category & Size -->
+                    <div class="flex items-center gap-1.5 mb-2">
+                        <span class="text-yellow-600 text-xs font-medium px-2 py-1 bg-yellow-50 rounded">{{ product.get_texture_display }}</span>
+                        {% if product.length %}
+                        <span class="text-gray-600 text-xs">{{ product.length }}"</span>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Product Name -->
+                    <h3 class="text-lg font-semibold mb-2 line-clamp-2">{{ product.name }}</h3>
+                    
+                    <!-- Rating -->
+                    <div class="flex items-center gap-1 mb-3">
+                        {% with rating=product.average_rating %}
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= rating %}
+                            <i class="fas fa-star text-yellow-500 text-sm"></i>
+                            {% elif forloop.counter == rating|add:1 and rating != rating|floatformat:0|add:0 %}
+                            <i class="fas fa-star-half-alt text-yellow-500 text-sm"></i>
+                            {% else %}
+                            <i class="far fa-star text-yellow-500 text-sm"></i>
+                            {% endif %}
+                        {% endfor %}
+                        {% endwith %}
+                        <span class="text-gray-500 text-sm ml-1">({{ product.review_count }})</span>
+                    </div>
+                    
+                    <!-- Price & Add to Cart -->
+                    <div class="flex items-center justify-between">
+                        <div>
+                            {% if product.discount_price %}
+                            <span class="text-2xl font-bold text-black">{{ product.discount_price|floatformat:0 }}</span>
+                            <span class="text-sm text-gray-400 line-through ml-1">{{ product.price|floatformat:0 }}</span>
+                            {% else %}
+                            <span class="text-2xl font-bold text-black">{{ product.price|floatformat:0 }}</span>
+                            {% endif %}
+                            <span class="text-sm text-gray-600 ml-1">FCFA</span>
+                        </div>
+                        <button onclick="addToCart({{ product.id }})" class="w-11 h-11 bg-yellow-600 hover:bg-yellow-700 text-black rounded-full flex items-center justify-center transition shadow-lg">
+                            <i class="fas fa-shopping-cart"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-full text-center py-20">
+                <i class="fas fa-inbox text-gray-300 text-6xl mb-4"></i>
+                <p class="text-gray-500 text-lg">Aucun produit disponible pour le moment.</p>
+            </div>
+            {% endfor %}
+
+        </div>
+
+        <!-- Pagination -->
+        {% if products.has_other_pages %}
+        <div class="flex justify-center items-center gap-2 mt-16">
+            {% if products.has_previous %}
+            <a href="?page={{ products.previous_page_number }}{% if category %}&category={{ category }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}" class="w-10 h-10 border-2 border-black rounded-full flex items-center justify-center hover:bg-black hover:text-yellow-600 transition">
+                <i class="fas fa-chevron-left text-sm"></i>
+            </a>
+            {% else %}
+            <button class="w-10 h-10 border-2 border-black rounded-full flex items-center justify-center opacity-50 cursor-not-allowed" disabled>
+                <i class="fas fa-chevron-left text-sm"></i>
+            </button>
+            {% endif %}
+
+            {% for num in products.paginator.page_range %}
+                {% if products.number == num %}
+                <span class="w-10 h-10 bg-black text-yellow-600 border-2 border-black rounded-full font-semibold flex items-center justify-center">{{ num }}</span>
+                {% elif num > products.number|add:'-3' and num < products.number|add:'3' %}
+                <a href="?page={{ num }}{% if category %}&category={{ category }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}" class="w-10 h-10 border-2 border-black rounded-full font-semibold hover:bg-black hover:text-yellow-600 transition flex items-center justify-center">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {% if products.has_next %}
+            <a href="?page={{ products.next_page_number }}{% if category %}&category={{ category }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}" class="w-10 h-10 border-2 border-black rounded-full flex items-center justify-center hover:bg-black hover:text-yellow-600 transition">
+                <i class="fas fa-chevron-right text-sm"></i>
+            </a>
+            {% else %}
+            <button class="w-10 h-10 border-2 border-black rounded-full flex items-center justify-center opacity-50 cursor-not-allowed" disabled>
+                <i class="fas fa-chevron-right text-sm"></i>
+            </button>
+            {% endif %}
+        </div>
+        {% endif %}
+
+    </div>
+</section>
+
+<!-- Newsletter CTA -->
+<section class="py-16 bg-black">
+    <div class="max-w-4xl mx-auto px-4 text-center">
+        <h3 class="text-3xl font-serif font-bold text-white mb-4">Restez Informée</h3>
+        <p class="text-gray-300 mb-8">Recevez nos offres exclusives et nouveautés en avant-première</p>
+        <form method="post" action="{% url 'newsletter_subscribe' %}" class="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
+            {% csrf_token %}
+            <input type="email" name="email" placeholder="Votre adresse email" required class="flex-1 px-6 py-4 rounded-full border-2 border-yellow-600 bg-transparent text-white placeholder-gray-400 focus:outline-none focus:border-yellow-500">
+            <button type="submit" class="bg-yellow-600 hover:bg-yellow-700 text-black px-8 py-4 rounded-full font-bold transition">
+                S'abonner
+            </button>
+        </form>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function addToCart(productId) {
+        fetch(`/cart/add/${productId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                quantity: 1
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                updateCartCount();
+                showNotification('Produit ajouté au panier !');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function updateCartCount() {
+        fetch('/cart/count/')
+            .then(response => response.json())
+            .then(data => {
+                const cartBadge = document.querySelector('.cart-count');
+                if (cartBadge) {
+                    cartBadge.textContent = data.count;
+                }
+            });
+    }
+
+    function toggleFavorite(productId) {
+        // Implémenter la logique des favoris
+        showNotification('Ajouté aux favoris !');
+    }
+
+    function showNotification(message) {
+        const notification = document.createElement('div');
+        notification.className = 'fixed top-24 right-4 bg-yellow-600 text-black px-6 py-4 rounded-full shadow-2xl z-50 animate-slideIn';
+        notification.innerHTML = `<i class="fas fa-check-circle mr-2"></i>${message}`;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+    }
+</script>
+{% endblock %}

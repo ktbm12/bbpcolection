@@ -1,0 +1,420 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Mon Panier - LuxeHair{% endblock %}
+
+{% block extra_css %}
+<style>
+    .cart-item {
+        transition: all 0.3s ease;
+        animation: fadeIn 0.5s ease-out;
+    }
+    
+    .cart-item:hover {
+        background: #fafafa;
+    }
+    
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .quantity-btn {
+        transition: all 0.2s;
+    }
+    
+    .quantity-btn:hover {
+        background: #000;
+        color: #d4af37;
+    }
+    
+    .quantity-btn:active {
+        transform: scale(0.95);
+    }
+    
+    .summary-card {
+        position: sticky;
+        top: 100px;
+    }
+    
+    .promo-input:focus {
+        border-color: #d4af37;
+        box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+    }
+    
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    
+    .animate-slideIn {
+        animation: slideIn 0.5s ease-out;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb -->
+<section class="bg-gray-50 py-6 mt-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center gap-2 text-sm">
+            <a href="{% url 'home' %}" class="text-gray-600 hover:text-yellow-600 transition">Accueil</a>
+            <i class="fas fa-chevron-right text-gray-400 text-xs"></i>
+            <span class="text-black font-semibold">Panier</span>
+        </div>
+    </div>
+</section>
+
+<!-- Cart Section -->
+<section class="py-12 bg-white min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Page Title -->
+        <div class="mb-12">
+            <h1 class="text-4xl md:text-5xl font-serif font-bold text-black mb-2">Mon Panier</h1>
+            <p class="text-gray-600">
+                {% if cart_items %}
+                    {{ cart_items|length }} article{{ cart_items|length|pluralize }} dans votre panier
+                {% else %}
+                    Votre panier est vide
+                {% endif %}
+            </p>
+        </div>
+
+        {% if cart_items %}
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- Cart Items -->
+            <div class="lg:col-span-2 space-y-4">
+                {% for item in cart_items %}
+                <div class="cart-item bg-white border-2 border-gray-200 rounded-2xl p-6 hover:border-yellow-600 transition-all">
+                    <div class="flex gap-6">
+                        
+                        <!-- Product Image -->
+                        <div class="w-32 h-32 flex-shrink-0 rounded-xl overflow-hidden bg-gray-100">
+                            {% if item.product.image %}
+                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="w-full h-full object-cover">
+                            {% else %}
+                            <div class="w-full h-full bg-gradient-to-br from-yellow-100 to-gray-100 flex items-center justify-center">
+                                <i class="fas fa-image text-gray-300 text-3xl"></i>
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Product Info -->
+                        <div class="flex-1">
+                            <div class="flex justify-between items-start mb-3">
+                                <div>
+                                    <h3 class="text-xl font-semibold text-black mb-1">{{ item.product.name }}</h3>
+                                    <div class="flex items-center gap-2 text-sm text-gray-600">
+                                        <span class="text-yellow-600 font-medium">{{ item.product.get_texture_display }}</span>
+                                        <span>•</span>
+                                        <span>{{ item.product.length }}"</span>
+                                    </div>
+                                </div>
+                                <button onclick="removeFromCart({{ item.id }})" class="text-gray-400 hover:text-red-600 transition">
+                                    <i class="fas fa-trash text-lg"></i>
+                                </button>
+                            </div>
+                            
+                            <!-- Quantity & Price -->
+                            <div class="flex justify-between items-end">
+                                <!-- Quantity Selector -->
+                                <div class="flex items-center gap-3">
+                                    <span class="text-sm text-gray-600 font-medium">Quantité:</span>
+                                    <div class="flex items-center border-2 border-gray-300 rounded-full overflow-hidden">
+                                        <button onclick="updateQuantity({{ item.id }}, {{ item.quantity|add:'-1' }})" class="quantity-btn w-10 h-10 flex items-center justify-center hover:bg-gray-100 transition {% if item.quantity <= 1 %}opacity-50 cursor-not-allowed{% endif %}" {% if item.quantity <= 1 %}disabled{% endif %}>
+                                            <i class="fas fa-minus text-sm"></i>
+                                        </button>
+                                        <span class="w-12 text-center font-semibold">{{ item.quantity }}</span>
+                                        <button onclick="updateQuantity({{ item.id }}, {{ item.quantity|add:'1' }})" class="quantity-btn w-10 h-10 flex items-center justify-center hover:bg-gray-100 transition">
+                                            <i class="fas fa-plus text-sm"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Price -->
+                                <div class="text-right">
+                                    <div class="text-2xl font-bold text-black">{{ item.total_price|floatformat:0 }} FCFA</div>
+                                    {% if item.product.discount_price %}
+                                    <div class="text-sm text-gray-400 line-through">{{ item.product.price|floatformat:0 }} FCFA</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                
+                <!-- Continue Shopping -->
+                <div class="pt-6">
+                    <a href="{% url 'products' %}" class="inline-flex items-center gap-2 text-black hover:text-yellow-600 font-semibold transition">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Continuer vos achats</span>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Order Summary -->
+            <div class="lg:col-span-1">
+                <div class="summary-card bg-gray-50 border-2 border-gray-200 rounded-2xl p-8">
+                    <h2 class="text-2xl font-serif font-bold text-black mb-6">Résumé de la commande</h2>
+                    
+                    <!-- Promo Code -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Code Promo</label>
+                        <form method="post" action="{% url 'apply_promo' %}" class="flex gap-2">
+                            {% csrf_token %}
+                            <input type="text" name="promo_code" placeholder="Entrez votre code" class="promo-input flex-1 px-4 py-3 border-2 border-gray-300 rounded-full focus:outline-none transition">
+                            <button type="submit" class="px-6 py-3 bg-black text-yellow-600 rounded-full font-semibold hover:bg-gray-800 transition">
+                                Appliquer
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <div class="border-t-2 border-gray-300 pt-6 space-y-4">
+                        <!-- Subtotal -->
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-700">Sous-total</span>
+                            <span class="font-semibold text-black">{{ subtotal|floatformat:0 }} FCFA</span>
+                        </div>
+                        
+                        <!-- Discount -->
+                        {% if discount %}
+                        <div class="flex justify-between items-center text-green-600">
+                            <span>Réduction</span>
+                            <span class="font-semibold">-{{ discount|floatformat:0 }} FCFA</span>
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Shipping -->
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-700">Livraison</span>
+                            <span class="font-semibold text-black">
+                                {% if shipping_cost > 0 %}
+                                    {{ shipping_cost|floatformat:0 }} FCFA
+                                {% else %}
+                                    <span class="text-green-600">Gratuite</span>
+                                {% endif %}
+                            </span>
+                        </div>
+                        
+                        <!-- Free Shipping Progress -->
+                        {% if free_shipping_threshold and subtotal < free_shipping_threshold %}
+                        <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
+                            <p class="text-xs text-gray-700 mb-2">
+                                Plus que <span class="font-bold text-yellow-600">{{ free_shipping_remaining|floatformat:0 }} FCFA</span> pour la livraison gratuite !
+                            </p>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-yellow-600 h-2 rounded-full transition-all" style="width: {{ shipping_progress }}%"></div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Total -->
+                        <div class="border-t-2 border-gray-300 pt-4 mt-4">
+                            <div class="flex justify-between items-center">
+                                <span class="text-xl font-serif font-bold text-black">Total</span>
+                                <span class="text-3xl font-bold text-black">{{ total|floatformat:0 }} <span class="text-lg text-gray-600">FCFA</span></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Checkout Button -->
+                    <div class="mt-8 space-y-3">
+                        <a href="{% url 'checkout' %}" class="block w-full bg-yellow-600 hover:bg-yellow-700 text-black text-center px-8 py-4 rounded-full font-bold text-lg transition shadow-xl hover:shadow-2xl hover:scale-105">
+                            Passer la commande
+                        </a>
+                        <a href="{% url 'products' %}" class="block w-full border-2 border-black text-black text-center px-8 py-4 rounded-full font-semibold hover:bg-black hover:text-yellow-600 transition">
+                            Continuer les achats
+                        </a>
+                    </div>
+                    
+                    <!-- Payment Methods -->
+                    <div class="mt-8 pt-6 border-t border-gray-300">
+                        <p class="text-xs text-gray-600 mb-3 font-semibold">Paiement sécurisé</p>
+                        <div class="flex gap-2 flex-wrap">
+                            <div class="bg-white px-3 py-2 rounded border border-gray-300 text-xs font-medium">
+                                <i class="fas fa-mobile-alt text-yellow-600"></i> Mobile Money
+                            </div>
+                            <div class="bg-white px-3 py-2 rounded border border-gray-300 text-xs font-medium">
+                                <i class="fas fa-credit-card text-yellow-600"></i> Carte
+                            </div>
+                            <div class="bg-white px-3 py-2 rounded border border-gray-300 text-xs font-medium">
+                                <i class="fas fa-money-bill-wave text-yellow-600"></i> Cash
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Guarantees -->
+                    <div class="mt-6 space-y-3">
+                        <div class="flex items-center gap-3 text-sm text-gray-700">
+                            <i class="fas fa-shield-alt text-yellow-600"></i>
+                            <span>Paiement 100% sécurisé</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm text-gray-700">
+                            <i class="fas fa-truck text-yellow-600"></i>
+                            <span>Livraison rapide sous 48h</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm text-gray-700">
+                            <i class="fas fa-undo text-yellow-600"></i>
+                            <span>Retour gratuit sous 14 jours</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+        {% else %}
+        
+        <!-- Empty Cart -->
+        <div class="text-center py-20">
+            <div class="w-32 h-32 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i class="fas fa-shopping-bag text-gray-300 text-5xl"></i>
+            </div>
+            <h2 class="text-3xl font-serif font-bold text-black mb-4">Votre panier est vide</h2>
+            <p class="text-gray-600 mb-8 max-w-md mx-auto">
+                Découvrez notre collection de mèches premium et ajoutez vos produits préférés
+            </p>
+            <a href="{% url 'products' %}" class="inline-block bg-yellow-600 hover:bg-yellow-700 text-black px-10 py-4 rounded-full font-bold text-lg transition shadow-xl hover:scale-105">
+                Voir les produits
+            </a>
+        </div>
+        
+        {% endif %}
+        
+        <!-- Related Products / Recommendations -->
+        {% if cart_items and recommended_products %}
+        <div class="mt-20 border-t-2 border-gray-200 pt-12">
+            <h2 class="text-3xl font-serif font-bold text-black mb-8">Vous aimerez aussi</h2>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {% for product in recommended_products %}
+                <div class="bg-white border-2 border-gray-200 rounded-2xl overflow-hidden hover:border-yellow-600 transition-all hover:shadow-xl">
+                    <div class="relative h-48">
+                        {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-full object-cover">
+                        {% else %}
+                        <div class="w-full h-full bg-gradient-to-br from-yellow-100 to-gray-100 flex items-center justify-center">
+                            <i class="fas fa-image text-gray-300 text-4xl"></i>
+                        </div>
+                        {% endif %}
+                        {% if product.is_new %}
+                        <span class="absolute top-2 left-2 bg-yellow-600 text-black px-2 py-1 rounded-full text-xs font-bold">Nouveau</span>
+                        {% endif %}
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-semibold mb-2 line-clamp-2">{{ product.name }}</h3>
+                        <div class="flex items-center justify-between">
+                            <span class="text-lg font-bold text-black">{{ product.final_price|floatformat:0 }} FCFA</span>
+                            <button onclick="addToCart({{ product.id }})" class="w-9 h-9 bg-yellow-600 hover:bg-yellow-700 text-black rounded-full flex items-center justify-center transition">
+                                <i class="fas fa-plus text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function updateQuantity(itemId, newQuantity) {
+        if (newQuantity < 1) return;
+        
+        fetch(`/cart/update/${itemId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                quantity: newQuantity
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function removeFromCart(itemId) {
+        if (confirm('Êtes-vous sûr de vouloir retirer cet article ?')) {
+            fetch(`/cart/remove/${itemId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    }
+
+    function addToCart(productId) {
+        fetch(`/cart/add/${productId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                quantity: 1
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showNotification('Produit ajouté au panier !');
+                setTimeout(() => location.reload(), 1000);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function showNotification(message) {
+        const notification = document.createElement('div');
+        notification.className = 'fixed top-24 right-4 bg-yellow-600 text-black px-6 py-4 rounded-full shadow-2xl z-50 animate-slideIn';
+        notification.innerHTML = `<i class="fas fa-check-circle mr-2"></i>${message}`;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+    }
+
+    // Auto-save promo code input
+    const promoInput = document.querySelector('input[name="promo_code"]');
+    if (promoInput) {
+        promoInput.addEventListener('input', function() {
+            this.value = this.value.toUpperCase();
+        });
+    }
+</script>
+{% endblock %}
