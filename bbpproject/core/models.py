@@ -1,20 +1,24 @@
+# core/models.py
 from uuid import uuid4
 
 from django.db import models
-from model_utils.models import TimeStampedModel, ActivatorModel
+from model_utils.models import TimeStampedModel
 from django.utils.translation import gettext_lazy as _
 
 
-class CFPBaseModel(TimeStampedModel, ActivatorModel):
-    """
-    Modèle de base CFP simplifié avec UUID, timestamps et activation.
-    """
+class CFPBaseModel(TimeStampedModel):
     id = models.UUIDField(
         primary_key=True,
         default=uuid4,
         editable=False,
         verbose_name="Identifiant",
         help_text="Identifiant unique universel"
+    )
+
+    is_active = models.BooleanField(
+        _("actif / visible"),
+        default=True,
+        db_index=True
     )
 
     class Meta:
