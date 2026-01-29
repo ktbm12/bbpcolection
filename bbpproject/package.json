@@ -1,0 +1,14 @@
+{
+  "name": "bbpproject",
+  "version": "1.0.0",
+  "description": "BBP Project - Tailwind CSS Configuration",
+  "scripts": {
+    "dev": "tailwindcss -i ./bbpproject/static/css/input.css -o ./bbpproject/static/css/output.css --watch",
+    "build": "tailwindcss -i ./bbpproject/static/css/input.css -o ./bbpproject/static/css/output.css --minify"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.1",
+    "postcss": "^8.4.32",
+    "autoprefixer": "^10.4.16"
+  }
+}
