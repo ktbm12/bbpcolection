@@ -1,11 +1,8 @@
-from django.db import models
-
-# Create your models here.
-# core/models.py  ou  common/models.py
+from uuid import uuid4
 
 from django.db import models
 from model_utils.models import TimeStampedModel, ActivatorModel
-from uuid import uuid4
+from django.utils.translation import gettext_lazy as _
 
 
 class CFPBaseModel(TimeStampedModel, ActivatorModel):
@@ -22,7 +19,7 @@ class CFPBaseModel(TimeStampedModel, ActivatorModel):
 
     class Meta:
         abstract = True
-        ordering = ['-created']     # tri par date de création descendante
+        ordering = ['-created']
 
     def __str__(self):
         return f"{self.__class__.__name__} ({self.id})"
