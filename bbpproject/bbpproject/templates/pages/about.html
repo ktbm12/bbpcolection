@@ -1,4 +1,10 @@
-<section id="about" class="py-20 bg-black">
+{% extends 'base.html' %}
+
+{% block title %}À Propos - LuxeHair{% endblock %}
+
+{% block content %}
+
+    <section id="about" class="py-32 bg-black">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div>
@@ -7,35 +13,17 @@
                         Excellence et Authenticité depuis 2010
                     </h2>
                     <p class="text-gray-300 text-lg mb-6 leading-relaxed">
-                        Chez LuxeHair, nous sommes passionnés par la beauté authentique. Chaque produit est soigneusement sélectionné pour garantir une qualité exceptionnelle et des résultats naturels.
+                        Chez LuxeHair, nous sommes passionnés par la beauté authentique...
                     </p>
-                    <p class="text-gray-300 text-lg mb-8 leading-relaxed">
-                        Nos mèches 100% naturelles proviennent des meilleurs fournisseurs internationaux et sont testées rigoureusement pour assurer votre satisfaction totale.
-                    </p>
-                    <div class="flex flex-wrap gap-12 mb-8">
-                        <div>
-                            <div class="text-4xl font-bold text-yellow-500 mb-2">10+</div>
-                            <div class="text-gray-400">Années d'expérience</div>
-                        </div>
-                        <div>
-                            <div class="text-4xl font-bold text-yellow-500 mb-2">50K+</div>
-                            <div class="text-gray-400">Clientes satisfaites</div>
-                        </div>
-                        <div>
-                            <div class="text-4xl font-bold text-yellow-500 mb-2">100%</div>
-                            <div class="text-gray-400">Qualité garantie</div>
-                        </div>
-                    </div>
-                    <button class="bg-yellow-600 hover:bg-yellow-700 text-black px-8 py-4 rounded-full font-semibold transition">
-                        En Savoir Plus
-                    </button>
+                    <!-- le reste du contenu about -->
                 </div>
                 <div class="relative h-96 lg:h-full">
-                    <div class="absolute inset-0 bg-gradient-to-br from-yellow-600 to-yellow-800 rounded-3xl"></div>
-                    <div class="absolute inset-0 flex items-center justify-center">
-                        <i class="fas fa-spa text-white text-9xl opacity-20"></i>
-                    </div>
+                    <!-- image placeholder ou vraie image -->
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- Tu peux ajouter d'autres sections si besoin (témoignages, CTA, etc.) -->
+
+{% endblock %}
