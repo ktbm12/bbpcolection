@@ -41,4 +41,19 @@
   .text-balance {
     text-wrap: balance;
   }
+  
+  .font-pacifico {
+    font-family: 'Pacifico', cursive;
+  }
+  
+  .font-satoshi {
+    font-family: 'Satoshi', sans-serif;
+  }
+}
+
+/* Set default body font to Satoshi */
+@layer base {
+  body {
+    @apply font-satoshi;
+  }
 }

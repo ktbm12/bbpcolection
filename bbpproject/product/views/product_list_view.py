@@ -18,7 +18,7 @@ class ProductListView(ListView):
     - Recherche contextuelle simple (optionnel)
     """
     model = Product
-    template_name = "product/product_list.html"     # adapte si le template est ailleurs
+    template_name = "pages/product/product.html"     # adapte si le template est ailleurs
     context_object_name = "products"
     paginate_by = 12                                # 12 produits par page (bon équilibre mobile/desktop)
     ordering = ['-created']                         # défaut : les plus récents

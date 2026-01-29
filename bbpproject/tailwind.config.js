@@ -24,8 +24,8 @@ module.exports = {
         },
       },
       fontFamily: {
-        serif: ['Playfair Display', 'serif'],
-        sans: ['Poppins', 'sans-serif'],
+        pacifico: ['Pacifico', 'cursive'],
+        satoshi: ['Satoshi', 'sans-serif'],
       },
     },
   },
