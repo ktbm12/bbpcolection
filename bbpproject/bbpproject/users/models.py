@@ -1,26 +1,61 @@
 from django.contrib.auth.models import AbstractUser
-from django.db.models import CharField
+from django.db.models import CharField, BooleanField, EmailField
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
+from core.models import CFPBaseModel
 
-class User(AbstractUser):
+
+class User(AbstractUser, CFPBaseModel):
     """
-    Default custom user model for My Awesome Project.
-    If adding fields that need to be filled at user signup,
-    check forms.SignupForm and forms.SocialSignupForms accordingly.
+    Modèle utilisateur personnalisé.
+    Déjà migré → ne pas supprimer de champs existants.
     """
 
-    # First and last name do not cover name patterns around the globe
-    name = CharField(_("Name of User"), blank=True, max_length=255)
+    # Champs déjà présents dans ton code
+    name = CharField(_("Nom complet"), blank=True, max_length=255)
     first_name = None  # type: ignore[assignment]
-    last_name = None  # type: ignore[assignment]
+    last_name = None   # type: ignore[assignment]
+
+    # Champs supplémentaires utiles
+    email = EmailField(_("email"), unique=True, blank=False, null=False)
+    
+    # Distinction admin / client
+    is_admin = BooleanField(
+        _("administrateur"),
+        default=False,
+        help_text=_("Cochez pour donner les droits staff + superuser")
+    )
+    
+    phone_number = CharField(
+        _("numéro de téléphone"),
+        max_length=20,
+        blank=True,
+        null=True,
+        unique=True,
+    )
+
+    # Champs d'audit et statut déjà hérités de CFPBaseModel
+    # → created / modified / status
+
+    class Meta(CFPBaseModel.Meta):
+        verbose_name = _("utilisateur")
+        verbose_name_plural = _("utilisateurs")
+
+    def __str__(self):
+        return self.name or self.username or self.email or str(self.id)
 
     def get_absolute_url(self) -> str:
-        """Get URL for user's detail view.
-
-        Returns:
-            str: URL for user detail.
-
-        """
         return reverse("users:detail", kwargs={"username": self.username})
+
+    @property
+    def is_client(self):
+        """Simple utilisateur (non admin)"""
+        return not self.is_admin and not self.is_staff and not self.is_superuser
+
+    def save(self, *args, **kwargs):
+        # Synchronisation logique : si is_admin → donner is_staff et is_superuser
+        if self.is_admin:
+            self.is_staff = True
+            self.is_superuser = True
+        super().save(*args, **kwargs)
