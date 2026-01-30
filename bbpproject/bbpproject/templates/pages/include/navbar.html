@@ -1,185 +1,110 @@
-<!-- templates/include/navbar.html -->
-<nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-xl border-b border-gray-100/80 transition-all duration-300">
-  <div class="max-w-7xl mx-auto px-6 lg:px-8">
-    <div class="flex items-center justify-between h-16 lg:h-20">
-      
-      <!-- Logo + marque -->
-      <div class="flex-shrink-0">
-        <a href="{% url 'home' %}" class="flex items-center gap-2.5 group">
-          <span class="text-2xl lg:text-3xl font-bold tracking-tight text-gray-900 group-hover:text-yellow-600 transition-colors">
-            BBP<span class="text-yellow-600">Collection</span>
-          </span>
-        </a>
-      </div>
+<nav class="fixed w-full bg-white/95 backdrop-blur-sm shadow-sm z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-20">
+            <!-- Logo -->
+            <div class="flex items-center">
+                <h1 class="text-3xl font-pacifico font-bold text-black">
+                    <span class="text-yellow-600">bbp</span>collection
+                </h1>
+            </div>
+            
+            <!-- Menu Desktop -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="/" class="text-black hover:text-yellow-600 font-medium transition">Accueil</a>
+                <a href="#collections" class="text-black hover:text-yellow-600 font-medium transition">Collections</a>
+                <a href="/about" class="text-black hover:text-yellow-600 font-medium transition">À Propos</a>
+                <a href="#contact" class="text-black hover:text-yellow-600 font-medium transition">Contact</a>
+            </div>
+            
+            <!-- Icons -->
+            <div class="flex items-center space-x-6">
+                <button class="text-black hover:text-yellow-600 transition">
+                    <i class="fas fa-search text-xl"></i>
+                </button>
+                <button class="text-black hover:text-yellow-600 transition">
+                    <i class="fas fa-user text-xl"></i>
+                </button>
+                <a href="{% url 'product:cart_detail' %}">
+                <button class="text-black hover:text-yellow-600 transition relative">
+                    <i class="fas fa-shopping-bag text-xl"></i>
+                    <span class="absolute -top-2 -right-2 bg-yellow-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
+                </button>
+                </a>
+                <button id="mobile-menu-btn" class="md:hidden text-black hover:text-yellow-600 transition">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
 
-      <!-- Navigation principale (desktop) -->
-      <div class="hidden lg:flex items-center gap-10">
-        <a href="{% url 'product_list' %}" class="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors">
-          Shop
-        </a>
-        <a href="{% url 'collections' %}" class="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors">
-          Collections
-        </a>
-        <a href="{% url 'about' %}" class="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors">
-          About
-        </a>
-        <a href="{% url 'contact' %}" class="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors">
-          Contact
-        </a>
-      </div>
-
-      <!-- Actions utilisateur (recherche, compte, panier) -->
-      <div class="flex items-center gap-5 lg:gap-6">
-        <!-- Recherche -->
-        <button 
-          type="button" 
-          class="text-gray-600 hover:text-gray-900 transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-400 rounded-full p-2"
-          aria-label="Search"
-        >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
-        </button>
-
-        <!-- Compte -->
-        {% if user.is_authenticated %}
-          <a 
-            href="{% url 'users:profile' %}" 
-            class="text-gray-600 hover:text-gray-900 transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-400 rounded-full p-2"
-            aria-label="Account"
-          >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-            </svg>
-          </a>
-        {% else %}
-          <a 
-            href="{% url 'account_login' %}" 
-            class="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
-          >
-            Sign in
-          </a>
-        {% endif %}
-
-        <!-- Panier -->
-        <a 
-          href="{% url 'cart:detail' %}" 
-          class="relative text-gray-600 hover:text-gray-900 transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-400 rounded-full p-2 group"
-          aria-label="Cart"
-        >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-          </svg>
-          <span class="absolute -top-1 -right-1 bg-yellow-600 text-white text-xs font-bold rounded-full min-w-[18px] h-5 flex items-center justify-center px-1.5 shadow-sm transform group-hover:scale-110 transition-transform">
-            0
-          </span>
-        </a>
-
-        <!-- Menu mobile (hamburger) -->
-        <button 
-          id="mobile-menu-btn"
-          class="lg:hidden text-gray-700 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-yellow-400 rounded-full p-2"
-          aria-label="Open menu"
-          aria-expanded="false"
-        >
-          <svg class="w-6 h-6 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" id="hamburger-lines">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-          <svg class="w-6 h-6 hidden transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" id="hamburger-cross">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden overflow-hidden transition-all duration-300 ease-in-out">
+            <div class="px-2 pt-2 pb-4 space-y-2 border-t border-gray-200">
+                <a href="/" class="block px-4 py-3 text-black hover:bg-yellow-50 hover:text-yellow-600 font-medium transition rounded-lg">
+                    <i class="fas fa-home mr-3 text-yellow-600"></i>Accueil
+                </a>
+                <a href="#collections" class="block px-4 py-3 text-black hover:bg-yellow-50 hover:text-yellow-600 font-medium transition rounded-lg">
+                    <i class="fas fa-images mr-3 text-yellow-600"></i>Collections
+                </a>
+                <a href="/about" class="block px-4 py-3 text-black hover:bg-yellow-50 hover:text-yellow-600 font-medium transition rounded-lg">
+                    <i class="fas fa-info-circle mr-3 text-yellow-600"></i>À Propos
+                </a>
+                <a href="#contact" class="block px-4 py-3 text-black hover:bg-yellow-50 hover:text-yellow-600 font-medium transition rounded-lg">
+                    <i class="fas fa-envelope mr-3 text-yellow-600"></i>Contact
+                </a>
+                <hr class="my-2">
+                <button class="w-full text-left px-4 py-3 text-black hover:bg-yellow-50 hover:text-yellow-600 font-medium transition rounded-lg">
+                    <i class="fas fa-user mr-3 text-yellow-600"></i>Mon Compte
+                </button>
+            </div>
+        </div>
     </div>
-  </div>
-
-  <!-- Mobile Menu (slide-in from right) -->
-  <div id="mobile-menu-panel" class="fixed inset-y-0 right-0 w-80 bg-white shadow-2xl transform translate-x-full transition-transform duration-500 ease-in-out lg:hidden z-50">
-    <div class="flex flex-col h-full">
-      <!-- Header -->
-      <div class="flex items-center justify-between p-6 border-b border-gray-100">
-        <span class="text-xl font-bold tracking-tight text-gray-900">
-          BBP<span class="text-yellow-600">Collection</span>
-        </span>
-        <button id="mobile-close-btn" class="text-gray-600 hover:text-gray-900 focus:outline-none">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
-
-      <!-- Liens -->
-      <div class="flex-1 px-6 py-10 space-y-8 text-base font-medium">
-        <a href="{% url 'product_list' %}" class="block text-gray-900 hover:text-yellow-600 transition-colors">Shop</a>
-        <a href="{% url 'collections' %}" class="block text-gray-900 hover:text-yellow-600 transition-colors">Collections</a>
-        <a href="{% url 'about' %}" class="block text-gray-900 hover:text-yellow-600 transition-colors">About</a>
-        <a href="{% url 'contact' %}" class="block text-gray-900 hover:text-yellow-600 transition-colors">Contact</a>
-      </div>
-
-      <!-- Auth & actions -->
-      <div class="p-6 border-t border-gray-100 space-y-6">
-        {% if user.is_authenticated %}
-          <a href="{% url 'users:profile' %}" class="flex items-center gap-3 text-gray-900 hover:text-yellow-600">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-            </svg>
-            Account
-          </a>
-          <a href="{% url 'account_logout' %}" class="flex items-center gap-3 text-red-600 hover:text-red-700">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-            </svg>
-            Sign out
-          </a>
-        {% else %}
-          <a href="{% url 'account_login' %}" class="block text-center py-3 px-6 bg-gray-900 text-white rounded-full font-medium hover:bg-gray-800 transition">
-            Sign in
-          </a>
-          <a href="{% url 'account_signup' %}" class="block text-center py-3 px-6 border border-gray-300 rounded-full font-medium hover:bg-gray-50 transition">
-            Create account
-          </a>
-        {% endif %}
-      </div>
-    </div>
-  </div>
-
-  <!-- Overlay backdrop -->
-  <div id="mobile-backdrop" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 hidden lg:hidden transition-opacity duration-500"></div>
 </nav>
 
-<!-- JavaScript (vanilla, léger) -->
 <script>
-  const btn = document.getElementById('mobile-menu-btn');
-  const closeBtn = document.getElementById('mobile-close-btn');
-  const panel = document.getElementById('mobile-menu-panel');
-  const backdrop = document.getElementById('mobile-backdrop');
-  const lines = document.getElementById('hamburger-lines');
-  const cross = document.getElementById('hamburger-cross');
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
 
-  function openMenu() {
-    panel.classList.remove('translate-x-full');
-    backdrop.classList.remove('hidden');
-    lines.classList.add('hidden');
-    cross.classList.remove('hidden');
-    btn.setAttribute('aria-expanded', 'true');
-  }
+    if (mobileMenuBtn && mobileMenu) {
+        mobileMenuBtn.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
+            
+            // Smooth animation
+            if (mobileMenu.classList.contains('hidden')) {
+                mobileMenu.style.maxHeight = '0px';
+            } else {
+                mobileMenu.style.maxHeight = mobileMenu.scrollHeight + 'px';
+            }
+        });
 
-  function closeMenu() {
-    panel.classList.add('translate-x-full');
-    backdrop.classList.add('hidden');
-    lines.classList.remove('hidden');
-    cross.classList.add('hidden');
-    btn.setAttribute('aria-expanded', 'false');
-  }
+        // Close menu when clicking on a link
+        const menuLinks = mobileMenu.querySelectorAll('a, button');
+        menuLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                mobileMenu.classList.add('hidden');
+                mobileMenu.style.maxHeight = '0px';
+            });
+        });
 
-  btn.addEventListener('click', openMenu);
-  closeBtn.addEventListener('click', closeMenu);
-  backdrop.addEventListener('click', closeMenu);
-
-  // Échap
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && !panel.classList.contains('translate-x-full')) {
-      closeMenu();
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('nav')) {
+                mobileMenu.classList.add('hidden');
+                mobileMenu.style.maxHeight = '0px';
+            }
+        });
     }
-  });
+});
 </script>
+
+<style>
+#mobile-menu {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out;
+}
+
+#mobile-menu:not(.hidden) {
+    max-height: 400px;
+}
+</style>
