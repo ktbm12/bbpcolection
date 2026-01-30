@@ -4,7 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
 
 class AdminDashboardView(LoginRequiredMixin, TemplateView):
-    template_name = "pages/dashboard/dashboard.html"
+    template_name = "pages/dashboard/admin_dashboards.html"
 
 class UserDashboardView(LoginRequiredMixin, TemplateView):
     template_name = "pages/dashboard/user_dashboard.html"

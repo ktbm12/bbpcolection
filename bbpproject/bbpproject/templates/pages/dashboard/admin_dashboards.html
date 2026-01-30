@@ -1,0 +1,85 @@
+{% extends "pages/dashboard/admin_base.html" %}
+
+{% block dashboard_content %}
+<!-- Welcome Section -->
+<div class="mb-10">
+    <h1 class="text-3xl lg:text-4xl font-serif font-bold text-gray-900 mb-2">
+        Bienvenue, {{ user.name|default:"Admin" }} 👋
+    </h1>
+    <p class="text-gray-600">Voici un aperçu de votre boutique aujourd'hui</p>
+</div>
+
+<!-- Stats Cards -->
+{% include "pages/dashboard/include/stats_cards.html" %}
+
+<!-- Charts Row -->
+{% include "pages/dashboard/include/charts_row.html" %}
+
+<!-- Recent Orders -->
+{% include "pages/dashboard/include/recent_orders.html" %}
+
+<!-- Quick Actions & Top Products -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+    <!-- Quick Actions -->
+    {% include "pages/dashboard/include/quick_actions.html" %}
+    
+    <!-- Top Products -->
+    <div class="lg:col-span-2 bg-white rounded-2xl border-2 border-gray-200 p-6">
+        <h3 class="text-xl font-bold text-black mb-6">Top Produits</h3>
+        <div class="space-y-4">
+            
+            <div class="flex items-center gap-4 p-3 rounded-xl hover:bg-gray-50 transition">
+                <div class="w-16 h-16 bg-gradient-to-br from-yellow-100 to-gray-100 rounded-lg"></div>
+                <div class="flex-1">
+                    <h4 class="font-semibold text-black">Mèches Lisses Brésiliennes 24"</h4>
+                    <p class="text-sm text-gray-500">156 ventes ce mois</p>
+                </div>
+                <div class="text-right">
+                    <p class="font-bold text-black">45,000 FCFA</p>
+                    <p class="text-xs text-green-600">+12%</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-4 p-3 rounded-xl hover:bg-gray-50 transition">
+                <div class="w-16 h-16 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg"></div>
+                <div class="flex-1">
+                    <h4 class="font-semibold text-black">Mèches Ondulées Péruviennes 20"</h4>
+                    <p class="text-sm text-gray-500">134 ventes ce mois</p>
+                </div>
+                <div class="text-right">
+                    <p class="font-bold text-black">38,000 FCFA</p>
+                    <p class="text-xs text-green-600">+8%</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-4 p-3 rounded-xl hover:bg-gray-50 transition">
+                <div class="w-16 h-16 bg-gradient-to-br from-yellow-100 to-gray-100 rounded-lg"></div>
+                <div class="flex-1">
+                    <h4 class="font-semibold text-black">Mèches Bouclées Indiennes 18"</h4>
+                    <p class="text-sm text-gray-500">98 ventes ce mois</p>
+                </div>
+                <div class="text-right">
+                    <p class="font-bold text-black">32,000 FCFA</p>
+                    <p class="text-xs text-red-600">-3%</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-4 p-3 rounded-xl hover:bg-gray-50 transition">
+                <div class="w-16 h-16 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg"></div>
+                <div class="flex-1">
+                    <h4 class="font-semibold text-black">Mèches Premium Luxe 26"</h4>
+                    <p class="text-sm text-gray-500">76 ventes ce mois</p>
+                </div>
+                <div class="text-right">
+                    <p class="font-bold text-black">52,000 FCFA</p>
+                    <p class="text-xs text-green-600">+15%</p>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<!-- Low Stock Alert -->
+{% include "pages/dashboard/include/low_stock_alert.html" %}
+{% endblock %}

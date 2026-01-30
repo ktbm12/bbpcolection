@@ -14,12 +14,16 @@
 </head>
 <body class="bg-white font-sans text-gray-900">
 
+    {% block navbar %}
     {% include 'pages/include/navbar.html' %}
+    {% endblock %}
 
     {% block content %}
     {% endblock %}
 
+    {% block footer %}
     {% include 'pages/include/footer.html' %}
+    {% endblock %}
 
     <!-- Premium Notification System -->
     <div id="notification-container" class="fixed top-24 right-6 z-[100] flex flex-col gap-4 pointer-events-none"></div>

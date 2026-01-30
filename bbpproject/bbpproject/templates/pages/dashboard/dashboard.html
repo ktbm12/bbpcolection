@@ -84,6 +84,15 @@
         
         .chart-container {
             animation: fadeIn 0.8s ease-out;
+            position: relative;
+            min-height: 250px;
+        }
+
+        /* Ensure canvas respects a fixed visual height so Chart.js doesn't stretch it */
+        .chart-container canvas {
+            width: 100% !important;
+            height: 250px !important;
+            display: block;
         }
         
         @keyframes fadeIn {
