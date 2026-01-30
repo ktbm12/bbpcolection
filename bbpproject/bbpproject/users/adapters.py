@@ -45,4 +45,8 @@ class SocialAccountAdapter(DefaultSocialAccountAdapter):
                 user.name = first_name
                 if last_name := data.get("last_name"):
                     user.name += f" {last_name}"
+        
+        if not user.phone_number:
+            if phone := data.get("phone_number") or data.get("phone"):
+                user.phone_number = phone
         return user

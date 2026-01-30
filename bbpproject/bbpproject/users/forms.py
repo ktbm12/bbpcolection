@@ -24,12 +24,34 @@ class UserAdminCreationForm(admin_forms.AdminUserCreationForm):
         }
 
 
+from django import forms
+
 class UserSignupForm(SignupForm):
     """
     Form that will be rendered on a user sign up section/screen.
     Default fields will be added automatically.
     Check UserSocialSignupForm for accounts created from social.
     """
+
+    name = forms.CharField(
+        max_length=255,
+        label=_("Full Name"),
+        widget=forms.TextInput(attrs={"placeholder": _("Full Name")}),
+        required=True,
+    )
+    phone_number = forms.CharField(
+        max_length=20,
+        label=_("Phone Number"),
+        widget=forms.TextInput(attrs={"placeholder": _("Phone Number")}),
+        required=False,
+    )
+
+    def save(self, request):
+        user = super().save(request)
+        user.name = self.cleaned_data["name"]
+        user.phone_number = self.cleaned_data["phone_number"]
+        user.save()
+        return user
 
 
 class UserSocialSignupForm(SocialSignupForm):

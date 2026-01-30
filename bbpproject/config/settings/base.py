@@ -111,9 +111,10 @@ AUTHENTICATION_BACKENDS = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
 AUTH_USER_MODEL = "users.User"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url
-LOGIN_REDIRECT_URL = "users:redirect"
+LOGIN_REDIRECT_URL = "users:dashboard_redirect"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
 LOGIN_URL = "account_login"
+LOGOUT_REDIRECT_URL = "/"
 
 # PASSWORDS
 # ------------------------------------------------------------------------------
@@ -225,10 +226,7 @@ X_FRAME_OPTIONS = "DENY"
 # EMAIL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
-EMAIL_BACKEND = env(
-    "DJANGO_EMAIL_BACKEND",
-    default="django.core.mail.backends.smtp.EmailBackend",
-)
+EMAIL_BACKEND = env("DJANGO_EMAIL_BACKEND", default="django.core.mail.backends.console.EmailBackend")
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
 EMAIL_TIMEOUT = 5
 
@@ -310,23 +308,41 @@ CELERY_WORKER_SEND_TASK_EVENTS = True
 CELERY_TASK_SEND_SENT_EVENT = True
 # https://docs.celeryq.dev/en/stable/userguide/configuration.html#worker-hijack-root-logger
 CELERY_WORKER_HIJACK_ROOT_LOGGER = False
+
 # django-allauth
 # ------------------------------------------------------------------------------
 ACCOUNT_ALLOW_REGISTRATION = env.bool("DJANGO_ACCOUNT_ALLOW_REGISTRATION", True)
-# https://docs.allauth.org/en/latest/account/configuration.html
-ACCOUNT_LOGIN_METHODS = {"username"}
-# https://docs.allauth.org/en/latest/account/configuration.html
-ACCOUNT_SIGNUP_FIELDS = ["email*", "username*", "password1*", "password2*"]
-# https://docs.allauth.org/en/latest/account/configuration.html
-ACCOUNT_EMAIL_VERIFICATION = "mandatory"
-# https://docs.allauth.org/en/latest/account/configuration.html
+# Authentification principale : login par EMAIL uniquement (Allauth 2.0+)
+ACCOUNT_LOGIN_METHODS = {
+    "email": {
+        "required": True,
+        "verification": "mandatory",
+    },
+}
+# Champs autorisés / obligatoires lors de l'inscription
+ACCOUNT_SIGNUP_FIELDS = [
+    "email*",
+    "name",
+    "phone_number",
+    "password1*",
+    "password2*",
+]
+
 ACCOUNT_ADAPTER = "bbpproject.users.adapters.AccountAdapter"
-# https://docs.allauth.org/en/latest/account/forms.html
 ACCOUNT_FORMS = {"signup": "bbpproject.users.forms.UserSignupForm"}
-# https://docs.allauth.org/en/latest/socialaccount/configuration.html
 SOCIALACCOUNT_ADAPTER = "bbpproject.users.adapters.SocialAccountAdapter"
-# https://docs.allauth.org/en/latest/socialaccount/configuration.html
 SOCIALACCOUNT_FORMS = {"signup": "bbpproject.users.forms.UserSocialSignupForm"}
+
+# Sécurité renforcée (anti-bruteforce)
+ACCOUNT_RATE_LIMITS = {
+    "login_failed": "5/5m",
+    "login": "20/5m",
+}
+ACCOUNT_PREVENT_ENUMERATION = True
+ACCOUNT_EMAIL_CONFIRMATION_HMAC = True
+ACCOUNT_SESSION_REMEMBER = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_LOGOUT_REDIRECT_URL = "/"
 
 # django-rest-framework
 # -------------------------------------------------------------------------------
@@ -352,65 +368,17 @@ SPECTACULAR_SETTINGS = {
     "SERVE_PERMISSIONS": ["rest_framework.permissions.IsAdminUser"],
     "SCHEMA_PATH_PREFIX": "/api/",
 }
-# Your stuff...
+# django-allauth social
 # ------------------------------------------------------------------------------
-# settings.py
-
-# ────────────────────────────────────────────────────────────────
-# django-allauth — Configuration moderne (obligatoire depuis allauth 2.0+)
-# ────────────────────────────────────────────────────────────────
-
-SITE_ID = 1
-
-# Ton modèle User personnalisé
-AUTH_USER_MODEL = 'users.User'
-
-# Authentification principale : login par EMAIL uniquement
-ACCOUNT_LOGIN_METHODS = {
-    'email': {
-        'required': True,
-        'verification': 'mandatory',          # ou 'optional' ou 'none'
-    },
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "SCOPE": [
+            "profile",
+            "email",
+        ],
+        "AUTH_PARAMS": {
+            "access_type": "online",
+        },
+        "OAUTH_PKCE_ENABLED": True,
+    }
 }
-
-# Champs autorisés / obligatoires lors de l'inscription
-ACCOUNT_SIGNUP_FIELDS = [
-    'email*',                                 # * = obligatoire
-    'name',                                   # ton champ name personnalisé
-    'phone_number',                           # ton champ téléphone
-    'password1*',
-    'password2*',
-]
-
-# Plus besoin de ces anciens paramètres (ils sont dépréciés)
-# → Supprime ou commente-les pour éviter les warnings :
-# ACCOUNT_AUTHENTICATION_METHOD = 'email'              ← supprimé
-# ACCOUNT_EMAIL_REQUIRED = True                         ← supprimé
-# ACCOUNT_USERNAME_REQUIRED = False                     ← supprimé
-# ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True           ← supprimé
-# ACCOUNT_LOGIN_ATTEMPTS_LIMIT / TIMEOUT               ← supprimé
-
-# Sécurité renforcée (anti-bruteforce)
-ACCOUNT_RATE_LIMITS = {
-    'login_failed': '5/5m',                   # 5 échecs → blocage 5 minutes
-    'login': '20/5m',                         # 20 tentatives login par 5 min
-}
-
-# Anti-énumération (empêche de savoir si un email existe)
-ACCOUNT_PREVENT_ENUMERATION = True
-
-# Autres paramètres utiles
-ACCOUNT_EMAIL_CONFIRMATION_HMAC = True
-ACCOUNT_SESSION_REMEMBER = True
-ACCOUNT_UNIQUE_EMAIL = True
-
-# Redirections
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
-ACCOUNT_LOGOUT_REDIRECT_URL = '/'
-
-# Emails (en développement)
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
-# Si tu veux activer les providers sociaux plus tard
-# SOCIALACCOUNT_PROVIDERS = { ... }

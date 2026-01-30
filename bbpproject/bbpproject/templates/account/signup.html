@@ -1,159 +1,197 @@
 {% extends "base.html" %}
-{% load i18n static allauth form_tags %}
+{% load socialaccount %}
+{% load i18n static form_tags %}
 
-{% block title %}Create Account - BBP Collection{% endblock %}
+{% block title %}Join LuxeHair - Premium Community{% endblock %}
+
+{% block extra_head %}
+<style>
+    @keyframes slideRight {
+        from { opacity: 0; transform: translateX(-30px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+    .animate-slide {
+        animation: slideRight 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .check-list-icon {
+        background: rgba(212, 175, 55, 0.15);
+        color: #d4af37;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
 <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-  <div class="max-w-4xl w-full grid lg:grid-cols-2 gap-12 items-center">
+  <div class="max-w-6xl w-full grid lg:grid-cols-2 bg-white rounded-3xl shadow-2xl overflow-hidden">
     
-    <!-- Left: Branding & Benefits (US-style premium) -->
-    <div class="hidden lg:block relative rounded-3xl overflow-hidden shadow-2xl">
+    <!-- Left Side: Experience & Benefits -->
+    <div class="hidden lg:block relative bg-black p-16 text-white overflow-hidden">
       <div class="absolute inset-0 bg-gradient-to-br from-gray-900 to-black"></div>
-      <div class="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_30%_20%,rgba(212,175,55,0.3)_0%,transparent_50%)]"></div>
       
-      <div class="relative z-10 p-12 h-full flex flex-col justify-center text-white">
-        <h1 class="text-5xl font-serif font-bold mb-6">
-          Welcome to <span class="text-yellow-500">BBP Collection</span>
-        </h1>
-        <p class="text-xl text-gray-300 mb-10">
-          Premium natural hair extensions. Join thousands of satisfied customers.
-        </p>
+      <div class="relative z-10 flex flex-col justify-between h-full">
+        <div>
+            <h1 class="text-3xl font-serif font-bold tracking-tighter">
+                <span class="text-yellow-600">bbp</span>collection
+            </h1>
+            <div class="w-12 h-1 bg-yellow-600 mt-2"></div>
+        </div>
 
-        <ul class="space-y-6 text-lg">
-          <li class="flex items-center gap-4">
-            <div class="w-10 h-10 rounded-full bg-yellow-500/20 flex items-center justify-center">
-              <i class="fas fa-gift text-yellow-400 text-xl"></i>
+        <div class="space-y-10 animate-slide">
+          <h2 class="text-5xl font-serif font-bold italic leading-tight">
+            Start your <br/>
+            <span class="text-yellow-500">Premium Experience</span>
+          </h2>
+
+          <div class="grid gap-6">
+            <div class="flex items-start gap-4">
+              <div class="w-12 h-12 rounded-full flex items-center justify-center check-list-icon flex-shrink-0">
+                <i class="fas fa-gift text-xl"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-lg">Welcome Gift</h4>
+                <p class="text-gray-400 text-sm">Get 20% off your first luxury order</p>
+              </div>
             </div>
-            <span>20% off your first order</span>
-          </li>
-          <li class="flex items-center gap-4">
-            <div class="w-10 h-10 rounded-full bg-yellow-500/20 flex items-center justify-center">
-              <i class="fas fa-star text-yellow-400 text-xl"></i>
+
+            <div class="flex items-start gap-4">
+              <div class="w-12 h-12 rounded-full flex items-center justify-center check-list-icon flex-shrink-0">
+                <i class="fas fa-crown text-xl"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-lg">Loyalty Access</h4>
+                <p class="text-gray-400 text-sm">Earn rewards on every premium purchase</p>
+              </div>
             </div>
-            <span>Loyalty points on every purchase</span>
-          </li>
-          <li class="flex items-center gap-4">
-            <div class="w-10 h-10 rounded-full bg-yellow-500/20 flex items-center justify-center">
-              <i class="fas fa-truck text-yellow-400 text-xl"></i>
+
+            <div class="flex items-start gap-4">
+              <div class="w-12 h-12 rounded-full flex items-center justify-center check-list-icon flex-shrink-0">
+                <i class="fas fa-truck text-xl"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-lg">VIP Delivery</h4>
+                <p class="text-gray-400 text-sm">Free shipping on orders over 50,000 FCFA</p>
+              </div>
             </div>
-            <span>Free shipping on orders over $150</span>
-          </li>
-          <li class="flex items-center gap-4">
-            <div class="w-10 h-10 rounded-full bg-yellow-500/20 flex items-center justify-center">
-              <i class="fas fa-shield-alt text-yellow-400 text-xl"></i>
-            </div>
-            <span>Secure checkout & 30-day returns</span>
-          </li>
-        </ul>
+          </div>
+        </div>
+
+        <div class="text-sm text-gray-500 font-medium">
+          &copy; 2026 BBP COLLECTION. ALL RIGHTS RESERVED.
+        </div>
       </div>
     </div>
 
-    <!-- Right: Signup Form -->
-    <div class="bg-white rounded-2xl shadow-xl p-8 lg:p-12">
-      <div class="text-center mb-10">
-        <h2 class="text-3xl lg:text-4xl font-serif font-bold text-gray-900">
-          Create your account
-        </h2>
-        <p class="mt-3 text-gray-600">
-          Join the BBP Collection family today
+    <!-- Right Side: Signup Form -->
+    <div class="p-8 lg:p-14 bg-white overflow-y-auto">
+      <div class="w-full max-w-md mx-auto">
+        
+        <div class="mb-8">
+          <h3 class="text-3xl font-serif font-bold text-gray-900 mb-2">Create Account</h3>
+          <p class="text-gray-500">Join our exclusive community today</p>
+        </div>
+
+        <form method="post" action="{% url 'account_signup' %}" class="grid gap-5">
+          {% csrf_token %}
+
+          <!-- Full Name -->
+          <div class="space-y-1.5">
+            <label class="text-xs font-bold text-gray-700 uppercase tracking-widest">Full Name</label>
+            <div class="relative group">
+              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-yellow-600 transition-colors">
+                <i class="fas fa-user text-sm"></i>
+              </div>
+              {{ form.name|add_class:"w-full pl-11 pr-4 py-3 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:outline-none focus:border-yellow-500 focus:bg-white transition-all text-sm" }}
+            </div>
+            {% if form.name.errors %}<p class="text-[10px] text-red-500">{{ form.name.errors.0 }}</p>{% endif %}
+          </div>
+
+          <!-- Email -->
+          <div class="space-y-1.5">
+            <label class="text-xs font-bold text-gray-700 uppercase tracking-widest">Email Address</label>
+            <div class="relative group">
+              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-yellow-600 transition-colors">
+                <i class="fas fa-envelope text-sm"></i>
+              </div>
+              {{ form.email|add_class:"w-full pl-11 pr-4 py-3 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:outline-none focus:border-yellow-500 focus:bg-white transition-all text-sm" }}
+            </div>
+            {% if form.email.errors %}<p class="text-[10px] text-red-500">{{ form.email.errors.0 }}</p>{% endif %}
+          </div>
+
+          <!-- Phone (Optionnel) -->
+          <div class="space-y-1.5">
+            <label class="text-xs font-bold text-gray-700 uppercase tracking-widest">Phone Number (Optional)</label>
+            <div class="relative group">
+              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-yellow-600 transition-colors">
+                <i class="fas fa-phone text-sm"></i>
+              </div>
+              {{ form.phone_number|add_class:"w-full pl-11 pr-4 py-3 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:outline-none focus:border-yellow-500 focus:bg-white transition-all text-sm" }}
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+             <!-- Password 1 -->
+            <div class="space-y-1.5">
+                <label class="text-xs font-bold text-gray-700 uppercase tracking-widest">Password</label>
+                <div class="relative group">
+                    {{ form.password1|add_class:"w-full px-4 py-3 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:outline-none focus:border-yellow-500 focus:bg-white transition-all text-sm" }}
+                </div>
+            </div>
+             <!-- Password 2 -->
+            <div class="space-y-1.5">
+                <label class="text-xs font-bold text-gray-700 uppercase tracking-widest">Confirm</label>
+                <div class="relative group">
+                    {{ form.password2|add_class:"w-full px-4 py-3 bg-gray-50 border-2 border-gray-100 rounded-2xl focus:outline-none focus:border-yellow-500 focus:bg-white transition-all text-sm" }}
+                </div>
+            </div>
+          </div>
+          {% if form.password1.errors or form.password2.errors %}
+            <p class="text-[10px] text-red-500">{{ form.password1.errors.0|default:form.password2.errors.0 }}</p>
+          {% endif %}
+
+          <div class="flex items-start gap-3 mt-2">
+            <input type="checkbox" id="terms" required class="mt-1 w-4 h-4 text-yellow-600 border-gray-300 rounded focus:ring-yellow-500">
+            <label for="terms" class="text-xs text-gray-500">
+                I agree to the <a href="#" class="text-yellow-600 font-bold hover:underline">Terms</a> and <a href="#" class="text-yellow-600 font-bold hover:underline">Privacy Policy</a>
+            </label>
+          </div>
+
+          <button type="submit" class="w-full py-4 mt-2 bg-black text-white font-bold rounded-2xl hover:bg-gray-900 active:scale-95 transition-all shadow-xl shadow-yellow-600/5">
+            Create Account
+          </button>
+        </form>
+
+        <!-- Social Sign Up -->
+        {% if socialaccount.providers %}
+        <div class="mt-8">
+            <div class="relative flex items-center justify-center">
+                <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-gray-100"></div></div>
+                <span class="relative px-4 bg-white text-[10px] text-gray-400 uppercase tracking-[0.2em] font-black">Or join with</span>
+            </div>
+
+            <div class="mt-6 flex gap-4">
+                {% for provider in socialaccount.providers %}
+                <a href="{% provider_login_url provider.id process='signup' %}" 
+                   class="flex items-center justify-center gap-2 flex-1 py-3 border-2 border-gray-100 rounded-2xl hover:bg-gray-50 transition-all">
+                    {% if provider.id == 'google' %}
+                    <svg class="w-5 h-5" viewBox="0 0 24 24">
+                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 12-4.53z" fill="#EA4335"/>
+                    </svg>
+                    {% endif %}
+                    <span class="text-xs font-bold text-gray-700">Google</span>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <p class="mt-8 text-center text-sm text-gray-500">
+          Already a member? 
+          <a href="{% url 'account_login' %}" class="text-yellow-600 font-bold hover:underline">Sign In</a>
         </p>
       </div>
-
-      <!-- Form -->
-      <form class="space-y-6" method="post" action="{% url 'account_signup' %}">
-        {% csrf_token %}
-
-        <!-- Full Name -->
-        <div>
-          <label for="id_name" class="block text-sm font-medium text-gray-700 mb-2">
-            Full Name <span class="text-red-500">*</span>
-          </label>
-          {{ form.name|add_class:"block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500" }}
-        </div>
-
-        <!-- Email -->
-        <div>
-          <label for="id_email" class="block text-sm font-medium text-gray-700 mb-2">
-            Email address <span class="text-red-500">*</span>
-          </label>
-          {{ form.email|add_class:"block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500" }}
-        </div>
-
-        <!-- Phone (optionnel mais utile aux US) -->
-        <div>
-          <label for="id_phone_number" class="block text-sm font-medium text-gray-700 mb-2">
-            Phone Number
-          </label>
-          {{ form.phone_number|add_class:"block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500" }}
-        </div>
-
-        <!-- Password -->
-        <div>
-          <label for="id_password1" class="block text-sm font-medium text-gray-700 mb-2">
-            Password <span class="text-red-500">*</span>
-          </label>
-          {{ form.password1|add_class:"block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500" }}
-        </div>
-
-        <!-- Confirm Password -->
-        <div>
-          <label for="id_password2" class="block text-sm font-medium text-gray-700 mb-2">
-            Confirm Password <span class="text-red-500">*</span>
-          </label>
-          {{ form.password2|add_class:"block w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500" }}
-        </div>
-
-        <!-- Terms -->
-        <div class="flex items-start">
-          <div class="flex items-center h-5">
-            <input type="checkbox" name="terms" id="terms" required class="w-4 h-4 text-yellow-600 border-gray-300 rounded focus:ring-yellow-500">
-          </div>
-          <label for="terms" class="ml-3 text-sm text-gray-600">
-            I agree to the <a href="#" class="text-yellow-600 hover:underline">Terms of Service</a> and <a href="#" class="text-yellow-600 hover:underline">Privacy Policy</a>
-          </label>
-        </div>
-
-        <!-- Submit -->
-        <button type="submit" class="w-full py-4 px-6 bg-black text-white font-semibold rounded-lg hover:bg-gray-900 transition duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
-          Create Account
-        </button>
-      </form>
-
-      <!-- Social Sign Up -->
-      {% if socialaccount.providers %}
-      <div class="mt-8">
-        <div class="relative">
-          <div class="absolute inset-0 flex items-center">
-            <div class="w-full border-t border-gray-300"></div>
-          </div>
-          <div class="relative flex justify-center text-sm">
-            <span class="px-4 bg-white text-gray-500">Or sign up with</span>
-          </div>
-        </div>
-
-        <div class="mt-6 grid grid-cols-2 gap-4">
-          {% for provider in socialaccount.providers %}
-          <a href="{% provider_login_url provider.id process='signup' %}" class="flex items-center justify-center gap-3 py-3 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
-            {% if provider.id == 'google' %}
-              <svg class="w-5 h-5" viewBox="0 0 24 24">
-                <!-- Google SVG -->
-              </svg>
-              Google
-            {% endif %}
-          </a>
-          {% endfor %}
-        </div>
-      </div>
-      {% endif %}
-
-      <!-- Sign in link -->
-      <p class="mt-8 text-center text-sm text-gray-600">
-        Already have an account?
-        <a href="{% url 'account_login' %}" class="font-medium text-yellow-600 hover:text-yellow-500">
-          Sign in
-        </a>
-      </p>
     </div>
   </div>
 </div>
