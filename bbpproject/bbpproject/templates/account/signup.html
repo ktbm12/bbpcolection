@@ -144,8 +144,14 @@
                 </div>
             </div>
           </div>
-          {% if form.password1.errors or form.password2.errors %}
-            <p class="text-[10px] text-red-500">{{ form.password1.errors.0|default:form.password2.errors.0 }}</p>
+          {% if form.password1.errors %}
+            {% for error in form.password1.errors %}
+                <p class="text-[10px] text-red-500">{{ error }}</p>
+            {% endfor %}
+          {% elif form.password2.errors %}
+            {% for error in form.password2.errors %}
+                <p class="text-[10px] text-red-500">{{ error }}</p>
+            {% endfor %}
           {% endif %}
 
           <div class="flex items-start gap-3 mt-2">

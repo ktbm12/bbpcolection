@@ -17,7 +17,7 @@ urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
     # User management
     path("", include("bbpproject.users.urls")),   
-     path("product", include("product.urls")),         # ← sans "users/" et sans namespace pour l'instant
+     path("product/", include("product.urls")),         # ← avec slash final
     
     path("accounts/", include("allauth.urls")),
     # Your stuff: custom urls includes go here

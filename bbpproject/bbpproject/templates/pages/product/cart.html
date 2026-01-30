@@ -229,10 +229,10 @@
                     </div>
 
                     <div class="mt-8 space-y-4">
-                        <a href="{% url 'checkout' %}" class="block w-full bg-yellow-600 hover:bg-yellow-700 text-black text-center py-4 rounded-full font-bold text-lg transition shadow-lg hover:shadow-xl">
+                        <a href="{% url 'product:checkout' %}" class="block w-full bg-yellow-600 hover:bg-yellow-700 text-black text-center py-4 rounded-full font-bold text-lg transition shadow-lg hover:shadow-xl">
                             Passer la commande
                         </a>
-                        <a href="{% url 'product_list' %}" class="block w-full border-2 border-black text-center py-4 rounded-full font-semibold hover:bg-black hover:text-yellow-600 transition">
+                        <a href="{% url 'product:product_list' %}" class="block w-full border-2 border-black text-center py-4 rounded-full font-semibold hover:bg-black hover:text-yellow-600 transition">
                             Continuer les achats
                         </a>
                     </div>
@@ -279,7 +279,7 @@ async function updateQuantity(itemId, quantity) {
     if (quantity < 1) return;
 
     try {
-        const response = await fetch(`/cart/update/${itemId}/`, {
+        const response = await fetch(`/product/update/${itemId}/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -306,7 +306,7 @@ async function removeItem(itemId) {
     if (!confirm('Retirer cet article ?')) return;
 
     try {
-        const response = await fetch(`/cart/remove/${itemId}/`, {
+        const response = await fetch(`/product/remove/${itemId}/`, {
             method: 'POST',
             headers: {
                 'X-CSRFToken': csrfToken,
@@ -398,7 +398,7 @@ document.getElementById('promo-form')?.addEventListener('submit', async (e) => {
     if (!code) return;
 
     try {
-        const response = await fetch('/cart/apply-promo/', {
+        const response = await fetch('/product/cart/apply-promo/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
