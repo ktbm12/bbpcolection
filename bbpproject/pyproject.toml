@@ -184,6 +184,7 @@ dependencies = [
     "hiredis==3.3.0",
     "pillow==12.1.0",
     "psycopg[c]==3.3.2",
+    "pyjwt>=2.10.1",
     "python-slugify==8.0.4",
     "redis==7.1.0",
     "sentry-sdk==2.50.0",

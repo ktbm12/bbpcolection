@@ -1,110 +1,148 @@
-<nav class="fixed w-full bg-white/95 backdrop-blur-sm shadow-sm z-50">
+<!-- templates/include/navbar.html -->
+<nav class="fixed w-full bg-white/95 backdrop-blur-md shadow-sm z-50 border-b border-gray-100/80">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-20">
             <!-- Logo -->
             <div class="flex items-center">
-                <h1 class="text-3xl font-pacifico font-bold text-black">
-                    <span class="text-yellow-600">bbp</span>collection
-                </h1>
+                <a href="{% url 'users:home' %}" class="flex items-center">
+                    <h1 class="text-3xl font-pacifico font-bold text-black">
+                        <span class="text-yellow-600">bbp</span>collection
+                    </h1>
+                </a>
             </div>
-            
+
             <!-- Menu Desktop -->
-            <div class="hidden md:flex items-center space-x-8">
-                <a href="/" class="text-black hover:text-yellow-600 font-medium transition">Accueil</a>
-                <a href="#collections" class="text-black hover:text-yellow-600 font-medium transition">Collections</a>
-                <a href="/about" class="text-black hover:text-yellow-600 font-medium transition">À Propos</a>
-                <a href="#contact" class="text-black hover:text-yellow-600 font-medium transition">Contact</a>
+            <div class="hidden md:flex items-center space-x-10">
+                <a href="{% url 'users:home' %}" class="text-gray-800 hover:text-yellow-600 font-medium transition duration-200">
+                    Accueil
+                </a>
+                <a href="{% url 'product:product_list' %}" class="text-gray-800 hover:text-yellow-600 font-medium transition duration-200">
+                    Collections
+                </a>
+                <a href="" class="text-gray-800 hover:text-yellow-600 font-medium transition duration-200">
+                    À Propos
+                </a>
+                <a href="" class="text-gray-800 hover:text-yellow-600 font-medium transition duration-200">
+                    Contact
+                </a>
             </div>
-            
-            <!-- Icons -->
+
+            <!-- Actions (recherche, compte, panier, mobile menu) -->
             <div class="flex items-center space-x-6">
-                <button class="text-black hover:text-yellow-600 transition">
+                <!-- Recherche (optionnel - à implémenter plus tard) -->
+                <button class="text-gray-700 hover:text-yellow-600 transition">
                     <i class="fas fa-search text-xl"></i>
                 </button>
-                <button class="text-black hover:text-yellow-600 transition">
-                    <i class="fas fa-user text-xl"></i>
-                </button>
-                <a href="{% url 'product:cart_detail' %}">
-                <button class="text-black hover:text-yellow-600 transition relative">
+
+                <!-- Compte / Auth -->
+                {% if user.is_authenticated %}
+                    <!-- Connecté -->
+                    <div class="relative group">
+                        <a href="" class="flex items-center gap-2 text-gray-700 hover:text-yellow-600 transition">
+                            <i class="fas fa-user-circle text-xl"></i>
+                            <span class="hidden lg:inline font-medium">{{ user.name|default:user.email|truncatechars:20 }}</span>
+                        </a>
+                        <!-- Dropdown au hover (desktop) -->
+                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                            <div class="py-2">
+                                <a href="" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                                    Mon Compte
+                                </a>
+                                <a href="" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                                    Mes Commandes
+                                </a>
+                                <div class="border-t border-gray-100 my-1"></div>
+                                <a href="{% url 'account_logout' %}" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50">
+                                    Déconnexion
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <!-- Non connecté -->
+                    <div class="flex items-center gap-4">
+                        <a href="{% url 'account_login' %}" class="text-gray-700 hover:text-yellow-600 font-medium transition">
+                            Connexion
+                        </a>
+                        <a href="{% url 'account_signup' %}" class="bg-yellow-600 hover:bg-yellow-700 text-black px-5 py-2.5 rounded-full font-medium transition shadow-sm">
+                            Créer un compte
+                        </a>
+                    </div>
+                {% endif %}
+
+                <!-- Panier -->
+                <a href="{% url 'product:cart_detail' %}" class="text-gray-700 hover:text-yellow-600 transition relative group">
                     <i class="fas fa-shopping-bag text-xl"></i>
-                    <span class="absolute -top-2 -right-2 bg-yellow-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
-                </button>
+                    <span class="absolute -top-2 -right-2 bg-yellow-600 text-white text-xs font-bold rounded-full min-w-[18px] h-5 flex items-center justify-center px-1.5 shadow-sm group-hover:scale-110 transition-transform">
+                        {{ request.session.cart_items_count|default:0 }}
+                    </span>
                 </a>
-                <button id="mobile-menu-btn" class="md:hidden text-black hover:text-yellow-600 transition">
+
+                <!-- Hamburger Mobile -->
+                <button id="mobile-menu-btn" class="md:hidden text-gray-700 hover:text-yellow-600 transition focus:outline-none">
                     <i class="fas fa-bars text-2xl"></i>
                 </button>
             </div>
         </div>
+    </div>
 
-        <!-- Mobile Menu Dropdown -->
-        <div id="mobile-menu" class="hidden md:hidden overflow-hidden transition-all duration-300 ease-in-out">
-            <div class="px-2 pt-2 pb-4 space-y-2 border-t border-gray-200">
-                <a href="/" class="block px-4 py-3 text-black hover:bg-yellow-50 hover:text-yellow-600 font-medium transition rounded-lg">
-                    <i class="fas fa-home mr-3 text-yellow-600"></i>Accueil
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 shadow-lg">
+        <div class="px-4 py-6 space-y-4">
+            <a href="{% url 'users:home' %}" class="block px-4 py-3 text-gray-800 hover:bg-gray-50 rounded-lg transition">
+                Accueil
+            </a>
+            <a href="{% url 'product:product_list' %}" class="block px-4 py-3 text-gray-800 hover:bg-gray-50 rounded-lg transition">
+                Collections
+            </a>
+            <a href="" class="block px-4 py-3 text-gray-800 hover:bg-gray-50 rounded-lg transition">
+                À Propos
+            </a>
+            <a href="" class="block px-4 py-3 text-gray-800 hover:bg-gray-50 rounded-lg transition">
+                Contact
+            </a>
+
+            <hr class="my-4 border-gray-200">
+
+            {% if user.is_authenticated %}
+                <a href="" class="block px-4 py-3 text-gray-800 hover:bg-gray-50 rounded-lg transition">
+                    Mon Compte
                 </a>
-                <a href="#collections" class="block px-4 py-3 text-black hover:bg-yellow-50 hover:text-yellow-600 font-medium transition rounded-lg">
-                    <i class="fas fa-images mr-3 text-yellow-600"></i>Collections
+                <a href="{% url 'product:cart_detail' %}" class="block px-4 py-3 text-gray-800 hover:bg-gray-50 rounded-lg transition">
+                    Panier ({{ request.session.cart_items_count|default:0 }})
                 </a>
-                <a href="/about" class="block px-4 py-3 text-black hover:bg-yellow-50 hover:text-yellow-600 font-medium transition rounded-lg">
-                    <i class="fas fa-info-circle mr-3 text-yellow-600"></i>À Propos
+                <a href="{% url 'account_logout' %}" class="block px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg transition">
+                    Déconnexion
                 </a>
-                <a href="#contact" class="block px-4 py-3 text-black hover:bg-yellow-50 hover:text-yellow-600 font-medium transition rounded-lg">
-                    <i class="fas fa-envelope mr-3 text-yellow-600"></i>Contact
+            {% else %}
+                <a href="{% url 'account_login' %}" class="block px-4 py-3 text-gray-800 hover:bg-gray-50 rounded-lg transition">
+                    Connexion
                 </a>
-                <hr class="my-2">
-                <button class="w-full text-left px-4 py-3 text-black hover:bg-yellow-50 hover:text-yellow-600 font-medium transition rounded-lg">
-                    <i class="fas fa-user mr-3 text-yellow-600"></i>Mon Compte
-                </button>
-            </div>
+                <a href="{% url 'account_signup' %}" class="block px-4 py-3 bg-yellow-600 text-white hover:bg-yellow-700 rounded-lg transition text-center font-medium mt-2">
+                    Créer un compte
+                </a>
+            {% endif %}
         </div>
     </div>
 </nav>
 
+<!-- Script mobile menu -->
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-    const mobileMenu = document.getElementById('mobile-menu');
+document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('mobile-menu-btn');
+    const menu = document.getElementById('mobile-menu');
 
-    if (mobileMenuBtn && mobileMenu) {
-        mobileMenuBtn.addEventListener('click', function() {
-            mobileMenu.classList.toggle('hidden');
-            
-            // Smooth animation
-            if (mobileMenu.classList.contains('hidden')) {
-                mobileMenu.style.maxHeight = '0px';
-            } else {
-                mobileMenu.style.maxHeight = mobileMenu.scrollHeight + 'px';
-            }
+    if (btn && menu) {
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
         });
 
-        // Close menu when clicking on a link
-        const menuLinks = mobileMenu.querySelectorAll('a, button');
-        menuLinks.forEach(link => {
-            link.addEventListener('click', function() {
-                mobileMenu.classList.add('hidden');
-                mobileMenu.style.maxHeight = '0px';
-            });
-        });
-
-        // Close menu when clicking outside
-        document.addEventListener('click', function(event) {
-            if (!event.target.closest('nav')) {
-                mobileMenu.classList.add('hidden');
-                mobileMenu.style.maxHeight = '0px';
+        // Fermer en cliquant ailleurs
+        document.addEventListener('click', e => {
+            if (!e.target.closest('nav')) {
+                menu.classList.add('hidden');
             }
         });
     }
 });
 </script>
-
-<style>
-#mobile-menu {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease-in-out;
-}
-
-#mobile-menu:not(.hidden) {
-    max-height: 400px;
-}
-</style>

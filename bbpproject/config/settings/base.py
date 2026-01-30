@@ -71,6 +71,7 @@ DJANGO_APPS = [
     "django.contrib.humanize",
     "django.contrib.admin",
     "django.forms",
+    "allauth.socialaccount.providers.google"
 ]
 THIRD_PARTY_APPS = [
     "crispy_forms",
@@ -353,3 +354,63 @@ SPECTACULAR_SETTINGS = {
 }
 # Your stuff...
 # ------------------------------------------------------------------------------
+# settings.py
+
+# ────────────────────────────────────────────────────────────────
+# django-allauth — Configuration moderne (obligatoire depuis allauth 2.0+)
+# ────────────────────────────────────────────────────────────────
+
+SITE_ID = 1
+
+# Ton modèle User personnalisé
+AUTH_USER_MODEL = 'users.User'
+
+# Authentification principale : login par EMAIL uniquement
+ACCOUNT_LOGIN_METHODS = {
+    'email': {
+        'required': True,
+        'verification': 'mandatory',          # ou 'optional' ou 'none'
+    },
+}
+
+# Champs autorisés / obligatoires lors de l'inscription
+ACCOUNT_SIGNUP_FIELDS = [
+    'email*',                                 # * = obligatoire
+    'name',                                   # ton champ name personnalisé
+    'phone_number',                           # ton champ téléphone
+    'password1*',
+    'password2*',
+]
+
+# Plus besoin de ces anciens paramètres (ils sont dépréciés)
+# → Supprime ou commente-les pour éviter les warnings :
+# ACCOUNT_AUTHENTICATION_METHOD = 'email'              ← supprimé
+# ACCOUNT_EMAIL_REQUIRED = True                         ← supprimé
+# ACCOUNT_USERNAME_REQUIRED = False                     ← supprimé
+# ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True           ← supprimé
+# ACCOUNT_LOGIN_ATTEMPTS_LIMIT / TIMEOUT               ← supprimé
+
+# Sécurité renforcée (anti-bruteforce)
+ACCOUNT_RATE_LIMITS = {
+    'login_failed': '5/5m',                   # 5 échecs → blocage 5 minutes
+    'login': '20/5m',                         # 20 tentatives login par 5 min
+}
+
+# Anti-énumération (empêche de savoir si un email existe)
+ACCOUNT_PREVENT_ENUMERATION = True
+
+# Autres paramètres utiles
+ACCOUNT_EMAIL_CONFIRMATION_HMAC = True
+ACCOUNT_SESSION_REMEMBER = True
+ACCOUNT_UNIQUE_EMAIL = True
+
+# Redirections
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+ACCOUNT_LOGOUT_REDIRECT_URL = '/'
+
+# Emails (en développement)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# Si tu veux activer les providers sociaux plus tard
+# SOCIALACCOUNT_PROVIDERS = { ... }
