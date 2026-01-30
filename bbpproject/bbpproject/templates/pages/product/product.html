@@ -177,15 +177,17 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             
             {% for product in products %}
-            <div class="product-card bg-white rounded-2xl overflow-hidden border-2 border-gray-200 hover:border-yellow-600 animate-fadeIn">
-                <div class="product-image relative h-80">
-                    {% if product.main_image %}
-                        <img src="{{ product.main_image.url }}" alt="{{ product.name }}" class="absolute inset-0 w-full h-full object-cover">
-                    {% else %}
-                        <div class="absolute inset-0 bg-gradient-to-br from-yellow-100 to-gray-100 flex items-center justify-center">
-                            <i class="fas fa-image text-gray-300 text-7xl"></i>
-                        </div>
-                    {% endif %}
+            <div class="product-card bg-white rounded-2xl overflow-hidden border-2 border-gray-200 hover:border-yellow-600 animate-fadeIn group">
+                <div class="product-image relative h-80 overflow-hidden">
+                    <a href="{% url 'product:product_detail' product.id %}" class="absolute inset-0 z-0">
+                        {% if product.get_main_image_url %}
+                            <img src="{{ product.get_main_image_url }}" alt="{{ product.name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        {% else %}
+                            <div class="absolute inset-0 bg-gradient-to-br from-yellow-100 to-gray-100 flex items-center justify-center">
+                                <i class="fas fa-image text-gray-300 text-7xl"></i>
+                            </div>
+                        {% endif %}
+                    </a>
                     
                     <!-- Badges -->
                     <div class="absolute top-4 left-4 flex flex-col gap-2 z-10">
@@ -223,7 +225,9 @@
                     </div>
                     
                     <!-- Product Name -->
-                    <h3 class="text-lg font-semibold mb-2 line-clamp-2">{{ product.name }}</h3>
+                    <a href="{% url 'product:product_detail' product.id %}">
+                        <h3 class="text-lg font-semibold mb-2 line-clamp-2 hover:text-yellow-600 transition">{{ product.name }}</h3>
+                    </a>
                     
                     <!-- Rating -->
                     <div class="flex items-center gap-1 mb-3">
@@ -241,12 +245,11 @@
                         <span class="text-gray-500 text-sm ml-1">({{ product.review_count|default:0 }})</span>
                     </div>
                     
-                    <!-- Price & Add to Cart -->
                     <div class="flex items-center justify-between">
                         <div>
-                            {% if product.discount_price %}
-                            <span class="text-2xl font-bold text-black">{{ product.discount_price|floatformat:0 }}</span>
-                            <span class="text-sm text-gray-400 line-through ml-1">{{ product.price|floatformat:0 }}</span>
+                            {% if product.old_price %}
+                            <span class="text-2xl font-bold text-black">{{ product.price|floatformat:0 }}</span>
+                            <span class="text-sm text-gray-400 line-through ml-1">{{ product.old_price|floatformat:0 }}</span>
                             {% else %}
                             <span class="text-2xl font-bold text-black">{{ product.price|floatformat:0 }}</span>
                             {% endif %}
@@ -333,23 +336,30 @@
             })
         })
         .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                updateCartCount();
-                showNotification('Produit ajouté au panier !');
-            }
-        })
-        .catch(error => console.error('Error:', error));
+            .then(data => {
+                if(data.success) {
+                    if (window.showPremiumNotification) window.showPremiumNotification('Produit ajouté au panier !');
+                    // Mise à jour de tous les badges (desktop + mobile)
+                    document.querySelectorAll('.cart-items-badge').forEach(badge => {
+                        badge.textContent = data.cart_items_count;
+                    });
+                } else {
+                    if (window.showPremiumNotification) window.showPremiumNotification(data.error || 'Erreur', 'error');
+                }
+            })
+            .catch(error => {
+                if (window.showPremiumNotification) window.showPremiumNotification('Erreur réseau', 'error');
+            });
     }
 
     function updateCartCount() {
         fetch('/product/cart/count/')
             .then(response => response.json())
             .then(data => {
-                const cartBadge = document.querySelector('.cart-count');
-                if (cartBadge) {
-                    cartBadge.textContent = data.count;
-                }
+                const badges = document.querySelectorAll('.cart-items-badge');
+                badges.forEach(badge => {
+                    badge.textContent = data.count || 0;
+                });
             });
     }
 

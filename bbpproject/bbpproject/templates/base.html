@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}LuxeHair - Mèches de Haute Gamme{% endblock %}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&family=Satoshi:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,400,300&display=swap" rel="stylesheet">
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/output.css' %}">
 
     {% block extra_head %}{% endblock %}
 </head>
-<body class="bg-white">
+<body class="bg-white font-sans text-gray-900">
 
     {% include 'pages/include/navbar.html' %}
 
@@ -19,6 +20,84 @@
     {% endblock %}
 
     {% include 'pages/include/footer.html' %}
+
+    <!-- Premium Notification System -->
+    <div id="notification-container" class="fixed top-24 right-6 z-[100] flex flex-col gap-4 pointer-events-none"></div>
+
+    <style>
+        .premium-notification {
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            border-left: 4px solid #d4af37;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            min-width: 300px;
+            transform: translateX(120%);
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            pointer-events: auto;
+        }
+        .premium-notification.show {
+            transform: translateX(0);
+        }
+        .premium-notification.success { border-left-color: #d4af37; }
+        .premium-notification.error { border-left-color: #ef4444; }
+        .premium-notification i { color: #d4af37; font-size: 1.25rem; }
+    </style>
+
+    <script>
+        window.showPremiumNotification = function(message, type = 'success') {
+            const container = document.getElementById('notification-container');
+            const notification = document.createElement('div');
+            notification.className = `premium-notification ${type}`;
+            
+            const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+            
+            notification.innerHTML = `
+                <i class="fas ${icon}"></i>
+                <div class="flex-1">
+                    <p class="text-xs font-black uppercase tracking-widest text-yellow-600 mb-0.5">${type === 'success' ? 'Succès' : 'Attention'}</p>
+                    <p class="text-sm font-medium text-gray-200">${message}</p>
+                </div>
+                <button onclick="this.parentElement.remove()" class="text-gray-500 hover:text-white transition">
+                    <i class="fas fa-times text-xs"></i>
+                </button>
+            `;
+            
+            container.appendChild(notification);
+            
+            // Trigger animation
+            setTimeout(() => notification.classList.add('show'), 10);
+            
+            // Auto remove
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 500);
+            }, 5000);
+        };
+
+        // Integration with Django Messages
+        {% if messages %}
+        document.addEventListener('DOMContentLoaded', () => {
+            {% for message in messages %}
+                if (window.showPremiumNotification) {
+                    window.showPremiumNotification("{{ message|escapejs }}", "{{ message.tags|default:'success' }}");
+                }
+            {% endfor %}
+        });
+        {% endif %}
+
+        // Global Image Fallback System
+        document.addEventListener('error', function (e) {
+            if (e.target.tagName.toLowerCase() === 'img') {
+                e.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='1000' viewBox='0 0 800 1000'%3E%3Crect width='800' height='1000' fill='%23f3f4f6'/%3E%3Ctext x='50%25' y='50%25' font-family='serif' font-size='40' fill='%239ca3af' text-anchor='middle' dy='.3em'%3EBBP COLLECTION%3C/text%3E%3C/svg%3E";
+            }
+        }, true);
+    </script>
 
     {% block extra_js %}{% endblock %}
 </body>

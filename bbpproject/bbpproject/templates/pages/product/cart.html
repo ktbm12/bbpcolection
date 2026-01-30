@@ -92,7 +92,7 @@
         <h1 class="text-4xl md:text-5xl font-serif font-bold mb-2">Mon Panier</h1>
         <p class="text-gray-600 mb-10">
             {% if cart_items_count %}
-                {{ cart_items_count }} article{{ cart_items_count|pluralize }} • {{ cart_total|floatformat:0|intcomma }} FCFA
+                {{ cart_items_count }} article{{ cart_items_count|pluralize }} • {{ total|floatformat:0|intcomma }} FCFA
             {% else %}
                 Votre panier est vide
             {% endif %}
@@ -185,7 +185,7 @@
                     <div class="space-y-4 text-sm">
                         <div class="flex justify-between">
                             <span class="text-gray-700">Sous-total</span>
-                            <span id="subtotal">{{ cart_subtotal|floatformat:0|intcomma }} FCFA</span>
+                            <span id="subtotal">{{ subtotal|floatformat:0|intcomma }} FCFA</span>
                         </div>
 
                         <div class="flex justify-between text-green-600" id="discount-row" {% if not discount %}style="display:none"{% endif %}>
@@ -223,7 +223,7 @@
                         <div class="pt-6 border-t border-gray-300 mt-6">
                             <div class="flex justify-between items-center text-xl font-bold">
                                 <span>Total</span>
-                                <span id="grand-total">{{ cart_total|floatformat:0|intcomma }} FCFA</span>
+                                <span id="grand-total">{{ total|floatformat:0|intcomma }} FCFA</span>
                             </div>
                         </div>
                     </div>
@@ -290,15 +290,15 @@ async function updateQuantity(itemId, quantity) {
 
         const data = await response.json();
 
-        if (data.success) {
-            updateCartDisplay(data);
-            showToast('Quantité mise à jour');
-        } else {
-            showToast(data.error || 'Erreur lors de la mise à jour', 'error');
+            if (data.success) {
+                updateCartDisplay(data);
+                if (window.showPremiumNotification) window.showPremiumNotification('Quantité mise à jour');
+            } else {
+                if (window.showPremiumNotification) window.showPremiumNotification(data.error || 'Erreur lors de la mise à jour', 'error');
+            }
+        } catch (err) {
+            if (window.showPremiumNotification) window.showPremiumNotification('Erreur réseau', 'error');
         }
-    } catch (err) {
-        showToast('Erreur réseau', 'error');
-    }
 }
 
 // Suppression article
@@ -365,8 +365,9 @@ function updateCartDisplay(data) {
     }
     
     // Nombre articles (header)
-    const cartCount = document.querySelector('.cart-count, .cart-badge');
-    if (cartCount) cartCount.textContent = data.cart_items_count;
+    document.querySelectorAll('.cart-items-badge').forEach(el => {
+        el.textContent = data.cart_items_count;
+    });
 }
 
 // Gestion quantité

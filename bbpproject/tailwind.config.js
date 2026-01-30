@@ -24,6 +24,7 @@ module.exports = {
         },
       },
       fontFamily: {
+        sans: ['Satoshi', 'sans-serif'],
         pacifico: ['Pacifico', 'cursive'],
         satoshi: ['Satoshi', 'sans-serif'],
       },

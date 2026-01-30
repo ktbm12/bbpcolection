@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 from core.models import CFPBaseModel
 from bbpproject.users.models import User
+import uuid
 
 
 class Category(CFPBaseModel):
@@ -47,6 +48,26 @@ class Product(CFPBaseModel):
         if self.old_price and self.old_price > self.price:
             return round(((self.old_price - self.price) / self.old_price) * 100)
         return 0
+
+    @property
+    def avg_rating(self):
+        # Simulation d'une note premium pour la démo
+        return 4.5
+
+    @property
+    def review_count(self):
+        # Simulation d'un nombre d'avis pour la démo
+        return 128
+
+    @property
+    def get_main_image_url(self):
+        """Retourne l'image principale ou la première image de la galerie comme fallback."""
+        if self.main_image:
+            return self.main_image.url
+        first_img = self.gallery.filter(is_main=True).first() or self.gallery.first()
+        if first_img:
+            return first_img.image.url
+        return None
 class ProductImage(CFPBaseModel):
     """Images secondaires / galerie"""
     product = models.ForeignKey(
@@ -56,6 +77,7 @@ class ProductImage(CFPBaseModel):
     )
     image = models.ImageField(upload_to="products/gallery/%Y/%m/%d/")
     alt_text = models.CharField(max_length=200, blank=True)
+    is_main = models.BooleanField(default=False)
     display_order = models.PositiveSmallIntegerField(default=10)
 
     class Meta(CFPBaseModel.Meta):

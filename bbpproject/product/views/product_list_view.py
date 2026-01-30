@@ -45,11 +45,8 @@ class ProductListView(ListView):
             elif sort == 'newest':
                 qs = qs.order_by('-created')
             elif sort == 'rating':
-                # Tri par note moyenne + nombre d'avis (plus pondéré)
-                qs = qs.annotate(
-                    avg_rating=Avg('reviews__rating'),
-                    review_count=Count('reviews')
-                ).order_by('-avg_rating', '-review_count')
+                # On garde l'option mais sans tri réel tant que Review n'existe pas
+                pass
 
         # Optionnel : recherche texte simple (si tu veux l'ajouter plus tard)
         q = self.request.GET.get('q')

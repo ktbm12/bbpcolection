@@ -13,7 +13,7 @@
             <!-- Logo (Always visible and centered on mobile) -->
             <div class="flex items-center order-2">
                 <a href="{% url 'users:home' %}" class="flex items-center">
-                    <h1 class="text-xl sm:text-2xl lg:text-3xl font-serif font-bold text-black tracking-tight">
+                    <h1 class="text-2xl sm:text-3xl lg:text-4xl font-pacifico text-black tracking-normal">
                         <span class="text-yellow-600">bbp</span>collection
                     </h1>
                 </a>
@@ -38,8 +38,8 @@
                 <!-- Panier (Always visible and prominent) -->
                 <a href="{% url 'product:cart_detail' %}" class="relative group p-2 text-gray-900 hover:text-yellow-600 transition flex items-center">
                     <i class="fas fa-shopping-bag text-xl"></i>
-                    <span class="absolute -top-1 -right-1 bg-black text-white text-[10px] font-black rounded-full w-5 h-5 flex items-center justify-center border-2 border-white shadow-sm group-hover:bg-yellow-600 group-hover:scale-110 transition-all">
-                        {{ request.session.cart_items_count|default:0 }}
+                    <span class="absolute -top-1 -right-1 bg-black text-white text-[10px] font-black rounded-full w-5 h-5 flex items-center justify-center border-2 border-white shadow-sm group-hover:bg-yellow-600 group-hover:scale-110 transition-all cart-items-badge">
+                        {{ cart_items_count|default:0 }}
                     </span>
                 </a>
 
@@ -102,7 +102,7 @@
         <div class="flex flex-col h-full overflow-hidden">
             <!-- Fixed Header for Mobile Menu -->
             <div class="h-20 px-4 sm:px-6 flex items-center justify-between border-b border-gray-100 bg-white">
-                <h1 class="text-2xl font-serif font-bold text-black tracking-tight">
+                <h1 class="text-3xl font-pacifico text-black tracking-normal">
                     <span class="text-yellow-600">bbp</span>collection
                 </h1>
                 <button id="close-menu-btn" class="text-gray-900 p-2 focus:outline-none" aria-label="Fermer">
