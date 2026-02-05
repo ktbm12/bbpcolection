@@ -261,19 +261,18 @@
                     </div>
             
                     <!-- ACTIONS -->
-                    <div class="flex justify-between items-center">
-            
+                    <div class="flex gap-2 items-center">
                         <button onclick="addToCart('{{ product.id }}')"
-                                class="bg-yellow-600 hover:bg-yellow-700 text-black px-4 py-2 rounded-lg text-sm font-semibold">
+                                class="bg-yellow-600 hover:bg-yellow-700 text-black flex-1 py-2 rounded-lg text-sm font-semibold">
                             Ajouter au panier
                         </button>
-            
+                    
                         <button onclick="toggleFavorite('{{ product.id }}')"
                                 class="w-10 h-10 flex items-center justify-center border rounded-lg hover:bg-gray-100">
                             <i class="far fa-heart"></i>
                         </button>
-            
                     </div>
+                    
             
                 </div>
             
