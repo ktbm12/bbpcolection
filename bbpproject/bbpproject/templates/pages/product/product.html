@@ -175,101 +175,113 @@
 
         <!-- Products Grid -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            
+
             {% for product in products %}
-            <div class="product-card bg-white rounded-2xl overflow-hidden border-2 border-gray-200 hover:border-yellow-600 animate-fadeIn group">
+            <div class="product-card bg-white rounded-2xl overflow-hidden border-2 border-gray-200 hover:border-yellow-600 group">
+            
+                <!-- IMAGE -->
                 <div class="product-image relative h-80 overflow-hidden">
-                    <a href="{% url 'product:product_detail' product.id %}" class="absolute inset-0 z-0">
+                    <a href="{% url 'product:product_detail' product.id %}" class="absolute inset-0">
                         {% if product.get_main_image_url %}
-                            <img src="{{ product.get_main_image_url }}" alt="{{ product.name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                            <img src="{{ product.get_main_image_url }}" alt="{{ product.name }}"
+                                 class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
                         {% else %}
-                            <div class="absolute inset-0 bg-gradient-to-br from-yellow-100 to-gray-100 flex items-center justify-center">
+                            <div class="absolute inset-0 bg-gray-100 flex items-center justify-center">
                                 <i class="fas fa-image text-gray-300 text-7xl"></i>
                             </div>
                         {% endif %}
                     </a>
-                    
-                    <!-- Badges -->
-                    <div class="absolute top-4 left-4 flex flex-col gap-2 z-10">
-                        {% if product.is_new %}
-                        <span class="badge-new px-3 py-1.5 rounded-full text-xs font-bold uppercase bg-yellow-600 text-black">Nouveau</span>
-                        {% endif %}
-                        {% if product.discount_percentage %}
-                        <span class="bg-black text-white px-3 py-1.5 rounded-full text-xs font-bold uppercase">-{{ product.discount_percentage }}%</span>
-                        {% endif %}
-                        {% if product.is_premium %}
-                        <span class="bg-yellow-600 text-black px-3 py-1.5 rounded-full text-xs font-bold uppercase">Premium</span>
-                        {% endif %}
-                    </div>
-                    
-                    <!-- Favorite Button -->
-                    <div class="absolute top-4 right-4 z-10">
-                        <button onclick="toggleFavorite('{{ product.id }}')" class="w-10 h-10 bg-white rounded-full flex items-center justify-center hover:bg-yellow-600 transition shadow-lg">
-                            <i class="far fa-heart"></i>
-                        </button>
-                    </div>
-                    
-                    <!-- Quick View Button -->
-                    <a href="{% url 'product:product_detail' product.id %}" class="quick-view-btn absolute bottom-4 left-1/2 -translate-x-1/2 bg-white text-black px-6 py-2.5 rounded-full font-semibold text-sm hover:bg-yellow-600 transition shadow-xl z-10">
-                        Aperçu Rapide
-                    </a>
                 </div>
-                
-                <div class="p-5 relative z-10">
-                    <!-- Category & Size -->
-                    <div class="flex items-center gap-1.5 mb-2">
-                        <span class="text-yellow-600 text-xs font-medium px-2 py-1 bg-yellow-50 rounded">{{ product.get_texture_display }}</span>
-                        {% if product.length %}
-                        <span class="text-gray-600 text-xs">{{ product.length }}"</span>
-                        {% endif %}
+            
+                <!-- CONTENT (comme course-card-content) -->
+                <div class="p-5 flex flex-col justify-between">
+            
+                    <!-- HEADER -->
+                    <div class="product-card-header flex justify-between items-start mb-2">
+            
+                        <div>
+                            <p class="text-sm text-gray-600">
+                                {{ product.brand.name|default:"Brand" }}
+                            </p>
+                        </div>
+            
+                        <!-- Rating -->
+                        <div class="flex items-center gap-1">
+                            {% with rating=product.avg_rating %}
+                            <span class="text-sm font-semibold">
+                                {{ rating|default:0|floatformat:1 }}
+                            </span>
+                            {% endwith %}
+                            <i class="fas fa-star text-yellow-500 text-xs"></i>
+                        </div>
+            
                     </div>
-                    
-                    <!-- Product Name -->
-                    <a href="{% url 'product:product_detail' product.id %}">
-                        <h3 class="text-lg font-semibold mb-2 line-clamp-2 hover:text-yellow-600 transition">{{ product.name }}</h3>
-                    </a>
-                    
-                    <!-- Rating -->
-                    <div class="flex items-center gap-1 mb-3">
-                        {% with rating=product.avg_rating %}
-                        {% for i in "12345" %}
-                            {% if forloop.counter <= rating %}
-                            <i class="fas fa-star text-yellow-500 text-sm"></i>
-                            {% elif forloop.counter == rating|add:1 and rating != rating|floatformat:0|add:0 %}
-                            <i class="fas fa-star-half-alt text-yellow-500 text-sm"></i>
-                            {% else %}
-                            <i class="far fa-star text-yellow-500 text-sm"></i>
+            
+                    <!-- TITLE + DESCRIPTION -->
+                    <div class="mb-3">
+                        <a href="{% url 'product:product_detail' product.id %}">
+                            <p class="font-semibold line-clamp-2 hover:text-yellow-600">
+                                {{ product.name }}
+                            </p>
+                        </a>
+            
+                        <p class="text-sm text-gray-500 line-clamp-2">
+                            {{ product.short_description|default:""|striptags }}
+                        </p>
+                    </div>
+            
+                    <!-- META -->
+                    <div class="flex justify-between items-center mb-4 text-sm text-gray-600">
+            
+                        <div class="flex gap-2">
+                            {% if product.length %}
+                            <span>{{ product.length }}"</span>
                             {% endif %}
-                        {% endfor %}
-                        {% endwith %}
-                        <span class="text-gray-500 text-sm ml-1">({{ product.review_count|default:0 }})</span>
-                    </div>
-                    
-                    <div class="flex items-center justify-between">
+            
+                            <span>{{ product.get_texture_display }}</span>
+                        </div>
+            
+                        <!-- PRICE -->
                         <div>
                             {% if product.old_price %}
-                            <span class="text-2xl font-bold text-black">{{ product.price|floatformat:0 }}</span>
-                            <span class="text-sm text-gray-400 line-through ml-1">{{ product.old_price|floatformat:0 }}</span>
+                            <span class="font-bold text-black">
+                                {{ product.price|floatformat:0 }}
+                            </span>
+                            <span class="line-through text-gray-400 ml-1">
+                                {{ product.old_price|floatformat:0 }}
+                            </span>
                             {% else %}
-                            <span class="text-2xl font-bold text-black">{{ product.price|floatformat:0 }}</span>
+                            <span class="font-bold text-black">
+                                {{ product.price|floatformat:0 }}
+                            </span>
                             {% endif %}
-                            <span class="text-sm text-gray-600 ml-1">FCFA</span>
+                            FCFA
                         </div>
-                        <button onclick="addToCart('{{ product.id }}')" class="w-11 h-11 bg-yellow-600 hover:bg-yellow-700 text-black rounded-full flex items-center justify-center transition shadow-lg">
-                            <i class="fas fa-shopping-cart"></i>
-                        </button>
+            
                     </div>
+            
+                    <!-- ACTIONS -->
+                    <div class="flex justify-between items-center">
+            
+                        <button onclick="addToCart('{{ product.id }}')"
+                                class="bg-yellow-600 hover:bg-yellow-700 text-black px-4 py-2 rounded-lg text-sm font-semibold">
+                            Ajouter au panier
+                        </button>
+            
+                        <button onclick="toggleFavorite('{{ product.id }}')"
+                                class="w-10 h-10 flex items-center justify-center border rounded-lg hover:bg-gray-100">
+                            <i class="far fa-heart"></i>
+                        </button>
+            
+                    </div>
+            
                 </div>
-            </div>
-            {% empty %}
-            <div class="col-span-full text-center py-20">
-                <i class="fas fa-inbox text-gray-300 text-6xl mb-4"></i>
-                <p class="text-gray-500 text-lg">Aucun produit disponible pour le moment.</p>
+            
             </div>
             {% endfor %}
-
-        </div>
-
+            
+            </div>
+            
         <!-- Pagination -->
         {% if products.has_other_pages %}
         <div class="flex justify-center items-center gap-2 mt-16">
