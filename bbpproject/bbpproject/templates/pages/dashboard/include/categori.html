@@ -1,0 +1,66 @@
+{% extends "pages/dashboard/admin_base.html" %}
+
+{% block content %}
+<div class="p-6">
+
+    <h1 class="text-2xl font-bold mb-6">Gestion des catégories</h1>
+
+    <!-- Formulaire ajout -->
+    <div class="bg-white p-5 rounded-lg shadow mb-8">
+        <h2 class="text-lg font-semibold mb-4">Nouvelle catégorie</h2>
+
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+
+            <div>
+                <label class="block text-sm mb-1">Nom</label>
+                <input type="text" name="name"
+                       class="w-full border rounded-lg p-2"
+                       required>
+            </div>
+
+            <div>
+                <label class="block text-sm mb-1">Description</label>
+                <textarea name="description"
+                          class="w-full border rounded-lg p-2"></textarea>
+            </div>
+
+            <button class="bg-yellow-600 text-black px-4 py-2 rounded-lg">
+                Ajouter
+            </button>
+        </form>
+    </div>
+
+    <!-- Liste -->
+    <div class="bg-white rounded-lg shadow">
+        <table class="w-full">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="p-3 text-left">Nom</th>
+                    <th class="p-3 text-left">Slug</th>
+                    <th class="p-3 text-left">Description</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for cat in categories %}
+                <tr class="border-t">
+                    <td class="p-3">{{ cat.name }}</td>
+                    <td class="p-3 text-gray-500">{{ cat.slug }}</td>
+                    <td class="p-3 text-gray-600">
+                        {{ cat.description|truncatechars:80 }}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="p-6 text-center text-gray-500">
+                        Aucune catégorie trouvée
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+{% endblock %}

@@ -12,7 +12,7 @@ from .views.cart_detail_view import (
     CheckoutPlaceholderView,
 )
 
-
+from product.views.categorie_view import category_list_create
 app_name = 'product'
 
 urlpatterns = [
@@ -25,5 +25,8 @@ urlpatterns = [
     path('update/<uuid:item_id>/', UpdateCartItemView.as_view(), name='update_item'),
     path('remove/<uuid:item_id>/', RemoveCartItemView.as_view(), name='remove_item'),
     path('add/<uuid:product_id>/', add_to_cart, name='add_item'),
+    path("categories/", category_list_create, name="category_list"),
 ]
+
+
 
