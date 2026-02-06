@@ -1,11 +1,61 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-</body>
-</html>
+{% extends "pages/dashboard/admin_base.html" %}
+
+{% block content %}
+<div class="p-6">
+
+<h1 class="text-xl font-bold mb-6">
+    {% if product %}Modifier{% else %}Créer{% endif %} produit
+</h1>
+
+<form method="post" enctype="multipart/form-data" class="space-y-4">
+{% csrf_token %}
+
+<input type="text" name="name"
+       value="{{ product.name|default:'' }}"
+       placeholder="Nom produit"
+       class="w-full border p-2 rounded" required>
+
+<select name="category" class="w-full border p-2 rounded">
+{% for cat in categories %}
+<option value="{{ cat.id }}"
+{% if product.category.id == cat.id %}selected{% endif %}>
+{{ cat.name }}
+</option>
+{% endfor %}
+</select>
+
+<input type="number" name="price"
+       value="{{ product.price|default:'' }}"
+       placeholder="Prix"
+       class="w-full border p-2 rounded">
+
+<input type="number" name="old_price"
+       value="{{ product.old_price|default:'' }}"
+       placeholder="Ancien prix"
+       class="w-full border p-2 rounded">
+
+<input type="number" name="stock"
+       value="{{ product.stock|default:10 }}"
+       placeholder="Stock"
+       class="w-full border p-2 rounded">
+
+<textarea name="description"
+          class="w-full border p-2 rounded"
+          placeholder="Description">{{ product.description }}</textarea>
+
+<label class="flex items-center gap-2">
+<input type="checkbox" name="is_featured"
+{% if product.is_featured %}checked{% endif %}>
+Produit vedette
+</label>
+
+<input type="file" name="main_image">
+
+<button class="bg-yellow-600 px-4 py-2 rounded">
+Enregistrer
+</button>
+
+</form>
+
+</div>
+{% endblock %}
