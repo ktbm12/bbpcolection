@@ -7,6 +7,17 @@ from bbpproject.users.views.dashboards.dashboard_views import (
     UserDashboardView,
     smart_home_redirect_view,
 )
+from django.urls import reverse_lazy
+from django.utils.text import slugify
+from django.views.generic import (
+    ListView,
+    CreateView,
+    UpdateView,
+    DeleteView,
+)
+
+from product.models import Product, Category
+
 
 app_name = "users"
 
@@ -16,3 +27,6 @@ urlpatterns = [
     path('dashboard/admin/', AdminDashboardView.as_view(), name='admin_dashboard'),
     path('dashboard/user/', UserDashboardView.as_view(), name='user_dashboard'),
 ]
+
+
+
