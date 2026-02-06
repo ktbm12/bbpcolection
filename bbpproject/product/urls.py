@@ -26,6 +26,10 @@ urlpatterns = [
     path('remove/<uuid:item_id>/', RemoveCartItemView.as_view(), name='remove_item'),
     path('add/<uuid:product_id>/', add_to_cart, name='add_item'),
     path("categories/", category_list_create, name="category_list"),
+    path("dashboard/products/", ProductListView.as_view(), name="product_list"),
+    path("dashboard/products/create/", ProductCreateView.as_view(), name="product_create"),
+    path("dashboard/products/<int:pk>/edit/", ProductUpdateView.as_view(), name="product_update"),
+    path("dashboard/products/<int:pk>/delete/", ProductDeleteView.as_view(), name="product_delete"),
 ]
 
 
