@@ -2,6 +2,8 @@
 from django.urls import include, path
 from .views.product_list_view import ProductListView
 from .views.product_detail_view import ProductDetailView
+from product.views.categorie_view import category_list_create
+
 from .views.cart_detail_view import (
     CartDetailView,
     UpdateCartItemView,
@@ -11,9 +13,14 @@ from .views.cart_detail_view import (
     apply_promo_code,
     CheckoutPlaceholderView,
 )
+from product.views.produc_create_view import (
+    ProductListView,
+    ProductCreateView,
+    ProductUpdateView,
+    ProductDeleteView,
+)
 
-from product.views.categorie_view import category_list_create
-app_name = 'product'
+app_name = "product"
 
 urlpatterns = [
     path('', ProductListView.as_view(), name='product_list'),

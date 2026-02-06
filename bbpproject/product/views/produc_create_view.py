@@ -1,6 +1,13 @@
+from django.shortcuts import render, redirect, get_object_or_404
+from django.utils.text import slugify
+
+from product.models import Product, Category
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+
 class ProductListView(ListView):
     model = Product
-    template_name = "pages/dashboard/include/product_list.html"
+    template_name = "pages/dashboard/include/create_product.html"
     context_object_name = "products"
     paginate_by = 20
 
