@@ -13,12 +13,10 @@ from .views.cart_detail_view import (
     apply_promo_code,
     CheckoutPlaceholderView,
 )
-from product.views.produc_create_view import (
-    ProductListView,
-    ProductCreateView,
-    ProductUpdateView,
-    ProductDeleteView,
-)
+from product.views.produc_create_view import ProductDashboardView
+from product.views.produc_create_view import product_edit
+from product.views.produc_create_view import product_delete
+
 
 app_name = "product"
 
@@ -33,10 +31,15 @@ urlpatterns = [
     path('remove/<uuid:item_id>/', RemoveCartItemView.as_view(), name='remove_item'),
     path('add/<uuid:product_id>/', add_to_cart, name='add_item'),
     path("categories/", category_list_create, name="category_list"),
-    path("dashboard/products/", ProductListView.as_view(), name="product_list"),
-    path("dashboard/products/create/", ProductCreateView.as_view(), name="product_create"),
-    path("dashboard/products/<int:pk>/edit/", ProductUpdateView.as_view(), name="product_update"),
-    path("dashboard/products/<int:pk>/delete/", ProductDeleteView.as_view(), name="product_delete"),
+   
+    path(
+    "dashboard/products/",
+    ProductDashboardView.as_view(),
+    name="dashboard_products",
+),
+path("dashboard/products/<uuid:pk>/edit/", product_edit, name="product_edit"),
+path("dashboard/products/<uuid:pk>/delete/", product_delete, name="product_delete"),
+
 ]
 
 

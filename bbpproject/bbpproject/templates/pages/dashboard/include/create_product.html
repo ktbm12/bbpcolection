@@ -1,61 +1,114 @@
 {% extends "pages/dashboard/admin_base.html" %}
+{% load static %}
 
-{% block content %}
+{% block dashboard_content %}
 <div class="p-6">
 
-<h1 class="text-xl font-bold mb-6">
-    {% if product %}Modifier{% else %}Créer{% endif %} produit
-</h1>
+    <!-- ===================== -->
+    <!-- FORMULAIRE PRODUIT -->
+    <!-- ===================== -->
+    <div class="bg-white p-6 rounded-xl shadow mb-10">
+        <h2 class="text-xl font-semibold mb-4">Ajouter un produit</h2>
 
-<form method="post" enctype="multipart/form-data" class="space-y-4">
-{% csrf_token %}
+        <form method="post" enctype="multipart/form-data" class="grid grid-cols-2 gap-4">
+            {% csrf_token %}
 
-<input type="text" name="name"
-       value="{{ product.name|default:'' }}"
-       placeholder="Nom produit"
-       class="w-full border p-2 rounded" required>
+            <div class="col-span-2">{{ form.name.label_tag }} {{ form.name }}</div>
+            <div>{{ form.category.label_tag }} {{ form.category }}</div>
+            <div>{{ form.stock.label_tag }} {{ form.stock }}</div>
 
-<select name="category" class="w-full border p-2 rounded">
-{% for cat in categories %}
-<option value="{{ cat.id }}"
-{% if product.category.id == cat.id %}selected{% endif %}>
-{{ cat.name }}
-</option>
-{% endfor %}
-</select>
+            <div>{{ form.price.label_tag }} {{ form.price }}</div>
+            <div>{{ form.old_price.label_tag }} {{ form.old_price }}</div>
 
-<input type="number" name="price"
-       value="{{ product.price|default:'' }}"
-       placeholder="Prix"
-       class="w-full border p-2 rounded">
+            <div class="col-span-2">{{ form.main_image.label_tag }} {{ form.main_image }}</div>
 
-<input type="number" name="old_price"
-       value="{{ product.old_price|default:'' }}"
-       placeholder="Ancien prix"
-       class="w-full border p-2 rounded">
+            <div class="col-span-2">
+                {{ form.description.label_tag }}
+                {{ form.description }}
+            </div>
 
-<input type="number" name="stock"
-       value="{{ product.stock|default:10 }}"
-       placeholder="Stock"
-       class="w-full border p-2 rounded">
+            <div class="col-span-2 flex items-center gap-3">
+                {{ form.is_featured }}
+                <label>Produit en vedette</label>
+            </div>
 
-<textarea name="description"
-          class="w-full border p-2 rounded"
-          placeholder="Description">{{ product.description }}</textarea>
+            <button class="col-span-2 bg-yellow-600 hover:bg-yellow-700 text-white py-3 rounded-lg font-semibold">
+                Enregistrer produit
+            </button>
+        </form>
+    </div>
 
-<label class="flex items-center gap-2">
-<input type="checkbox" name="is_featured"
-{% if product.is_featured %}checked{% endif %}>
-Produit vedette
-</label>
 
-<input type="file" name="main_image">
+    <!-- ===================== -->
+    <!-- LISTE PRODUITS -->
+    <!-- ===================== -->
+    <div class="bg-white p-6 rounded-xl shadow">
+        <h2 class="text-xl font-semibold mb-6">Produits enregistrés</h2>
 
-<button class="bg-yellow-600 px-4 py-2 rounded">
-Enregistrer
-</button>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left">
+                <thead class="border-b">
+                    <tr>
+                        <th class="p-3">Image</th>
+                        <th>Nom</th>
+                        <th>Catégorie</th>
+                        <th>Prix</th>
+                        <th>Stock</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
 
-</form>
+                <tbody>
+                    {% for product in products %}
+                    <tr class="border-b hover:bg-gray-50">
+
+                        <td class="p-2">
+                            {% if product.main_image %}
+                            <img src="{{ product.main_image.url }}" class="w-14 h-14 object-cover rounded">
+                            {% endif %}
+                        </td>
+
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.category.name }}</td>
+                        <td>{{ product.price }} FCFA</td>
+
+                        <td>
+                            {% if product.stock < 5 %}
+                            <span class="text-red-600 font-semibold">{{ product.stock }}</span>
+                            {% else %}
+                            {{ product.stock }}
+                            {% endif %}
+                        </td>
+
+                        <td class="flex gap-2 py-3">
+
+                            <form method="post" action="{% url 'product:product_edit' product.id %}" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <button class="px-3 py-1 bg-blue-600 text-white rounded">
+                                    Modifier
+                                </button>
+                            </form>
+
+                            <a href="{% url 'product:product_delete' product.id %}"
+                               onclick="return confirm('Supprimer ce produit ?')"
+                               class="px-3 py-1 bg-red-600 text-white rounded">
+                                Supprimer
+                            </a>
+
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center p-6 text-gray-500">
+                            Aucun produit enregistré
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+    </div>
 
 </div>
-{% endblock %}
+{% endblock dashboard_content %}
