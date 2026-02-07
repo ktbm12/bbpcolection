@@ -2,113 +2,280 @@
 {% load static %}
 
 {% block dashboard_content %}
-<div class="p-6">
-
-    <!-- ===================== -->
-    <!-- FORMULAIRE PRODUIT -->
-    <!-- ===================== -->
-    <div class="bg-white p-6 rounded-xl shadow mb-10">
-        <h2 class="text-xl font-semibold mb-4">Ajouter un produit</h2>
-
-        <form method="post" enctype="multipart/form-data" class="grid grid-cols-2 gap-4">
-            {% csrf_token %}
-
-            <div class="col-span-2">{{ form.name.label_tag }} {{ form.name }}</div>
-            <div>{{ form.category.label_tag }} {{ form.category }}</div>
-            <div>{{ form.stock.label_tag }} {{ form.stock }}</div>
-
-            <div>{{ form.price.label_tag }} {{ form.price }}</div>
-            <div>{{ form.old_price.label_tag }} {{ form.old_price }}</div>
-
-            <div class="col-span-2">{{ form.main_image.label_tag }} {{ form.main_image }}</div>
-
-            <div class="col-span-2">
-                {{ form.description.label_tag }}
-                {{ form.description }}
+<div class="space-y-10 animate-fadeIn">
+    
+    <!-- Header Section -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white/40 backdrop-blur-md p-8 rounded-3xl border border-white/20 shadow-xl">
+        <div>
+            <h1 class="text-3xl lg:text-4xl font-serif font-bold text-gray-900 mb-2">Gestion du Catalogue</h1>
+            <p class="text-gray-600">Ajouter de nouvelles pièces d'exception à votre collection</p>
+        </div>
+        <div class="flex items-center gap-3">
+            <div class="px-4 py-2 bg-yellow-100/50 border border-yellow-200 rounded-full">
+                <span class="text-yellow-700 font-semibold flex items-center gap-2">
+                    <i class="fas fa-box"></i>
+                    {{ products.count }} Produits
+                </span>
             </div>
-
-            <div class="col-span-2 flex items-center gap-3">
-                {{ form.is_featured }}
-                <label>Produit en vedette</label>
-            </div>
-
-            <button class="col-span-2 bg-yellow-600 hover:bg-yellow-700 text-white py-3 rounded-lg font-semibold">
-                Enregistrer produit
-            </button>
-        </form>
-    </div>
-
-
-    <!-- ===================== -->
-    <!-- LISTE PRODUITS -->
-    <!-- ===================== -->
-    <div class="bg-white p-6 rounded-xl shadow">
-        <h2 class="text-xl font-semibold mb-6">Produits enregistrés</h2>
-
-        <div class="overflow-x-auto">
-            <table class="w-full text-left">
-                <thead class="border-b">
-                    <tr>
-                        <th class="p-3">Image</th>
-                        <th>Nom</th>
-                        <th>Catégorie</th>
-                        <th>Prix</th>
-                        <th>Stock</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {% for product in products %}
-                    <tr class="border-b hover:bg-gray-50">
-
-                        <td class="p-2">
-                            {% if product.main_image %}
-                            <img src="{{ product.main_image.url }}" class="w-14 h-14 object-cover rounded">
-                            {% endif %}
-                        </td>
-
-                        <td>{{ product.name }}</td>
-                        <td>{{ product.category.name }}</td>
-                        <td>{{ product.price }} FCFA</td>
-
-                        <td>
-                            {% if product.stock < 5 %}
-                            <span class="text-red-600 font-semibold">{{ product.stock }}</span>
-                            {% else %}
-                            {{ product.stock }}
-                            {% endif %}
-                        </td>
-
-                        <td class="flex gap-2 py-3">
-
-                            <form method="post" action="{% url 'product:product_edit' product.id %}" enctype="multipart/form-data">
-                                {% csrf_token %}
-                                <button class="px-3 py-1 bg-blue-600 text-white rounded">
-                                    Modifier
-                                </button>
-                            </form>
-
-                            <a href="{% url 'product:product_delete' product.id %}"
-                               onclick="return confirm('Supprimer ce produit ?')"
-                               class="px-3 py-1 bg-red-600 text-white rounded">
-                                Supprimer
-                            </a>
-
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="6" class="text-center p-6 text-gray-500">
-                            Aucun produit enregistré
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-
-            </table>
         </div>
     </div>
 
+    <!-- Main Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Left Column: Form -->
+        <div class="lg:col-span-5">
+            <div class="sticky top-24 bg-white/80 backdrop-blur-xl p-8 rounded-3xl border border-white shadow-2xl overflow-hidden relative">
+                <!-- Decorative elements -->
+                <div class="absolute -top-24 -right-24 w-48 h-48 bg-yellow-400/10 rounded-full blur-3xl"></div>
+                <div class="absolute -bottom-24 -left-24 w-48 h-48 bg-black/5 rounded-full blur-3xl"></div>
+
+                <h2 class="text-2xl font-serif font-bold text-gray-900 mb-6 flex items-center gap-3">
+                    <span class="w-10 h-10 bg-black text-yellow-500 rounded-xl flex items-center justify-center text-base">
+                        <i class="fas fa-plus"></i>
+                    </span>
+                    Nouveau Produit
+                </h2>
+
+                <form method="post" enctype="multipart/form-data" class="space-y-6 relative z-10">
+                    {% csrf_token %}
+
+                    <!-- Global Errors -->
+                    {% if form.non_field_errors %}
+                    <div class="p-4 bg-red-50 border-l-4 border-red-500 rounded-r-xl animate-shake">
+                        {% for error in form.non_field_errors %}
+                        <p class="text-red-700 text-sm font-medium flex items-center gap-2">
+                            <i class="fas fa-exclamation-circle"></i> {{ error }}
+                        </p>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <!-- Name Field -->
+                    <div class="space-y-2">
+                        <label class="text-sm font-bold text-gray-700 uppercase tracking-wider ml-1">Nom du Produit</label>
+                        {{ form.name }}
+                        {% if form.name.errors %}
+                        <p class="text-red-500 text-xs mt-1 ml-1">{{ form.name.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- Row 1: Category & Stock -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label class="text-sm font-bold text-gray-700 uppercase tracking-wider ml-1">Catégorie</label>
+                            {{ form.category }}
+                            {% if form.category.errors %}
+                            <p class="text-red-500 text-xs mt-1 ml-1">{{ form.category.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-sm font-bold text-gray-700 uppercase tracking-wider ml-1">Stock Initial</label>
+                            {{ form.stock }}
+                            {% if form.stock.errors %}
+                            <p class="text-red-500 text-xs mt-1 ml-1">{{ form.stock.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Row 2: Price & Old Price -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label class="text-sm font-bold text-gray-700 uppercase tracking-wider ml-1">Prix de Vente</label>
+                            {{ form.price }}
+                            {% if form.price.errors %}
+                            <p class="text-red-500 text-xs mt-1 ml-1">{{ form.price.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-sm font-bold text-gray-700 uppercase tracking-wider ml-1">Ancien Prix</label>
+                            {{ form.old_price }}
+                        </div>
+                    </div>
+
+                    <!-- Image Upload -->
+                    <div class="space-y-2">
+                        <label class="text-sm font-bold text-gray-700 uppercase tracking-wider ml-1">Image Principale</label>
+                        <div class="relative group">
+                            {{ form.main_image }}
+                            <div id="imagePreview" class="hidden mt-4 rounded-2xl overflow-hidden border-2 border-yellow-600/30">
+                                <img src="" alt="Aperçu" class="w-full h-48 object-cover">
+                            </div>
+                        </div>
+                        {% if form.main_image.errors %}
+                        <p class="text-red-500 text-xs mt-1 ml-1">{{ form.main_image.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- Description -->
+                    <div class="space-y-2">
+                        <label class="text-sm font-bold text-gray-700 uppercase tracking-wider ml-1">Description</label>
+                        {{ form.description }}
+                    </div>
+
+                    <!-- Featured Toggle -->
+                    <div class="flex items-center gap-4 bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                        <div class="relative inline-block w-12 h-6 transition duration-200 ease-in-out rounded-full bg-gray-200">
+                             {{ form.is_featured }}
+                        </div>
+                        <div>
+                            <p class="font-bold text-gray-900 text-sm">Produit en vedette</p>
+                            <p class="text-xs text-gray-500">Afficher en priorité sur la page d'accueil</p>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="w-full bg-black hover:bg-yellow-600 text-white hover:text-black py-4 rounded-2xl font-bold text-lg shadow-xl hover:shadow-yellow-600/20 transition-all duration-500 flex items-center justify-center gap-3 group">
+                        <span>Enregistrer l'Article</span>
+                        <i class="fas fa-chevron-right group-hover:translate-x-1 transition-transform"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Right Column: List -->
+        <div class="lg:col-span-7">
+            <div class="bg-white/60 backdrop-blur-md p-8 rounded-3xl border border-white shadow-xl">
+                <div class="flex items-center justify-between mb-8">
+                    <h2 class="text-2xl font-serif font-bold text-gray-900">Articles en Boutique</h2>
+                    <div class="flex gap-2">
+                        <div class="relative">
+                            <input type="text" placeholder="Filtrer..." class="pl-10 pr-4 py-2 bg-white/50 border border-gray-200 rounded-full text-sm focus:outline-none focus:border-yellow-600 transition-all">
+                            <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="overflow-hidden rounded-2xl border border-gray-100">
+                    <table class="w-full">
+                        <thead class="bg-black text-white">
+                            <tr>
+                                <th class="p-4 text-left text-xs font-bold uppercase tracking-widest">Article</th>
+                                <th class="p-4 text-left text-xs font-bold uppercase tracking-widest">Catégorie</th>
+                                <th class="p-4 text-left text-xs font-bold uppercase tracking-widest">Prix</th>
+                                <th class="p-4 text-left text-xs font-bold uppercase tracking-widest">Stock</th>
+                                <th class="p-4 text-center text-xs font-bold uppercase tracking-widest">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100 bg-white/40">
+                            {% for product in products %}
+                            <tr class="group hover:bg-yellow-600/5 transition-all duration-300">
+                                <td class="p-4">
+                                    <div class="flex items-center gap-4">
+                                        <div class="relative w-14 h-14 rounded-xl overflow-hidden bg-gray-100 border border-gray-200 group-hover:border-yellow-600/50 transition-colors">
+                                            {% if product.main_image %}
+                                            <img src="{{ product.main_image.url }}" class="w-full h-full object-cover">
+                                            {% else %}
+                                            <div class="w-full h-full flex items-center justify-center text-gray-300">
+                                                <i class="fas fa-image text-xl"></i>
+                                            </div>
+                                            {% endif %}
+                                            {% if product.is_featured %}
+                                            <div class="absolute top-0 right-0 bg-yellow-600 text-black p-1 rounded-bl-lg">
+                                                <i class="fas fa-star text-[8px]"></i>
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                        <div>
+                                            <p class="font-bold text-gray-900 group-hover:text-yellow-700 transition-colors">{{ product.name }}</p>
+                                            <p class="text-[10px] text-gray-400 font-mono">#{{ product.id|stringformat:".8s" }}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="p-4">
+                                    <span class="px-3 py-1 bg-gray-100 border border-gray-200 rounded-full text-[10px] font-bold text-gray-600 uppercase">
+                                        {{ product.category.name|default:"Sans catégorie" }}
+                                    </span>
+                                </td>
+                                <td class="p-4">
+                                    <div class="flex flex-col">
+                                        <span class="font-bold text-gray-900">{{ product.price }} FCFA</span>
+                                        {% if product.old_price %}
+                                        <span class="text-[10px] text-gray-400 line-through">{{ product.old_price }} FCFA</span>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                                <td class="p-4">
+                                    {% if product.stock < 10 %}
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
+                                        <span class="text-sm font-bold text-red-600">{{ product.stock }}</span>
+                                    </div>
+                                    {% else %}
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                                        <span class="text-sm font-bold text-gray-600">{{ product.stock }}</span>
+                                    </div>
+                                    {% endif %}
+                                </td>
+                                <td class="p-4">
+                                    <div class="flex items-center justify-center gap-2">
+                                        <a href="{% url 'product:product_edit' product.id %}" class="w-9 h-9 flex items-center justify-center rounded-xl bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white transition-all duration-300">
+                                            <i class="fas fa-edit text-sm"></i>
+                                        </a>
+                                        <a href="{% url 'product:product_delete' product.id %}" onclick="return confirm('Confirmer la suppression ?')" class="w-9 h-9 flex items-center justify-center rounded-xl bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition-all duration-300">
+                                            <i class="fas fa-trash-alt text-sm"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="p-20 text-center">
+                                    <div class="flex flex-col items-center gap-4 text-gray-400">
+                                        <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center">
+                                            <i class="fas fa-box-open text-4xl"></i>
+                                        </div>
+                                        <p class="font-serif italic">Aucun article dans votre catalogue pour le moment.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<style>
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fadeIn {
+        animation: fadeIn 0.8s ease-out forwards;
+    }
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+    }
+    .animate-shake {
+        animation: shake 0.4s ease-in-out;
+    }
+</style>
+
+<script>
+    // Image Preview
+    const imageInput = document.querySelector('input[type="file"]');
+    if (imageInput) {
+        imageInput.addEventListener('change', function() {
+            const preview = document.getElementById('imagePreview');
+            const previewImg = preview.querySelector('img');
+            const file = this.files[0];
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    preview.classList.remove('hidden');
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+</script>
 {% endblock dashboard_content %}
+
