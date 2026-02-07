@@ -1,21 +1,28 @@
-<div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm mb-10">
-    <div class="p-6 border-b border-gray-200 flex items-center justify-between">
+<div class="mb-12">
+    <div class="flex items-center justify-between mb-8">
         <div>
-            <h2 class="text-xl font-bold">Recent Orders</h2>
-            <p class="text-sm text-gray-500 mt-1">Your last 3 orders</p>
+            <h2 class="text-2xl font-black text-black tracking-tight">Recent Orders</h2>
+            <p class="text-[11px] font-bold text-gray-400 uppercase tracking-[0.2em] mt-1">Track your latest purchases</p>
         </div>
-        <a href="#" class="text-yellow-600 hover:text-yellow-800 font-medium flex items-center gap-2 text-sm">
-            View all <i class="fas fa-arrow-right"></i>
+        <a href="#" class="group flex items-center gap-3 text-xs font-black uppercase tracking-widest text-gray-500 hover:text-yellow-600 transition-colors">
+            View All History 
+            <i class="fas fa-arrow-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
         </a>
     </div>
 
-    <div class="divide-y divide-gray-100">
-        {% for order in recent_orders|slice:":3" %}
-            {% include "pages/user_dashboard/components/order_card.html" with order=order %}
-        {% empty %}
-            <div class="p-10 text-center text-gray-500">
-                You haven't placed any orders yet.
-            </div>
-        {% endfor %}
+    <div class="bg-white rounded-[2rem] border border-gray-100 shadow-[0_20px_50px_rgba(0,0,0,0.02)] overflow-hidden">
+        <div class="divide-y divide-gray-50">
+            {% for order in recent_orders|slice:":3" %}
+                {% include "pages/user_dashboard/components/order_card.html" with order=order %}
+            {% empty %}
+                <div class="p-20 text-center">
+                    <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-box-open text-gray-300 text-3xl"></i>
+                    </div>
+                    <p class="text-sm font-bold text-gray-400 uppercase tracking-widest">No orders yet</p>
+                    <a href="{% url 'product:product_list' %}" class="inline-block mt-4 text-xs font-black text-yellow-600 uppercase tracking-widest hover:underline">Start Shopping</a>
+                </div>
+            {% endfor %}
+        </div>
     </div>
 </div>

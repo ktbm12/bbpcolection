@@ -1,67 +1,101 @@
 {% load custom_filters %}
-<aside id="sidebar" class="sidebar mobile-hidden lg:mobile-hidden">
+<aside id="sidebar" class="sidebar mobile-hidden">
+    <div class="h-full flex flex-col">
+        <!-- Brand -->
+        <div class="p-8 pb-6">
+            <a href="/" class="group">
+                <h1 class="text-2xl font-bold tracking-tighter transition-all group-hover:tracking-tight">
+                    <span class="text-yellow-600">bbp</span>collection
+                </h1>
+                <p class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 mt-1">Exclusive Portal</p>
+            </a>
+        </div>
 
-    <div class="p-6 border-b border-gray-200">
-        <h1 class="text-3xl font-serif font-bold">
-            <span class="text-yellow-600">bbp</span>collection
-        </h1>
-        <p class="text-gray-500 text-sm mt-1">My Dashboard</p>
+        <!-- User Profile Quick View -->
+        <div class="px-6 mb-6">
+            <div class="bg-gray-50 rounded-2xl p-4 border border-gray-100">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-12 h-12 bg-black rounded-xl flex items-center justify-center text-white font-black text-lg shadow-lg shadow-black/10">
+                        {{ user.name|slice:":1"|upper|default:"U" }}
+                    </div>
+                    <div class="overflow-hidden">
+                        <p class="font-bold text-sm text-black truncate">{{ user.name|default:user.username }}</p>
+                        <p class="text-[10px] font-bold text-yellow-600 uppercase tracking-wider">
+                            {% if user.is_vip %}VIP Member{% else %}Valued Client{% endif %}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <div class="flex justify-between items-end">
+                        <span class="text-[10px] font-black uppercase tracking-widest text-gray-400">Loyalty Points</span>
+                        <span class="text-sm font-black text-black">{{ loyalty_points|default:"0" }} <span class="text-[10px] text-gray-400">pts</span></span>
+                    </div>
+                    <div class="w-full bg-gray-200 h-1.5 rounded-full overflow-hidden">
+                        <div class="bg-yellow-600 h-full rounded-full" style="width: 65%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-1 px-4 overflow-y-auto">
+            <div class="space-y-1">
+                <p class="px-4 text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 mb-3 mt-4">General</p>
+                
+                <a href="{% url 'users:user_dashboard' %}" class="menu-item {% if request.resolver_match.url_name == 'user_dashboard' %}active{% endif %}">
+                    <i class="fas fa-th-large"></i> 
+                    <span>Overview</span>
+                </a>
+                
+                <a href="#" class="menu-item">
+                    <i class="fas fa-shopping-bag"></i> 
+                    <span>My Orders</span>
+                    {% if pending_orders_count %}
+                    <span class="ml-auto bg-yellow-600 text-white text-[10px] px-2 py-0.5 rounded-md font-black">{{ pending_orders_count }}</span>
+                    {% endif %}
+                </a>
+
+                <a href="#" class="menu-item">
+                    <i class="fas fa-heart"></i> 
+                    <span>Wishlist</span>
+                </a>
+
+                <p class="px-4 text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 mb-3 mt-8">Account Settings</p>
+
+                <a href="#" class="menu-item">
+                    <i class="fas fa-map-marker-alt"></i> 
+                    <span>Addresses</span>
+                </a>
+
+                <a href="#" class="menu-item">
+                    <i class="fas fa-credit-card"></i> 
+                    <span>Payments</span>
+                </a>
+
+                <a href="#" class="menu-item">
+                    <i class="fas fa-gift"></i> 
+                    <span>Rewards</span>
+                </a>
+
+                <a href="#" class="menu-item">
+                    <i class="fas fa-user-gear"></i> 
+                    <span>Profile Data</span>
+                </a>
+
+                <a href="#" class="menu-item">
+                    <i class="fas fa-headset"></i> 
+                    <span>Support</span>
+                </a>
+            </div>
+        </nav>
+
+        <!-- Bottom Actions -->
+        <div class="p-4 mt-auto">
+            <a href="{% url 'account_logout' %}" class="flex items-center gap-3 px-6 py-4 text-red-600 hover:bg-red-50 rounded-2xl font-bold text-sm transition-colors">
+                <i class="fas fa-sign-out-alt"></i> 
+                <span>Sign Out</span>
+            </a>
+        </div>
     </div>
-
-    <div class="p-6 border-b border-gray-200">
-        <div class="flex items-center gap-4 mb-5">
-            <div class="w-16 h-16 bg-yellow-600 rounded-full flex items-center justify-center text-white font-bold text-2xl">
-                {{ user.first_name|slice:":1"|upper|default:"U" }}
-            </div>
-            <div>
-                <p class="font-bold text-lg">{{ user.get_full_name|default:user.username }}</p>
-                <p class="text-sm text-gray-500">{% if user.is_vip %}Cliente VIP{% else %}Cliente{% endif %}</p>
-            </div>
-        </div>
-
-        <div class="bg-gradient-to-r from-yellow-50 to-yellow-100 rounded-xl p-4">
-            <div class="flex justify-between items-center mb-2">
-                <span class="text-sm font-semibold text-gray-700">Points de fidélité</span>
-                <i class="fas fa-star text-yellow-600"></i>
-            </div>
-            <p class="text-2xl font-bold">{{ loyalty_points|default:"2 450" }} pts</p>
-            <p class="text-xs text-gray-600 mt-1">≈ {{ loyalty_points|multiply:10|default:"24 500" }} FCFA</p>
-        </div>
-    </div>
-
-    <nav class="p-4">
-        <div class="space-y-1.5">
-            <a href="{% url 'users:user_dashboard' %}" class="menu-item {% if request.resolver_match.url_name == 'user_dashboard' %}active{% endif %} flex items-center gap-3 px-4 py-3 rounded-lg">
-                <i class="fas fa-home w-5"></i> Dashboard
-            </a>
-            <a href="#" class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg">
-                <i class="fas fa-shopping-bag w-5"></i> My Orders
-                {% if pending_orders_count %}<span class="ml-auto bg-yellow-600 text-white text-xs px-2.5 py-1 rounded-full">{{ pending_orders_count }}</span>{% endif %}
-            </a>
-            <a href="#" class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg">
-                <i class="fas fa-heart w-5"></i> Favorites
-            </a>
-            <a href="#" class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg">
-                <i class="fas fa-map-marker-alt w-5"></i> Addresses
-            </a>
-            <a href="#" class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg">
-                <i class="fas fa-credit-card w-5"></i> Payments
-            </a>
-            <a href="#" class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg">
-                <i class="fas fa-gift w-5"></i> Rewards
-            </a>
-            <a href="#" class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg">
-                <i class="fas fa-cog w-5"></i> Settings
-            </a>
-            <a href="#" class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg">
-                <i class="fas fa-headset w-5"></i> Support
-            </a>
-        </div>
-
-        <div class="mt-10 pt-6 border-t border-gray-200">
-            <a href="{% url 'account_logout' %}" class="flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg">
-                <i class="fas fa-sign-out-alt w-5"></i> Logout
-            </a>
-        </div>
-    </nav>
 </aside>

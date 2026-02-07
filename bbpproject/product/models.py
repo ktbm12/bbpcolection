@@ -166,6 +166,10 @@ class Order(CFPBaseModel):
             return item.product.main_image
         return None
 
+    @property
+    def items_count(self):
+        return self.items.count()
+
 
 class OrderItem(CFPBaseModel):
     order = models.ForeignKey(Order, on_delete=models.PROTECT, related_name="items")

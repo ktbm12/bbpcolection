@@ -1,55 +1,74 @@
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
 
-    <div class="card bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
-        <div class="flex items-start justify-between mb-4">
-            <div>
-                <h3 class="text-gray-600 text-sm font-medium mb-1">Total Spent</h3>
-                <p class="text-2xl lg:text-3xl font-bold">${{ total_spent|default:"0" }}</p>
-            </div>
-            <div class="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center">
+    <!-- Total Spent -->
+    <div class="group bg-white rounded-[2rem] p-8 border border-gray-100 shadow-[0_20px_50px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.05)] transition-all duration-300">
+        <div class="flex items-start justify-between mb-6">
+            <div class="w-14 h-14 bg-yellow-50 rounded-2xl flex items-center justify-center group-hover:bg-yellow-100 transition-colors">
                 <i class="fas fa-wallet text-yellow-600 text-xl"></i>
             </div>
+            <div class="text-right">
+                <span class="text-[10px] font-black uppercase tracking-widest text-gray-400">Total Spent</span>
+                <p class="text-3xl font-black text-black mt-1">${{ total_spent|default:0 }}</p>
+            </div>
         </div>
-        <p class="text-xs text-gray-500">Since joining</p>
+        <div class="flex items-center gap-2 text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+            <i class="fas fa-calendar-alt text-yellow-600/50"></i>
+            Since joining
+        </div>
     </div>
 
-    <div class="card bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
-        <div class="flex items-start justify-between mb-4">
-            <div>
-                <h3 class="text-gray-600 text-sm font-medium mb-1">Orders</h3>
-                <p class="text-2xl lg:text-3xl font-bold">{{ order_count|default:0 }}</p>
+    <!-- Orders -->
+    <div class="group bg-white rounded-[2rem] p-8 border border-gray-100 shadow-[0_20px_50px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.05)] transition-all duration-300">
+        <div class="flex items-start justify-between mb-6">
+            <div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center group-hover:bg-blue-100 transition-colors">
+                <i class="fas fa-shopping-bag text-blue-600 text-xl"></i>
             </div>
-            <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                <i class="fas fa-shopping-cart text-blue-600 text-xl"></i>
+            <div class="text-right">
+                <span class="text-[10px] font-black uppercase tracking-widest text-gray-400">Orders</span>
+                <p class="text-3xl font-black text-black mt-1">{{ order_count|default:0 }}</p>
             </div>
         </div>
-        <p class="text-xs text-gray-500">{{ pending_orders_count|default:0 }} in progress</p>
+        <div class="flex items-center gap-2 text-[11px] font-bold text-blue-600 uppercase tracking-wider">
+            <span class="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
+            {{ pending_orders_count|default:0 }} in progress
+        </div>
     </div>
 
-    <div class="card bg-gradient-to-br from-yellow-500 to-yellow-700 rounded-2xl p-6 text-white shadow-md">
-        <div class="flex items-start justify-between mb-4">
-            <div>
-                <h3 class="text-white/90 text-sm font-medium mb-1">Loyalty Points</h3>
-                <p class="text-3xl font-bold">{{ loyalty_points|default:"0" }} pts</p>
+    <!-- Loyalty Points -->
+    <div class="group bg-black rounded-[2rem] p-8 shadow-[0_20px_50px_rgba(0,0,0,0.1)] hover:scale-[1.02] transition-all duration-300 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-yellow-600/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl"></div>
+        <div class="relative z-10">
+            <div class="flex items-start justify-between mb-6">
+                <div class="w-14 h-14 bg-yellow-600 rounded-2xl flex items-center justify-center shadow-lg shadow-yellow-600/20">
+                    <i class="fas fa-crown text-white text-xl"></i>
+                </div>
+                <div class="text-right">
+                    <span class="text-[10px] font-black uppercase tracking-widest text-gray-500">Loyalty Points</span>
+                    <p class="text-3xl font-black text-white mt-1">{{ loyalty_points|default:0 }}</p>
+                </div>
             </div>
-            <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                <i class="fas fa-star text-white text-xl"></i>
+            <div class="flex items-center justify-between text-[11px] font-bold uppercase tracking-wider">
+                <span class="text-yellow-600 italic">VIP STATUS</span>
+                <span class="text-gray-500">Next: Gold</span>
             </div>
         </div>
-        <p class="text-xs text-white/80">Next level: VIP Gold</p>
     </div>
 
-    <div class="card bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
-        <div class="flex items-start justify-between mb-4">
-            <div>
-                <h3 class="text-gray-600 text-sm font-medium mb-1">Favorites</h3>
-                <p class="text-2xl lg:text-3xl font-bold">{{ wishlist_count|default:0 }}</p>
+    <!-- Favorites -->
+    <div class="group bg-white rounded-[2rem] p-8 border border-gray-100 shadow-[0_20px_50px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.05)] transition-all duration-300">
+        <div class="flex items-start justify-between mb-6">
+            <div class="w-14 h-14 bg-red-50 rounded-2xl flex items-center justify-center group-hover:bg-red-100 transition-colors">
+                <i class="fas fa-heart text-red-500 text-xl"></i>
             </div>
-            <div class="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center">
-                <i class="fas fa-heart text-red-600 text-xl"></i>
+            <div class="text-right">
+                <span class="text-[10px] font-black uppercase tracking-widest text-gray-400">Wishlist</span>
+                <p class="text-3xl font-black text-black mt-1">{{ wishlist_count|default:0 }}</p>
             </div>
         </div>
-        <p class="text-xs text-gray-500">Saved items</p>
+        <div class="flex items-center gap-2 text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+            <i class="fas fa-bookmark text-red-500/50"></i>
+            Saved items
+        </div>
     </div>
 
 </div>

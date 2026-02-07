@@ -1,29 +1,58 @@
-<div class="p-6 hover:bg-gray-50 transition">
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-5">
-        <div class="flex gap-4 flex-1">
-            <div class="w-20 h-20 bg-gray-100 rounded-xl flex-shrink-0 overflow-hidden">
-                {% if order.first_item_image %}
-                    <img src="{{ order.first_item_image.url }}" alt="{{ order.first_item_name }}" class="w-full h-full object-cover">
-                {% else %}
-                    <div class="w-full h-full bg-gradient-to-br from-yellow-50 to-gray-100"></div>
+<div class="p-8 hover:bg-gray-50/50 transition-colors group">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-8">
+        <div class="flex flex-1 gap-6">
+            <!-- Product Image -->
+            <div class="relative w-24 h-24 flex-shrink-0 group-hover:rotate-1 transition-transform duration-500">
+                <div class="absolute inset-0 bg-yellow-600/10 rounded-2xl -rotate-3 group-hover:rotate-3 transition-transform"></div>
+                <div class="relative h-full w-full bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
+                    {% if order.first_item_image %}
+                        <img src="{{ order.first_item_image.url }}" alt="{{ order.first_item_name }}" class="w-full h-full object-cover">
+                    {% else %}
+                        <div class="w-full h-full bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
+                            <i class="fas fa-image text-gray-200 text-2xl"></i>
+                        </div>
+                    {% endif %}
+                </div>
+                {% if order.items_count > 1 %}
+                    <div class="absolute -bottom-2 -right-2 w-8 h-8 bg-black text-white text-[10px] font-black rounded-lg flex items-center justify-center border-2 border-white shadow-lg">
+                        +{{ order.items_count|add:"-1" }}
+                    </div>
                 {% endif %}
             </div>
-            <div>
-                <p class="font-bold mb-1">Order #{{ order.number|default:"CMD-2026-156" }}</p>
-                <p class="text-sm text-gray-600 mb-1">{{ order.first_item_name|default:"Luxury Straight Hair 24\""|truncatewords:6 }}</p>
-                <p class="text-xs text-gray-500">{{ order.created_at|date:"M d, Y" }}</p>
+
+            <!-- Order Info -->
+            <div class="flex flex-col justify-center">
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="text-[10px] font-black uppercase tracking-widest text-yellow-600">Order</span>
+                    <span class="text-sm font-black text-black">#{{ order.number|default:"CMD-2026-X" }}</span>
+                </div>
+                <h4 class="font-bold text-gray-800 line-clamp-1 mb-2">{{ order.first_item_name|default:"Luxury Premium Hair" }}</h4>
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-1.5 text-xs font-bold text-gray-400">
+                        <i class="fas fa-calendar-day text-[10px]"></i>
+                        {{ order.created_at|date:"M d, Y" }}
+                    </div>
+                    <div class="w-1 h-1 bg-gray-200 rounded-full"></div>
+                    <div class="text-xs font-bold text-gray-400">
+                        {{ order.items.count|default:1 }} item{% if order.items.count > 1 %}s{% endif %}
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="flex flex-col md:items-end gap-2">
-            {% include "pages/user_dashboard/components/status_badge.html" with status=order.status %}
-            <p class="font-bold">{{ order.total|default:"45 000" }} FCFA</p>
+        <!-- Status & Price -->
+        <div class="flex flex-col md:items-end gap-4">
+            <div class="flex flex-col md:items-end gap-1">
+                <p class="text-[10px] font-black uppercase tracking-widest text-gray-400">Total Amount</p>
+                <p class="text-xl font-black text-black">${{ order.total|default:0 }}</p>
+            </div>
             
-            {% if order.status == "shipped" %}
-                <a href="#" class="text-yellow-600 hover:text-yellow-800 text-sm font-medium">Track order →</a>
-            {% elif order.status == "delivered" %}
-                <a href="#" class="text-yellow-600 hover:text-yellow-800 text-sm font-medium">Leave a review →</a>
-            {% endif %}
+            <div class="flex items-center gap-3">
+                {% include "pages/user_dashboard/components/status_badge.html" with status=order.status %}
+                <a href="#" class="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 hover:bg-black hover:text-white transition-all shadow-sm">
+                    <i class="fas fa-chevron-right text-xs"></i>
+                </a>
+            </div>
         </div>
     </div>
 </div>
