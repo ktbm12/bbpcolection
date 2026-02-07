@@ -1,0 +1,66 @@
+<aside id="sidebar" class="sidebar mobile-hidden lg:mobile-hidden">
+
+    <div class="p-6 border-b border-gray-200">
+        <h1 class="text-3xl font-serif font-bold">
+            <span class="text-yellow-600">Luxe</span>Hair
+        </h1>
+        <p class="text-gray-500 text-sm mt-1">Mon Espace Client</p>
+    </div>
+
+    <div class="p-6 border-b border-gray-200">
+        <div class="flex items-center gap-4 mb-5">
+            <div class="w-16 h-16 bg-yellow-600 rounded-full flex items-center justify-center text-white font-bold text-2xl">
+                {{ user.first_name|slice:":1"|upper|default:"U" }}
+            </div>
+            <div>
+                <p class="font-bold text-lg">{{ user.get_full_name|default:user.username }}</p>
+                <p class="text-sm text-gray-500">{% if user.is_vip %}Cliente VIP{% else %}Cliente{% endif %}</p>
+            </div>
+        </div>
+
+        <div class="bg-gradient-to-r from-yellow-50 to-yellow-100 rounded-xl p-4">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-sm font-semibold text-gray-700">Points de fidélité</span>
+                <i class="fas fa-star text-yellow-600"></i>
+            </div>
+            <p class="text-2xl font-bold">{{ loyalty_points|default:"2 450" }} pts</p>
+            <p class="text-xs text-gray-600 mt-1">≈ {{ loyalty_points|multiply:10|default:"24 500" }} FCFA</p>
+        </div>
+    </div>
+
+    <nav class="p-4">
+        <div class="space-y-1.5">
+            <a href="{% url 'dashboard' %}" class="menu-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %} flex items-center gap-3 px-4 py-3 rounded-lg">
+                <i class="fas fa-home w-5"></i> Tableau de bord
+            </a>
+            <a href="{% url 'user_orders' %}" class="menu-item {% if request.resolver_match.url_name == 'user_orders' %}active{% endif %} flex items-center gap-3 px-4 py-3 rounded-lg">
+                <i class="fas fa-shopping-bag w-5"></i> Mes commandes
+                {% if pending_orders_count %}<span class="ml-auto bg-yellow-600 text-white text-xs px-2.5 py-1 rounded-full">{{ pending_orders_count }}</span>{% endif %}
+            </a>
+            <a href="{% url 'wishlist' %}" class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg">
+                <i class="fas fa-heart w-5"></i> Favoris
+            </a>
+            <a href="{% url 'addresses' %}" class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg">
+                <i class="fas fa-map-marker-alt w-5"></i> Adresses
+            </a>
+            <a href="{% url 'payment_methods' %}" class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg">
+                <i class="fas fa-credit-card w-5"></i> Paiement
+            </a>
+            <a href="{% url 'rewards' %}" class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg">
+                <i class="fas fa-gift w-5"></i> Récompenses
+            </a>
+            <a href="{% url 'account_settings' %}" class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg">
+                <i class="fas fa-cog w-5"></i> Paramètres
+            </a>
+            <a href="{% url 'support' %}" class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg">
+                <i class="fas fa-headset w-5"></i> Support
+            </a>
+        </div>
+
+        <div class="mt-10 pt-6 border-t border-gray-200">
+            <a href="{% url 'account_logout' %}" class="flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg">
+                <i class="fas fa-sign-out-alt w-5"></i> Déconnexion
+            </a>
+        </div>
+    </nav>
+</aside>
