@@ -1,0 +1,21 @@
+<div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm mb-10">
+    <div class="p-6 border-b border-gray-200 flex items-center justify-between">
+        <div>
+            <h2 class="text-xl font-bold">Commandes récentes</h2>
+            <p class="text-sm text-gray-500 mt-1">Vos 3 dernières commandes</p>
+        </div>
+        <a href="{% url 'user_orders' %}" class="text-yellow-600 hover:text-yellow-800 font-medium flex items-center gap-2 text-sm">
+            Voir tout <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
+
+    <div class="divide-y divide-gray-100">
+        {% for order in recent_orders|slice:":3" %}
+            {% include "pages/user_dashboard/components/order_card.html" with order=order %}
+        {% empty %}
+            <div class="p-10 text-center text-gray-500">
+                Vous n'avez pas encore passé de commande
+            </div>
+        {% endfor %}
+    </div>
+</div>
