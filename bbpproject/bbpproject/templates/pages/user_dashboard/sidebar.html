@@ -1,10 +1,11 @@
+{% load custom_filters %}
 <aside id="sidebar" class="sidebar mobile-hidden lg:mobile-hidden">
 
     <div class="p-6 border-b border-gray-200">
         <h1 class="text-3xl font-serif font-bold">
-            <span class="text-yellow-600">Luxe</span>Hair
+            <span class="text-yellow-600">bbp</span>collection
         </h1>
-        <p class="text-gray-500 text-sm mt-1">Mon Espace Client</p>
+        <p class="text-gray-500 text-sm mt-1">My Dashboard</p>
     </div>
 
     <div class="p-6 border-b border-gray-200">
@@ -30,36 +31,36 @@
 
     <nav class="p-4">
         <div class="space-y-1.5">
-            <a href="{% url 'dashboard' %}" class="menu-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %} flex items-center gap-3 px-4 py-3 rounded-lg">
-                <i class="fas fa-home w-5"></i> Tableau de bord
+            <a href="{% url 'users:user_dashboard' %}" class="menu-item {% if request.resolver_match.url_name == 'user_dashboard' %}active{% endif %} flex items-center gap-3 px-4 py-3 rounded-lg">
+                <i class="fas fa-home w-5"></i> Dashboard
             </a>
-            <a href="{% url 'user_orders' %}" class="menu-item {% if request.resolver_match.url_name == 'user_orders' %}active{% endif %} flex items-center gap-3 px-4 py-3 rounded-lg">
-                <i class="fas fa-shopping-bag w-5"></i> Mes commandes
+            <a href="#" class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg">
+                <i class="fas fa-shopping-bag w-5"></i> My Orders
                 {% if pending_orders_count %}<span class="ml-auto bg-yellow-600 text-white text-xs px-2.5 py-1 rounded-full">{{ pending_orders_count }}</span>{% endif %}
             </a>
-            <a href="{% url 'wishlist' %}" class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg">
-                <i class="fas fa-heart w-5"></i> Favoris
+            <a href="#" class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg">
+                <i class="fas fa-heart w-5"></i> Favorites
             </a>
-            <a href="{% url 'addresses' %}" class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg">
-                <i class="fas fa-map-marker-alt w-5"></i> Adresses
+            <a href="#" class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg">
+                <i class="fas fa-map-marker-alt w-5"></i> Addresses
             </a>
-            <a href="{% url 'payment_methods' %}" class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg">
-                <i class="fas fa-credit-card w-5"></i> Paiement
+            <a href="#" class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg">
+                <i class="fas fa-credit-card w-5"></i> Payments
             </a>
-            <a href="{% url 'rewards' %}" class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg">
-                <i class="fas fa-gift w-5"></i> Récompenses
+            <a href="#" class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg">
+                <i class="fas fa-gift w-5"></i> Rewards
             </a>
-            <a href="{% url 'account_settings' %}" class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg">
-                <i class="fas fa-cog w-5"></i> Paramètres
+            <a href="#" class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg">
+                <i class="fas fa-cog w-5"></i> Settings
             </a>
-            <a href="{% url 'support' %}" class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg">
+            <a href="#" class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg">
                 <i class="fas fa-headset w-5"></i> Support
             </a>
         </div>
 
         <div class="mt-10 pt-6 border-t border-gray-200">
             <a href="{% url 'account_logout' %}" class="flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg">
-                <i class="fas fa-sign-out-alt w-5"></i> Déconnexion
+                <i class="fas fa-sign-out-alt w-5"></i> Logout
             </a>
         </div>
     </nav>

@@ -1,13 +1,13 @@
-{% if status == "pending" %}
-    <span class="status-badge status-pending">En attente</span>
-{% elif status == "confirmed" %}
-    <span class="status-badge status-confirmed">Confirmée</span>
-{% elif status == "shipped" %}
-    <span class="status-badge status-shipped">En livraison</span>
-{% elif status == "delivered" %}
-    <span class="status-badge status-delivered">Livrée</span>
-{% elif status == "cancelled" %}
-    <span class="status-badge bg-red-100 text-red-800">Annulée</span>
+{% if status|lower == "pending" %}
+    <span class="status-badge status-pending">Pending</span>
+{% elif status|lower == "confirmed" %}
+    <span class="status-badge status-confirmed">Confirmed</span>
+{% elif status|lower == "shipped" %}
+    <span class="status-badge status-shipped">Shipped</span>
+{% elif status|lower == "delivered" %}
+    <span class="status-badge status-delivered">Delivered</span>
+{% elif status|lower == "cancelled" %}
+    <span class="status-badge bg-red-100 text-red-800">Cancelled</span>
 {% else %}
     <span class="status-badge bg-gray-100 text-gray-700">{{ status|title }}</span>
 {% endif %}

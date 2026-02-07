@@ -1,26 +1,26 @@
 <div class="bg-white rounded-2xl p-6 lg:p-8 border border-gray-200 shadow-sm mb-10">
-    <h2 class="text-xl lg:text-2xl font-bold mb-6">Actions rapides</h2>
+    <h2 class="text-xl lg:text-2xl font-bold mb-6">Quick Actions</h2>
     
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
 
-        <a href="{% url 'shop' %}" class="flex flex-col items-center gap-3 p-6 border-2 border-gray-200 rounded-xl hover:border-yellow-600 hover:bg-yellow-50 transition text-center">
+        <a href="{% url 'product:product_list' %}" class="flex flex-col items-center gap-3 p-6 border-2 border-gray-200 rounded-xl hover:border-yellow-600 hover:bg-yellow-50 transition text-center">
             <i class="fas fa-shopping-bag text-4xl text-yellow-600"></i>
-            <span class="font-semibold text-sm">Nouvelle commande</span>
+            <span class="font-semibold text-sm">New Order</span>
         </a>
 
         <button class="flex flex-col items-center gap-3 p-6 border-2 border-gray-200 rounded-xl hover:border-yellow-600 hover:bg-yellow-50 transition">
             <i class="fas fa-undo text-4xl text-yellow-600"></i>
-            <span class="font-semibold text-sm">Retourner un produit</span>
+            <span class="font-semibold text-sm">Return Product</span>
         </button>
 
         <button class="flex flex-col items-center gap-3 p-6 border-2 border-gray-200 rounded-xl hover:border-yellow-600 hover:bg-yellow-50 transition">
             <i class="fas fa-comments text-4xl text-yellow-600"></i>
-            <span class="font-semibold text-sm">Contacter le support</span>
+            <span class="font-semibold text-sm">Contact Support</span>
         </button>
 
-        <a href="{% url 'rewards' %}" class="flex flex-col items-center gap-3 p-6 border-2 border-gray-200 rounded-xl hover:border-yellow-600 hover:bg-yellow-50 transition text-center">
+        <a href="#" class="flex flex-col items-center gap-3 p-6 border-2 border-gray-200 rounded-xl hover:border-yellow-600 hover:bg-yellow-50 transition text-center">
             <i class="fas fa-gift text-4xl text-yellow-600"></i>
-            <span class="font-semibold text-sm">Utiliser mes points</span>
+            <span class="font-semibold text-sm">Redeem Points</span>
         </a>
 
     </div>

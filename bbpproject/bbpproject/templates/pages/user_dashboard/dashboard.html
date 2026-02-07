@@ -1,6 +1,6 @@
 {% extends "pages/user_dashboard/base_user.html" %}
 
-{% block title %}Tableau de bord - LuxeHair{% endblock %}
+{% block title %}Dashboard - BBP Collection{% endblock %}
 
 {% block content %}
 
@@ -8,9 +8,9 @@
 
     <div class="mb-8">
         <h1 class="text-3xl lg:text-4xl font-serif font-bold text-black mb-2">
-            Bienvenue, {{ user.first_name|default:"Aïcha" }} 👋
+            Welcome back, {{ user.name|default:user.username }} 👋
         </h1>
-        <p class="text-gray-600">Ravie de vous revoir ! Voici un aperçu de votre compte</p>
+        <p class="text-gray-600">Great to see you! Here's what's happening with your account.</p>
     </div>
 
     {% include "pages/user_dashboard/_stats_cards.html" %}

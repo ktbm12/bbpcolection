@@ -1,8 +1,8 @@
 <div class="bg-white rounded-2xl p-6 lg:p-8 border border-gray-200 shadow-sm">
     <div class="flex items-center justify-between mb-6">
-        <h2 class="text-xl lg:text-2xl font-bold">Mes favoris</h2>
-        <a href="{% url 'wishlist' %}" class="text-yellow-600 hover:text-yellow-800 font-medium flex items-center gap-2 text-sm">
-            Voir tout <i class="fas fa-arrow-right"></i>
+        <h2 class="text-xl lg:text-2xl font-bold">My Favorites</h2>
+        <a href="#" class="text-yellow-600 hover:text-yellow-800 font-medium flex items-center gap-2 text-sm">
+            View all <i class="fas fa-arrow-right"></i>
         </a>
     </div>
 
@@ -11,7 +11,7 @@
             {% include "pages/user_dashboard/components/product_card_small.html" with product=product %}
         {% empty %}
             <div class="col-span-full text-center py-12 text-gray-500">
-                Vous n'avez aucun produit en favoris pour le moment
+                You have no items in your favorites yet.
             </div>
         {% endfor %}
     </div>

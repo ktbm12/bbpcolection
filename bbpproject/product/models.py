@@ -142,6 +142,30 @@ class Order(CFPBaseModel):
             self.order_number = f"CMD-{uuid.uuid4().hex[:8].upper()}"
         super().save(*args, **kwargs)
 
+    @property
+    def number(self):
+        return self.order_number
+
+    @property
+    def total(self):
+        return self.total_amount
+
+    @property
+    def first_item(self):
+        return self.items.first()
+
+    @property
+    def first_item_name(self):
+        item = self.first_item
+        return item.product.name if item else "Aucun article"
+
+    @property
+    def first_item_image(self):
+        item = self.first_item
+        if item and item.product.main_image:
+            return item.product.main_image
+        return None
+
 
 class OrderItem(CFPBaseModel):
     order = models.ForeignKey(Order, on_delete=models.PROTECT, related_name="items")
@@ -149,3 +173,15 @@ class OrderItem(CFPBaseModel):
     quantity = models.PositiveIntegerField()
     unit_price = models.DecimalField(max_digits=10, decimal_places=0)
     subtotal = models.DecimalField(max_digits=12, decimal_places=0)
+
+
+class Wishlist(CFPBaseModel):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="wishlist")
+    products = models.ManyToManyField(Product, related_name="wishlisted_by")
+
+    class Meta(CFPBaseModel.Meta):
+        verbose_name = _("liste de souhaits")
+        verbose_name_plural = _("listes de souhaits")
+
+    def __str__(self):
+        return f"Wishlist de {self.user.username}"

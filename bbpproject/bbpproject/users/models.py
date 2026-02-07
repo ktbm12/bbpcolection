@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractUser
+from django.db import models
 from django.db.models import CharField, BooleanField, EmailField
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -34,6 +35,10 @@ class User(AbstractUser, CFPBaseModel):
         null=True,
         unique=True,
     )
+
+    loyalty_points = models.PositiveIntegerField(_("points de fidélité"), default=0)
+    referral_code = CharField(_("code de parrainage"), max_length=20, blank=True, null=True)
+    is_vip = BooleanField(_("client VIP"), default=False)
 
     # Champs d'audit et statut déjà hérités de CFPBaseModel
     # → created / modified / status

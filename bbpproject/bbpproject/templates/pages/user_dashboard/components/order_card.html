@@ -9,9 +9,9 @@
                 {% endif %}
             </div>
             <div>
-                <p class="font-bold mb-1">Commande #{{ order.number|default:"CMD-2026-156" }}</p>
-                <p class="text-sm text-gray-600 mb-1">{{ order.first_item_name|default:"Mèches Lisses Brésiliennes 24\""|truncatewords:6 }}</p>
-                <p class="text-xs text-gray-500">{{ order.created_at|date:"d F Y" }}</p>
+                <p class="font-bold mb-1">Order #{{ order.number|default:"CMD-2026-156" }}</p>
+                <p class="text-sm text-gray-600 mb-1">{{ order.first_item_name|default:"Luxury Straight Hair 24\""|truncatewords:6 }}</p>
+                <p class="text-xs text-gray-500">{{ order.created_at|date:"M d, Y" }}</p>
             </div>
         </div>
 
@@ -20,9 +20,9 @@
             <p class="font-bold">{{ order.total|default:"45 000" }} FCFA</p>
             
             {% if order.status == "shipped" %}
-                <a href="#" class="text-yellow-600 hover:text-yellow-800 text-sm font-medium">Suivre ma commande →</a>
+                <a href="#" class="text-yellow-600 hover:text-yellow-800 text-sm font-medium">Track order →</a>
             {% elif order.status == "delivered" %}
-                <a href="#" class="text-yellow-600 hover:text-yellow-800 text-sm font-medium">Laisser un avis →</a>
+                <a href="#" class="text-yellow-600 hover:text-yellow-800 text-sm font-medium">Leave a review →</a>
             {% endif %}
         </div>
     </div>
