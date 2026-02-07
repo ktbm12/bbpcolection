@@ -1,0 +1,29 @@
+<div class="p-6 hover:bg-gray-50 transition">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-5">
+        <div class="flex gap-4 flex-1">
+            <div class="w-20 h-20 bg-gray-100 rounded-xl flex-shrink-0 overflow-hidden">
+                {% if order.first_item_image %}
+                    <img src="{{ order.first_item_image.url }}" alt="{{ order.first_item_name }}" class="w-full h-full object-cover">
+                {% else %}
+                    <div class="w-full h-full bg-gradient-to-br from-yellow-50 to-gray-100"></div>
+                {% endif %}
+            </div>
+            <div>
+                <p class="font-bold mb-1">Commande #{{ order.number|default:"CMD-2026-156" }}</p>
+                <p class="text-sm text-gray-600 mb-1">{{ order.first_item_name|default:"Mèches Lisses Brésiliennes 24\""|truncatewords:6 }}</p>
+                <p class="text-xs text-gray-500">{{ order.created_at|date:"d F Y" }}</p>
+            </div>
+        </div>
+
+        <div class="flex flex-col md:items-end gap-2">
+            {% include "pages/user_dashboard/components/status_badge.html" with status=order.status %}
+            <p class="font-bold">{{ order.total|default:"45 000" }} FCFA</p>
+            
+            {% if order.status == "shipped" %}
+                <a href="#" class="text-yellow-600 hover:text-yellow-800 text-sm font-medium">Suivre ma commande →</a>
+            {% elif order.status == "delivered" %}
+                <a href="#" class="text-yellow-600 hover:text-yellow-800 text-sm font-medium">Laisser un avis →</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
