@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
-{% load static %}
+{% load static product_tags %}
 
-{% block title %}Nos Produits - LuxeHair{% endblock %}
+{% block title %}Nos Produits - bbpcollection{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -267,9 +267,9 @@
                             Ajouter au panier
                         </button>
                     
-                        <button onclick="toggleFavorite('{{ product.id }}')"
-                                class="w-10 h-10 flex items-center justify-center border rounded-lg hover:bg-gray-100">
-                            <i class="far fa-heart"></i>
+                        <button onclick="toggleFavorite('{{ product.id }}', this)"
+                                class="wishlist-btn w-10 h-10 flex items-center justify-center border rounded-lg hover:bg-gray-100 transition-colors {% if product|is_in_wishlist:user %}bg-red-50 border-red-200 text-red-500{% endif %}">
+                            <i class="{% if product|is_in_wishlist:user %}fas{% else %}far{% endif %} fa-heart"></i>
                         </button>
                     </div>
                     
@@ -374,10 +374,10 @@
             });
     }
 
-    function toggleFavorite(productId) {
-        // Implémenter la logique des favoris
-        showNotification('Ajouté aux favoris !');
-    }
+    // function toggleFavorite(productId) {
+    //     // Implémenter la logique des favoris
+    //     showNotification('Ajouté aux favoris !');
+    // }
 
     function showNotification(message) {
         const notification = document.createElement('div');

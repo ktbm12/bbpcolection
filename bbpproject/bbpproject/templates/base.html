@@ -101,6 +101,57 @@
                 e.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='1000' viewBox='0 0 800 1000'%3E%3Crect width='800' height='1000' fill='%23f3f4f6'/%3E%3Ctext x='50%25' y='50%25' font-family='serif' font-size='40' fill='%239ca3af' text-anchor='middle' dy='.3em'%3EBBP COLLECTION%3C/text%3E%3C/svg%3E";
             }
         }, true);
+
+        // Global Wishlist Toggle
+        window.toggleFavorite = function(productId, btn) {
+            fetch(`/product/wishlist/toggle/${productId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.success) {
+                    // Update Button UI
+                    const icon = btn.querySelector('i');
+                    if (data.added) {
+                        btn.classList.add('bg-red-50', 'border-red-200', 'text-red-500');
+                        btn.classList.remove('text-gray-900', 'hover:bg-gray-100');
+                        icon.classList.remove('far');
+                        icon.classList.add('fas');
+                    } else {
+                        btn.classList.remove('bg-red-50', 'border-red-200', 'text-red-500');
+                        btn.classList.add('text-gray-900', 'hover:bg-gray-100');
+                        icon.classList.remove('fas');
+                        icon.classList.add('far');
+                    }
+                    
+                    // Update Navbar Badge
+                    const badge = document.getElementById('wishlist-badge');
+                    if(badge) {
+                        badge.textContent = data.wishlist_count;
+                        if(data.wishlist_count > 0) {
+                            badge.classList.remove('hidden');
+                        } else {
+                            badge.classList.add('hidden');
+                        }
+                    }
+
+                    // Notification
+                    if (window.showPremiumNotification) {
+                        window.showPremiumNotification(data.message, 'success');
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                if (window.showPremiumNotification) {
+                    window.showPremiumNotification('Please login to use wishlist', 'error');
+                }
+            });
+        };
     </script>
 
     {% block extra_js %}{% endblock %}

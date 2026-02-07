@@ -35,6 +35,14 @@
                     <i class="fas fa-search text-lg"></i>
                 </button>
 
+                <!-- Wishlist (Desktop) -->
+                <a href="{% url 'product:wishlist_detail' %}" class="relative group p-2 text-gray-900 hover:text-yellow-600 transition flex items-center">
+                    <i class="fas fa-heart text-xl"></i>
+                    <span id="wishlist-badge" class="absolute -top-1 -right-1 bg-yellow-600 text-white text-[10px] font-black rounded-full w-5 h-5 flex items-center justify-center border-2 border-white shadow-sm group-hover:scale-110 transition-all {% if not wishlist_count %}hidden{% endif %}">
+                        {{ wishlist_count|default:0 }}
+                    </span>
+                </a>
+
                 <!-- Panier (Always visible and prominent) -->
                 <a href="{% url 'product:cart_detail' %}" class="relative group p-2 text-gray-900 hover:text-yellow-600 transition flex items-center">
                     <i class="fas fa-shopping-bag text-xl"></i>
@@ -115,6 +123,14 @@
                 <nav class="flex flex-col space-y-10 animate-fade-in">
                     <a href="{% url 'users:home' %}" class="text-4xl font-serif font-bold text-gray-900 hover:text-yellow-600 transition">Home</a>
                     <a href="{% url 'product:product_list' %}" class="text-4xl font-serif font-bold text-gray-900 hover:text-yellow-600 transition">Collections</a>
+                    <a href="{% url 'product:wishlist_detail' %}" class="relative inline-block text-4xl font-serif font-bold text-gray-900 hover:text-yellow-600 transition">
+                        Wishlist
+                        {% if wishlist_count %}
+                        <span class="absolute top-0 -right-8 bg-yellow-600 text-white text-[12px] font-black rounded-full w-6 h-6 flex items-center justify-center border-2 border-white shadow-sm">
+                            {{ wishlist_count }}
+                        </span>
+                        {% endif %}
+                    </a>
                     <a href="#" class="text-4xl font-serif font-bold text-gray-900 hover:text-yellow-600 transition">About</a>
                     <a href="#" class="text-4xl font-serif font-bold text-gray-900 hover:text-yellow-600 transition">Contact</a>
 

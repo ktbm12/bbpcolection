@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+{% load static humanize %}
+
+{% block title %}My Wishlist - bbpcollection{% endblock %}
+
+{% block content %}
+<div class="pt-32 pb-20 bg-gray-50 min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Header -->
+        <div class="mb-10 text-center">
+            <h1 class="text-4xl font-serif font-bold text-gray-900 mb-4">My Wishlist</h1>
+            <p class="text-gray-500">Save your favorite items for later.</p>
+        </div>
+
+        {% if wishlist_items %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {% for product in wishlist_items %}
+                <div class="bg-white rounded-[2rem] overflow-hidden border border-gray-100 shadow-lg hover:shadow-xl transition-shadow group relative flex flex-col">
+                    
+                    <!-- Remove Button (Top Right) -->
+                    <button onclick="removeFromWishlist('{{ product.id }}', this)" 
+                            class="absolute top-4 right-4 z-10 w-10 h-10 bg-white/90 backdrop-blur rounded-full flex items-center justify-center text-gray-400 hover:text-red-500 hover:bg-red-50 transition shadow-sm">
+                        <i class="fas fa-times"></i>
+                    </button>
+
+                    <!-- Image -->
+                    <div class="relative aspect-[4/5] overflow-hidden bg-gray-100">
+                        <a href="{% url 'product:product_detail' product.id %}">
+                            {% if product.get_main_image_url %}
+                                <img src="{{ product.get_main_image_url }}" alt="{{ product.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                            {% else %}
+                                <div class="w-full h-full flex items-center justify-center text-gray-300">
+                                    <i class="fas fa-image text-4xl"></i>
+                                </div>
+                            {% endif %}
+                        </a>
+                        
+                        {% if not product.stock %}
+                        <div class="absolute bottom-4 left-4 bg-red-500 text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full">
+                            Out of Stock
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Content -->
+                    <div class="p-6 flex flex-col flex-grow">
+                        <div class="mb-4">
+                            <p class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">{{ product.category.name }}</p>
+                            <a href="{% url 'product:product_detail' product.id %}">
+                                <h3 class="font-bold text-gray-900 hover:text-yellow-600 transition mb-1 line-clamp-1">{{ product.name }}</h3>
+                            </a>
+                            <div class="flex items-baseline gap-2">
+                                <span class="font-bold text-black">{{ product.price|floatformat:0|intcomma }} FCFA</span>
+                                {% if product.old_price %}
+                                <span class="text-sm text-gray-400 line-through">{{ product.old_price|floatformat:0|intcomma }} FCFA</span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="mt-auto pt-4 border-t border-gray-50">
+                            <button onclick="moveToCart('{{ product.id }}')" 
+                                    class="w-full py-3 bg-black text-white font-black uppercase tracking-widest text-xs rounded-xl hover:bg-yellow-600 hover:text-black transition-colors flex items-center justify-center gap-2"
+                                    {% if not product.stock %}disabled style="opacity: 0.5; cursor: not-allowed;"{% endif %}>
+                                <i class="fas fa-shopping-bag"></i>
+                                {% if product.stock %}Add to Cart{% else %}Sold Out{% endif %}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="text-center py-20">
+                <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6 text-gray-300">
+                    <i class="far fa-heart text-4xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Your wishlist is empty</h3>
+                <p class="text-gray-500 mb-8 max-w-md mx-auto">Browse our collections and save your favorite items here.</p>
+                <a href="{% url 'product:product_list' %}" class="inline-flex items-center px-8 py-4 bg-black text-white font-black uppercase tracking-widest text-xs rounded-full hover:bg-yellow-600 hover:text-black transition shadow-xl shadow-black/10">
+                    Start Shopping
+                </a>
+            </div>
+        {% endif %}
+
+    </div>
+</div>
+
+<script>
+    function removeFromWishlist(productId, btn) {
+        fetch(`/product/wishlist/toggle/${productId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.success) {
+                // Remove card from DOM
+                const card = btn.closest('.group');
+                card.style.opacity = '0';
+                card.style.transform = 'scale(0.9)';
+                setTimeout(() => {
+                    card.remove();
+                    // If no items left, reload to show empty state
+                    if(document.querySelectorAll('.group').length === 0) {
+                        window.location.reload();
+                    }
+                }, 300);
+                
+                // Update Badge
+                const badge = document.getElementById('wishlist-badge');
+                if(badge) {
+                    badge.textContent = data.wishlist_count;
+                    if(data.wishlist_count === 0) badge.classList.add('hidden');
+                }
+                
+                showNotification('Removed from wishlist');
+            }
+        });
+    }
+
+    function moveToCart(productId) {
+        fetch(`/product/wishlist/move-to-cart/${productId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.success) {
+                if (window.showPremiumNotification) window.showPremiumNotification('Moved to cart!', 'success');
+                
+                // Update Badges
+                document.querySelectorAll('.cart-items-badge').forEach(b => b.textContent = data.cart_count);
+                const wBadge = document.getElementById('wishlist-badge');
+                if(wBadge) {
+                    wBadge.textContent = data.wishlist_count;
+                    if(data.wishlist_count === 0) wBadge.classList.add('hidden');
+                }
+                
+                // Reload to remove item
+                setTimeout(() => window.location.reload(), 1000);
+            }
+        });
+    }
+
+    function showNotification(message) {
+        if (window.showPremiumNotification) {
+            window.showPremiumNotification(message, 'success');
+        } else {
+            alert(message);
+        }
+    }
+</script>
+{% endblock %}
