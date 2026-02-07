@@ -1,0 +1,29 @@
+{% extends "pages/user_dashboard/base_user.html" %}
+
+{% block title %}Tableau de bord - LuxeHair{% endblock %}
+
+{% block content %}
+
+<div class="p-6 lg:p-8">
+
+    <div class="mb-8">
+        <h1 class="text-3xl lg:text-4xl font-serif font-bold text-black mb-2">
+            Bienvenue, {{ user.first_name|default:"Aïcha" }} 👋
+        </h1>
+        <p class="text-gray-600">Ravie de vous revoir ! Voici un aperçu de votre compte</p>
+    </div>
+
+    {% include "pages/user_dashboard/_stats_cards.html" %}
+    {% include "pages/user_dashboard/_quick_actions.html" %}
+    {% include "pages/user_dashboard/_recent_orders.html" %}
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        {% include "pages/user_dashboard/_promo_vip.html" %}
+        {% include "pages/user_dashboard/_referral_program.html" %}
+    </div>
+
+    {% include "pages/user_dashboard/_wishlist_preview.html" %}
+
+</div>
+
+{% endblock %}
