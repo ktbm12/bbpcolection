@@ -66,3 +66,35 @@ def wishlist_to_cart(request, product_id):
     
     messages.success(request, f"{product.name} moved to cart")
     return redirect('product:wishlist_detail')
+
+@login_required
+def wishlist_add_all_to_cart(request):
+    wishlist, created = Wishlist.objects.get_or_create(user=request.user)
+    cart = get_or_create_cart(request)
+    
+    products = wishlist.products.all()
+    count = products.count()
+    
+    if count == 0:
+        messages.info(request, "Your wishlist is empty.")
+        return redirect('product:wishlist_detail')
+        
+    for product in products:
+        cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+        if not created:
+            cart_item.quantity += 1
+            cart_item.save()
+            
+    # Clear wishlist
+    wishlist.products.clear()
+    
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return JsonResponse({
+            'success': True,
+            'message': f"{count} items moved to cart",
+            'cart_count': cart.items.count(),
+            'wishlist_count': 0
+        })
+        
+    messages.success(request, f"{count} items moved to cart")
+    return redirect('product:cart_detail')

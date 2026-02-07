@@ -103,51 +103,58 @@
             <!-- Liste des articles -->
             <div class="lg:col-span-2 space-y-6" id="cart-items-container">
                 {% for item in cart_items %}
-                <div class="cart-item bg-white border border-gray-200 rounded-2xl p-6" data-item-id="{{ item.id }}">
-                    <div class="flex gap-6">
+                <div class="cart-item bg-white border border-gray-200 rounded-2xl p-4 sm:p-6" data-item-id="{{ item.id }}">
+                    <div class="flex flex-col sm:flex-row gap-6">
                         <!-- Image -->
-                        <div class="w-32 h-32 rounded-xl overflow-hidden bg-gray-50 flex-shrink-0">
-                            {% if item.product.main_image %}
-                            <img src="{{ item.product.main_image.url }}" alt="{{ item.product.name }}" class="w-full h-full object-cover">
-                            {% else %}
-                            <div class="w-full h-full flex items-center justify-center text-gray-300">
-                                <i class="fas fa-image text-4xl"></i>
-                            </div>
-                            {% endif %}
+                        <div class="w-full sm:w-32 h-48 sm:h-32 rounded-xl overflow-hidden bg-gray-50 flex-shrink-0 relative group">
+                            <a href="{% url 'product:product_detail' item.product.id %}">
+                                {% if item.product.main_image %}
+                                <img src="{{ item.product.main_image.url }}" alt="{{ item.product.name }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                                {% else %}
+                                <div class="w-full h-full flex items-center justify-center text-gray-300">
+                                    <i class="fas fa-image text-4xl"></i>
+                                </div>
+                                {% endif %}
+                            </a>
                         </div>
 
                         <!-- Infos -->
-                        <div class="flex-1">
-                            <div class="flex justify-between mb-2">
-                                <h3 class="text-xl font-semibold">{{ item.product.name }}</h3>
-                                <button class="remove-item text-red-500 hover:text-red-700 transition" data-item-id="{{ item.id }}">
-                                    <i class="fas fa-trash-can"></i>
-                                </button>
-                            </div>
-
-                            <div class="text-sm text-gray-600 mb-4">
-                                {{ item.product.category.name }} • {{ item.product.length_inches }}" • {{ item.product.weight_grams }}g
-                            </div>
-
-                            <div class="flex items-center justify-between">
-                                <!-- Quantité -->
-                                <div class="flex items-center gap-3">
-                                    <button class="quantity-btn decrease" data-item-id="{{ item.id }}">
-                                        <i class="fas fa-minus text-sm"></i>
+                        <div class="flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-start mb-2">
+                                    <a href="{% url 'product:product_detail' item.product.id %}">
+                                        <h3 class="text-lg sm:text-xl font-serif font-bold hover:text-yellow-600 transition">{{ item.product.name }}</h3>
+                                    </a>
+                                    <button class="remove-item text-gray-400 hover:text-red-500 transition p-2 hover:bg-red-50 rounded-full" data-item-id="{{ item.id }}">
+                                        <i class="fas fa-trash-can"></i>
                                     </button>
-                                    <input type="number" class="quantity-input" value="{{ item.quantity }}" min="1" readonly>
-                                    <button class="quantity-btn increase" data-item-id="{{ item.id }}">
-                                        <i class="fas fa-plus text-sm"></i>
+                                </div>
+
+                                <div class="text-xs sm:text-sm font-bold uppercase tracking-wide text-gray-400 mb-4">
+                                    {{ item.product.category.name }} 
+                                    {% if item.product.length %}• {{ item.product.length }}"{% endif %}
+                                </div>
+                            </div>
+
+                            <div class="flex flex-row items-center justify-between mt-4 sm:mt-0 pt-4 sm:pt-0 border-t sm:border-t-0 border-gray-100">
+                                <!-- Quantité -->
+                                <div class="flex items-center gap-3 bg-gray-50 rounded-full p-1 border border-gray-200">
+                                    <button class="quantity-btn decrease w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-sm hover:shadow-md hover:text-yellow-600 transition disabled:opacity-50" data-item-id="{{ item.id }}" {% if item.quantity <= 1 %}disabled{% endif %}>
+                                        <i class="fas fa-minus text-[10px]"></i>
+                                    </button>
+                                    <input type="number" class="quantity-input w-8 text-center bg-transparent border-none p-0 text-sm font-bold focus:ring-0" value="{{ item.quantity }}" min="1" readonly>
+                                    <button class="quantity-btn increase w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-sm hover:shadow-md hover:text-yellow-600 transition" data-item-id="{{ item.id }}">
+                                        <i class="fas fa-plus text-[10px]"></i>
                                     </button>
                                 </div>
 
                                 <!-- Prix -->
                                 <div class="text-right">
-                                    <div class="text-xl font-bold">
+                                    <div class="text-lg sm:text-xl font-bold text-black">
                                         {{ item.line_total|floatformat:0|intcomma }} FCFA
                                     </div>
                                     {% if item.product.old_price %}
-                                    <div class="text-sm text-gray-400 line-through">
+                                    <div class="text-xs text-red-500 line-through font-medium">
                                         {{ item.product.old_price|floatformat:0|intcomma }} FCFA
                                     </div>
                                     {% endif %}
@@ -267,11 +274,15 @@ const csrfToken = "{{ csrf_token }}";
 
 // Fonction notification
 function showToast(message, type = 'success') {
-    const toast = document.createElement('div');
-    toast.className = `fixed top-6 right-6 px-6 py-4 rounded-xl shadow-2xl z-50 text-white flex items-center gap-3 toast ${type === 'error' ? 'bg-red-600' : 'bg-green-600'}`;
-    toast.innerHTML = `<i class="fas ${type === 'error' ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i> ${message}`;
-    document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), 3000);
+    if (window.showPremiumNotification) {
+        window.showPremiumNotification(message, type);
+    } else {
+        const toast = document.createElement('div');
+        toast.className = `fixed top-6 right-6 px-6 py-4 rounded-xl shadow-2xl z-50 text-white flex items-center gap-3 toast ${type === 'error' ? 'bg-red-600' : 'bg-green-600'}`;
+        toast.innerHTML = `<i class="fas ${type === 'error' ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i> ${message}`;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
 }
 
 // Mise à jour quantité

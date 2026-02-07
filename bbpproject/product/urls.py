@@ -16,7 +16,7 @@ from .views.cart_detail_view import (
 from .views.produc_create_view import ProductDashboardView
 from .views.produc_create_view import product_edit
 from .views.produc_create_view import product_delete
-from .views.wishlist_view import WishlistView, toggle_wishlist, wishlist_to_cart
+from .views.wishlist_view import WishlistView, toggle_wishlist, wishlist_to_cart, wishlist_add_all_to_cart
 
 
 app_name = "product"
@@ -37,6 +37,7 @@ urlpatterns = [
     path('wishlist/', WishlistView.as_view(), name='wishlist_detail'),
     path('wishlist/toggle/<uuid:product_id>/', toggle_wishlist, name='toggle_wishlist'),
     path('wishlist/move-to-cart/<uuid:product_id>/', wishlist_to_cart, name='move_to_cart'),
+    path('wishlist/move-all-to-cart/', wishlist_add_all_to_cart, name='wishlist_add_all_to_cart'),
    
     path(
     "dashboard/products/",

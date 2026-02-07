@@ -1,84 +1,159 @@
 {% extends 'base.html' %}
-{% load static humanize %}
+{% load static humanize product_tags %}
 
-{% block title %}My Wishlist - bbpcollection{% endblock %}
+{% block title %}Ma Wishlist - bbpcollection{% endblock %}
+
+{% block extra_css %}
+<style>
+    .product-card {
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .product-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+        transition: left 0.6s;
+        z-index: 1;
+    }
+    
+    .product-card:hover::before {
+        left: 100%;
+    }
+    
+    .product-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+    }
+    
+    .product-image {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .product-image::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 40%);
+        opacity: 0;
+        transition: opacity 0.4s;
+    }
+    
+    .product-card:hover .product-image::after {
+        opacity: 1;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
 <div class="pt-32 pb-20 bg-gray-50 min-h-screen">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <!-- Header -->
-        <div class="mb-10 text-center">
-            <h1 class="text-4xl font-serif font-bold text-gray-900 mb-4">My Wishlist</h1>
-            <p class="text-gray-500">Save your favorite items for later.</p>
+        <div class="flex flex-col md:flex-row justify-between items-center mb-12 gap-6">
+            <div>
+                <h1 class="text-4xl font-serif font-bold text-gray-900 mb-2">Ma Wishlist</h1>
+                <p class="text-gray-500">{{ wishlist_items.count }} article{{ wishlist_items.count|pluralize }} sauvegardé{{ wishlist_items.count|pluralize }}</p>
+            </div>
+            
+            {% if wishlist_items %}
+            <button onclick="addAllToCart()" class="bg-black hover:bg-yellow-600 text-white hover:text-black px-8 py-4 rounded-full font-bold uppercase tracking-widest text-xs transition-all shadow-xl hover:shadow-yellow-600/20 active:scale-95 flex items-center gap-3">
+                <i class="fas fa-shopping-bag text-lg"></i>
+                Tout ajouter au panier
+            </button>
+            {% endif %}
         </div>
 
         {% if wishlist_items %}
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                 {% for product in wishlist_items %}
-                <div class="bg-white rounded-[2rem] overflow-hidden border border-gray-100 shadow-lg hover:shadow-xl transition-shadow group relative flex flex-col">
-                    
-                    <!-- Remove Button (Top Right) -->
-                    <button onclick="removeFromWishlist('{{ product.id }}', this)" 
-                            class="absolute top-4 right-4 z-10 w-10 h-10 bg-white/90 backdrop-blur rounded-full flex items-center justify-center text-gray-400 hover:text-red-500 hover:bg-red-50 transition shadow-sm">
-                        <i class="fas fa-times"></i>
-                    </button>
-
-                    <!-- Image -->
-                    <div class="relative aspect-[4/5] overflow-hidden bg-gray-100">
-                        <a href="{% url 'product:product_detail' product.id %}">
+                <div class="product-card bg-white rounded-2xl overflow-hidden border-2 border-gray-200 hover:border-yellow-600 group flex flex-col">
+            
+                    <!-- IMAGE -->
+                    <div class="product-image relative h-80 overflow-hidden flex-shrink-0">
+                        <a href="{% url 'product:product_detail' product.id %}" class="absolute inset-0">
                             {% if product.get_main_image_url %}
-                                <img src="{{ product.get_main_image_url }}" alt="{{ product.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                                <img src="{{ product.get_main_image_url }}" alt="{{ product.name }}"
+                                     class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
                             {% else %}
-                                <div class="w-full h-full flex items-center justify-center text-gray-300">
-                                    <i class="fas fa-image text-4xl"></i>
+                                <div class="absolute inset-0 bg-gray-100 flex items-center justify-center">
+                                    <i class="fas fa-image text-gray-300 text-7xl"></i>
                                 </div>
                             {% endif %}
                         </a>
                         
-                        {% if not product.stock %}
-                        <div class="absolute bottom-4 left-4 bg-red-500 text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full">
-                            Out of Stock
-                        </div>
-                        {% endif %}
+                        <!-- Remove Button (Absolute Top Right) -->
+                        <button onclick="removeFromWishlist('{{ product.id }}', this)" 
+                                class="absolute top-4 right-4 z-10 w-10 h-10 bg-white/90 backdrop-blur rounded-full flex items-center justify-center text-red-500 hover:bg-red-500 hover:text-white transition shadow-md">
+                            <i class="fas fa-times"></i>
+                        </button>
                     </div>
-
-                    <!-- Content -->
-                    <div class="p-6 flex flex-col flex-grow">
+            
+                    <!-- CONTENT -->
+                    <div class="p-5 flex flex-col flex-grow justify-between">
+            
+                        <!-- HEADER -->
+                        <div class="product-card-header flex justify-between items-start mb-2">
+                            <div>
+                                <p class="text-sm text-gray-600">
+                                    {{ product.category.name|default:"Catégorie" }}
+                                </p>
+                            </div>
+                            
+                            <!-- Rating -->
+                            <div class="flex items-center gap-1">
+                                <span class="text-sm font-semibold">{{ product.avg_rating|default:0|floatformat:1 }}</span>
+                                <i class="fas fa-star text-yellow-500 text-xs"></i>
+                            </div>
+                        </div>
+            
+                        <!-- TITLE + PRICE -->
                         <div class="mb-4">
-                            <p class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">{{ product.category.name }}</p>
                             <a href="{% url 'product:product_detail' product.id %}">
-                                <h3 class="font-bold text-gray-900 hover:text-yellow-600 transition mb-1 line-clamp-1">{{ product.name }}</h3>
+                                <h3 class="font-semibold line-clamp-2 hover:text-yellow-600 mb-1 transition">
+                                    {{ product.name }}
+                                </h3>
                             </a>
+                            
                             <div class="flex items-baseline gap-2">
-                                <span class="font-bold text-black">{{ product.price|floatformat:0|intcomma }} FCFA</span>
+                                <span class="font-bold text-black text-lg">{{ product.price|floatformat:0|intcomma }} FCFA</span>
                                 {% if product.old_price %}
-                                <span class="text-sm text-gray-400 line-through">{{ product.old_price|floatformat:0|intcomma }} FCFA</span>
+                                <span class="line-through text-gray-400 text-sm">
+                                    {{ product.old_price|floatformat:0|intcomma }} FCFA
+                                </span>
                                 {% endif %}
                             </div>
                         </div>
-
-                        <div class="mt-auto pt-4 border-t border-gray-50">
-                            <button onclick="moveToCart('{{ product.id }}')" 
-                                    class="w-full py-3 bg-black text-white font-black uppercase tracking-widest text-xs rounded-xl hover:bg-yellow-600 hover:text-black transition-colors flex items-center justify-center gap-2"
-                                    {% if not product.stock %}disabled style="opacity: 0.5; cursor: not-allowed;"{% endif %}>
-                                <i class="fas fa-shopping-bag"></i>
-                                {% if product.stock %}Add to Cart{% else %}Sold Out{% endif %}
+            
+                        <!-- ACTIONS -->
+                        <div class="mt-auto">
+                            <button onclick="addToCart('{{ product.id }}')"
+                                    class="w-full bg-yellow-600 hover:bg-yellow-700 text-black py-3 rounded-lg text-sm font-bold uppercase tracking-wide transition-colors flex items-center justify-center gap-2">
+                                <i class="fas fa-cart-plus"></i>
+                                Ajouter au panier
                             </button>
                         </div>
+            
                     </div>
                 </div>
                 {% endfor %}
             </div>
         {% else %}
-            <div class="text-center py-20">
+            <div class="text-center py-20 animate-fade-in">
                 <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6 text-gray-300">
                     <i class="far fa-heart text-4xl"></i>
                 </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-2">Your wishlist is empty</h3>
-                <p class="text-gray-500 mb-8 max-w-md mx-auto">Browse our collections and save your favorite items here.</p>
+                <h3 class="text-2xl font-serif font-bold text-gray-900 mb-2">Votre wishlist est vide</h3>
+                <p class="text-gray-500 mb-8 max-w-md mx-auto">Parcourez nos collections et sauvegardez vos coups de cœur pour plus tard.</p>
                 <a href="{% url 'product:product_list' %}" class="inline-flex items-center px-8 py-4 bg-black text-white font-black uppercase tracking-widest text-xs rounded-full hover:bg-yellow-600 hover:text-black transition shadow-xl shadow-black/10">
-                    Start Shopping
+                    Commencer le shopping
                 </a>
             </div>
         {% endif %}
@@ -88,6 +163,8 @@
 
 <script>
     function removeFromWishlist(productId, btn) {
+        if(!confirm('Retirer cet article de la wishlist ?')) return;
+
         fetch(`/product/wishlist/toggle/${productId}/`, {
             method: 'POST',
             headers: {
@@ -98,32 +175,55 @@
         .then(response => response.json())
         .then(data => {
             if(data.success) {
-                // Remove card from DOM
-                const card = btn.closest('.group');
-                card.style.opacity = '0';
+                // Remove card animation
+                const card = btn.closest('.product-card');
                 card.style.transform = 'scale(0.9)';
+                card.style.opacity = '0';
+                
                 setTimeout(() => {
                     card.remove();
-                    // If no items left, reload to show empty state
-                    if(document.querySelectorAll('.group').length === 0) {
+                    // If no items left, reload
+                    if(document.querySelectorAll('.product-card').length === 0) {
                         window.location.reload();
                     }
                 }, 300);
                 
-                // Update Badge
+                // Update badge
                 const badge = document.getElementById('wishlist-badge');
                 if(badge) {
                     badge.textContent = data.wishlist_count;
                     if(data.wishlist_count === 0) badge.classList.add('hidden');
                 }
                 
-                showNotification('Removed from wishlist');
+                showNotification('Retiré de la wishlist');
             }
         });
     }
 
-    function moveToCart(productId) {
-        fetch(`/product/wishlist/move-to-cart/${productId}/`, {
+    function addToCart(productId) {
+        fetch(`/product/add/${productId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ quantity: 1 })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.success) {
+                if (window.showPremiumNotification) window.showPremiumNotification('Produit ajouté au panier !');
+                document.querySelectorAll('.cart-items-badge').forEach(badge => {
+                    badge.textContent = data.cart_items_count;
+                });
+            }
+        });
+    }
+
+    function addAllToCart() {
+        if(!confirm('Ajouter tous les articles au panier ?')) return;
+
+        fetch('{% url "product:wishlist_add_all_to_cart" %}', {
             method: 'POST',
             headers: {
                 'X-CSRFToken': '{{ csrf_token }}',
@@ -133,18 +233,8 @@
         .then(response => response.json())
         .then(data => {
             if(data.success) {
-                if (window.showPremiumNotification) window.showPremiumNotification('Moved to cart!', 'success');
-                
-                // Update Badges
-                document.querySelectorAll('.cart-items-badge').forEach(b => b.textContent = data.cart_count);
-                const wBadge = document.getElementById('wishlist-badge');
-                if(wBadge) {
-                    wBadge.textContent = data.wishlist_count;
-                    if(data.wishlist_count === 0) wBadge.classList.add('hidden');
-                }
-                
-                // Reload to remove item
-                setTimeout(() => window.location.reload(), 1000);
+                if (window.showPremiumNotification) window.showPremiumNotification(data.message);
+                setTimeout(() => window.location.href = "{% url 'product:cart_detail' %}", 1000);
             }
         });
     }
