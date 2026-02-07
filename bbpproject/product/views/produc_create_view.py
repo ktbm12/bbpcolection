@@ -5,7 +5,7 @@ from django.utils.text import slugify
 from django.contrib import messages
 
 from product.models import Product
-from product.forms import ProductForm
+from product.forms import ProductForm, ProductImageFormSet
 
 
 class ProductDashboardView(FormView):
@@ -13,12 +13,13 @@ class ProductDashboardView(FormView):
     form_class = ProductForm
     success_url = reverse_lazy("product:dashboard_products")
 
-    # ---------------------------
-    # Liste produits optimisée
-    # ---------------------------
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
+        if self.request.POST:
+            context['image_formset'] = ProductImageFormSet(self.request.POST, self.request.FILES)
+        else:
+            context['image_formset'] = ProductImageFormSet()
+        
         context["products"] = (
             Product.objects
             .select_related("category")
@@ -35,22 +36,29 @@ class ProductDashboardView(FormView):
             )
             .order_by("-created")
         )
-
         return context
 
-    # ---------------------------
-    # Création produit
-    # ---------------------------
-    def form_valid(self, form):
-        product = form.save(commit=False)
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        image_formset = ProductImageFormSet(request.POST, request.FILES)
+        
+        if form.is_valid() and image_formset.is_valid():
+            return self.form_valid(form, image_formset)
+        else:
+            return self.form_invalid(form)
 
+    def form_valid(self, form, image_formset):
+        product = form.save(commit=False)
         if not product.slug:
             product.slug = slugify(product.name)
-
         product.save()
+        
+        # Sauvegarde des images de la galerie
+        image_formset.instance = product
+        image_formset.save()
 
-        messages.success(self.request, "Produit ajouté avec succès.")
-        return super().form_valid(form)
+        messages.success(self.request, "Produit et galerie ajoutés avec succès.")
+        return redirect(self.success_url)
 
 
 # ---------------------------

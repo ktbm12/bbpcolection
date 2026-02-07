@@ -113,6 +113,59 @@
                         {{ form.description }}
                     </div>
 
+                    <!-- Gallery Section -->
+                    <div class="space-y-4 pt-6 border-t border-gray-100">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-lg font-serif font-bold text-gray-900">Galerie d'Images</h3>
+                            <button type="button" id="add-gallery-item" class="text-xs font-bold text-yellow-600 hover:text-yellow-700 flex items-center gap-1 uppercase tracking-wider transition-colors">
+                                <i class="fas fa-plus-circle"></i> Ajouter une image
+                            </button>
+                        </div>
+                        
+                        {{ image_formset.management_form }}
+                        <div id="gallery-formset-container" class="space-y-4">
+                            {% for galley_form in image_formset %}
+                            <div class="gallery-item p-4 bg-gray-50 rounded-2xl border border-gray-100 relative group animate-fadeIn">
+                                {% for hidden in galley_form.hidden_fields %}
+                                    {{ hidden }}
+                                {% endfor %}
+                                <div class="grid grid-cols-1 gap-4">
+                                    <div class="space-y-1">
+                                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Image Galerie</label>
+                                        {{ galley_form.image }}
+                                    </div>
+                                    <div class="space-y-1">
+                                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Légende</label>
+                                        {{ galley_form.alt_text }}
+                                    </div>
+                                </div>
+                                {% if image_formset.can_delete %}
+                                <div class="mt-2 flex items-center gap-2">
+                                    {{ galley_form.DELETE }}
+                                    <label class="text-[10px] font-bold text-red-500 uppercase">Supprimer</label>
+                                </div>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Template for new gallery items (hidden) -->
+                        <div id="gallery-template" class="hidden">
+                            <div class="gallery-item p-4 bg-gray-50 rounded-2xl border border-gray-100 relative group">
+                                <div class="grid grid-cols-1 gap-4">
+                                    <div class="space-y-1">
+                                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Image Galerie</label>
+                                        {{ image_formset.empty_form.image }}
+                                    </div>
+                                    <div class="space-y-1">
+                                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Légende</label>
+                                        {{ image_formset.empty_form.alt_text }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Featured Toggle -->
                     <div class="flex items-center gap-4 bg-gray-50 p-4 rounded-2xl border border-gray-100">
                         <div class="relative inline-block w-12 h-6 transition duration-200 ease-in-out rounded-full bg-gray-200">
@@ -274,6 +327,35 @@
                 }
                 reader.readAsDataURL(file);
             }
+        });
+    }
+
+    // Dynamic Formset Management
+    const addBtn = document.getElementById('add-gallery-item');
+    const container = document.getElementById('gallery-formset-container');
+    const totalForms = document.getElementById('id_gallery-TOTAL_FORMS');
+    const template = document.getElementById('gallery-template').firstElementChild;
+
+    if (addBtn && container && totalForms) {
+        addBtn.addEventListener('click', () => {
+            const formCount = parseInt(totalForms.value);
+            const newForm = template.cloneNode(true);
+            
+            // Update indices
+            const nameRegex = new RegExp(`gallery-__prefix__-`, 'g');
+            const idRegex = new RegExp(`id_gallery-__prefix__-`, 'g');
+            
+            newForm.innerHTML = newForm.innerHTML.replace(nameRegex, `gallery-${formCount}-`);
+            newForm.innerHTML = newForm.innerHTML.replace(idRegex, `id_gallery-${formCount}-`);
+            
+            // Add to container
+            container.appendChild(newForm);
+            
+            // Update total forms
+            totalForms.value = formCount + 1;
+            
+            // Apply animation
+            newForm.classList.add('animate-fadeIn');
         });
     }
 </script>
