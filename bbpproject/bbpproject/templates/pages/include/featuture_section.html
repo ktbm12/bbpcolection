@@ -1,37 +1,51 @@
-<section class="py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div class="text-center">
-                    <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-certificate text-yellow-600 text-2xl"></i>
-                    </div>
-                    <h3 class="text-lg font-semibold mb-2">100% Naturel</h3>
-                    <p class="text-gray-600 text-sm">Cheveux humains de qualité premium</p>
+<section class="py-24 bg-white overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+            <!-- Feature 1 -->
+            <div class="text-center group transition-all duration-500 hover:-translate-y-2 opacity-0 animate-reveal" style="animation-delay: 0.1s">
+                <div class="w-20 h-20 bg-yellow-50 rounded-3xl flex items-center justify-center mx-auto mb-6 transition-transform group-hover:rotate-12">
+                    <i class="fas fa-certificate text-yellow-600 text-3xl"></i>
                 </div>
-                
-                <div class="text-center">
-                    <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-shipping-fast text-yellow-600 text-2xl"></i>
-                    </div>
-                    <h3 class="text-lg font-semibold mb-2">Livraison Rapide</h3>
-                    <p class="text-gray-600 text-sm">Livraison à domicile sous 48h</p>
+                <h3 class="text-xl font-bold mb-3 uppercase tracking-tighter">100% Raw Hair</h3>
+                <p class="text-gray-500 text-sm leading-relaxed">Premium human hair, ethically sourced for unparalleled quality.</p>
+            </div>
+            
+            <!-- Feature 2 -->
+            <div class="text-center group transition-all duration-500 hover:-translate-y-2 opacity-0 animate_reveal" style="animation-delay: 0.2s">
+                <div class="w-20 h-20 bg-yellow-50 rounded-3xl flex items-center justify-center mx-auto mb-6 transition-transform group-hover:rotate-12">
+                    <i class="fas fa-shipping-fast text-yellow-600 text-3xl"></i>
                 </div>
-                
-                <div class="text-center">
-                    <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-shield-alt text-yellow-600 text-2xl"></i>
-                    </div>
-                    <h3 class="text-lg font-semibold mb-2">Garantie Qualité</h3>
-                    <p class="text-gray-600 text-sm">Satisfaction garantie ou remboursé</p>
+                <h3 class="text-xl font-bold mb-3 uppercase tracking-tighter">Express Shipping</h3>
+                <p class="text-gray-500 text-sm leading-relaxed">Fast domestic delivery to your doorstep within 48 hours.</p>
+            </div>
+            
+            <!-- Feature 3 -->
+            <div class="text-center group transition-all duration-500 hover:-translate-y-2 opacity-0 animate-reveal" style="animation-delay: 0.3s">
+                <div class="w-20 h-20 bg-yellow-50 rounded-3xl flex items-center justify-center mx-auto mb-6 transition-transform group-hover:rotate-12">
+                    <i class="fas fa-shield-alt text-yellow-600 text-3xl"></i>
                 </div>
-                
-                <div class="text-center">
-                    <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-headset text-yellow-600 text-2xl"></i>
-                    </div>
-                    <h3 class="text-lg font-semibold mb-2">Support 24/7</h3>
-                    <p class="text-gray-600 text-sm">Service client à votre écoute</p>
+                <h3 class="text-xl font-bold mb-3 uppercase tracking-tighter">Quality Promise</h3>
+                <p class="text-gray-500 text-sm leading-relaxed">Satisfaction guaranteed or your money back. No questions asked.</p>
+            </div>
+            
+            <!-- Feature 4 -->
+            <div class="text-center group transition-all duration-500 hover:-translate-y-2 opacity-0 animate-reveal" style="animation-delay: 0.4s">
+                <div class="w-20 h-20 bg-yellow-50 rounded-3xl flex items-center justify-center mx-auto mb-6 transition-transform group-hover:rotate-12">
+                    <i class="fas fa-headset text-yellow-600 text-3xl"></i>
                 </div>
+                <h3 class="text-xl font-bold mb-3 uppercase tracking-tighter">Luxury Support</h3>
+                <p class="text-gray-500 text-sm leading-relaxed">Dedicated concierge service available 24/7 for your needs.</p>
             </div>
         </div>
-    </section>
+    </div>
+</section>
+
+<style>
+    @keyframes reveal {
+        from { opacity: 0; transform: translateY(40px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-reveal {
+        animation: reveal 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+</style>

@@ -21,9 +21,9 @@
 
             <!-- Navigation Desktop (Hidden on mobile) -->
             <div class="hidden md:flex items-center space-x-8 order-3">
-                <a href="{% url 'users:home' %}" class="text-[11px] lg:text-xs font-black uppercase tracking-[0.2em] text-gray-900 hover:text-yellow-600 transition">Accueil</a>
+                <a href="{% url 'users:home' %}" class="text-[11px] lg:text-xs font-black uppercase tracking-[0.2em] text-gray-900 hover:text-yellow-600 transition">Home</a>
                 <a href="{% url 'product:product_list' %}" class="text-[11px] lg:text-xs font-black uppercase tracking-[0.2em] text-gray-900 hover:text-yellow-600 transition">Collections</a>
-                <a href="#" class="text-[11px] lg:text-xs font-black uppercase tracking-[0.2em] text-gray-900 hover:text-yellow-600 transition">À Propos</a>
+                <a href="#" class="text-[11px] lg:text-xs font-black uppercase tracking-[0.2em] text-gray-900 hover:text-yellow-600 transition">About</a>
                 <a href="#" class="text-[11px] lg:text-xs font-black uppercase tracking-[0.2em] text-gray-900 hover:text-yellow-600 transition">Contact</a>
             </div>
 
@@ -54,28 +54,28 @@
                     </button>
                     <div class="absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible translate-y-2 group-hover:translate-y-0 transition-all duration-300 z-[60] overflow-hidden">
                         <div class="px-6 py-5 border-b border-gray-50 bg-gray-50/50">
-                            <p class="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-1">Votre Espace</p>
+                            <p class="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-1">Your Account</p>
                             <p class="text-sm font-bold text-gray-900 truncate">{{ user.name|default:user.email }}</p>
                         </div>
                         <div class="p-2.5">
                             <a href="{% url 'users:dashboard_redirect' %}" class="flex items-center gap-3.5 px-4 py-3 text-sm font-bold text-gray-700 hover:bg-yellow-50 hover:text-yellow-700 rounded-xl transition">
-                                <i class="fas fa-th-large text-gray-400"></i> Tableau de bord
+                                <i class="fas fa-th-large text-gray-400"></i> Dashboard
                             </a>
                             <a href="#" class="flex items-center gap-3.5 px-4 py-3 text-sm font-bold text-gray-700 hover:bg-yellow-50 hover:text-yellow-700 rounded-xl transition">
-                                <i class="fas fa-shopping-basket text-gray-400"></i> Mes Commandes
+                                <i class="fas fa-shopping-basket text-gray-400"></i> My Orders
                             </a>
                         </div>
                         <div class="p-2.5 bg-red-50/30 border-t border-gray-50">
                             <a href="{% url 'account_logout' %}" class="flex items-center gap-3.5 px-4 py-3 text-sm font-bold text-red-600 hover:bg-red-50 rounded-xl transition">
-                                <i class="fas fa-power-off text-sm"></i> Déconnexion
+                                <i class="fas fa-power-off text-sm"></i> Logout
                             </a>
                         </div>
                     </div>
                 </div>
                 {% else %}
                 <div class="hidden md:flex items-center gap-5">
-                    <a href="{% url 'account_login' %}" class="text-xs font-black uppercase tracking-widest text-gray-900 hover:text-yellow-600 transition">Connexion</a>
-                    <a href="{% url 'account_signup' %}" class="bg-black text-white px-7 py-3 rounded-full text-xs font-black uppercase tracking-widest hover:bg-yellow-600 transition shadow-xl shadow-black/10">Rejoindre</a>
+                    <a href="{% url 'account_login' %}" class="text-xs font-black uppercase tracking-widest text-gray-900 hover:text-yellow-600 transition">Login</a>
+                    <a href="{% url 'account_signup' %}" class="bg-black text-white px-7 py-3 rounded-full text-xs font-black uppercase tracking-widest hover:bg-yellow-600 transition shadow-xl shadow-black/10">Join Us</a>
                 </div>
                 {% endif %}
 
@@ -105,7 +105,7 @@
                 <h1 class="text-3xl font-pacifico text-black tracking-normal">
                     <span class="text-yellow-600">bbp</span>collection
                 </h1>
-                <button id="close-menu-btn" class="text-gray-900 p-2 focus:outline-none" aria-label="Fermer">
+                <button id="close-menu-btn" class="text-gray-900 p-2 focus:outline-none" aria-label="Close">
                     <i class="fas fa-times text-2xl"></i>
                 </button>
             </div>
@@ -113,22 +113,22 @@
             <!-- Fullscreen Links Container -->
             <div class="flex-1 flex flex-col justify-center items-center px-8 text-center bg-white shadow-inner">
                 <nav class="flex flex-col space-y-10 animate-fade-in">
-                    <a href="{% url 'users:home' %}" class="text-4xl font-serif font-bold text-gray-900 hover:text-yellow-600 transition">Accueil</a>
+                    <a href="{% url 'users:home' %}" class="text-4xl font-serif font-bold text-gray-900 hover:text-yellow-600 transition">Home</a>
                     <a href="{% url 'product:product_list' %}" class="text-4xl font-serif font-bold text-gray-900 hover:text-yellow-600 transition">Collections</a>
-                    <a href="#" class="text-4xl font-serif font-bold text-gray-900 hover:text-yellow-600 transition">À Propos</a>
+                    <a href="#" class="text-4xl font-serif font-bold text-gray-900 hover:text-yellow-600 transition">About</a>
                     <a href="#" class="text-4xl font-serif font-bold text-gray-900 hover:text-yellow-600 transition">Contact</a>
 
                     <div class="w-16 h-1.5 bg-yellow-600 rounded-full mx-auto"></div>
 
                     {% if user.is_authenticated %}
                         <div class="flex flex-col gap-6">
-                            <a href="{% url 'users:dashboard_redirect' %}" class="text-xl font-black uppercase tracking-[0.2em] text-gray-900 hover:text-yellow-600 transition">Tableau de bord</a>
-                            <a href="{% url 'account_logout' %}" class="text-xl font-black uppercase tracking-[0.2em] text-red-600 hover:underline">Déconnexion</a>
+                            <a href="{% url 'users:dashboard_redirect' %}" class="text-xl font-black uppercase tracking-[0.2em] text-gray-900 hover:text-yellow-600 transition">Dashboard</a>
+                            <a href="{% url 'account_logout' %}" class="text-xl font-black uppercase tracking-[0.2em] text-red-600 hover:underline">Logout</a>
                         </div>
                     {% else %}
                         <div class="flex flex-col w-full max-w-xs gap-4 mx-auto">
-                            <a href="{% url 'account_login' %}" class="text-xl font-black uppercase tracking-[0.2em] text-gray-900 hover:text-yellow-600 transition">Se Connecter</a>
-                            <a href="{% url 'account_signup' %}" class="py-5 bg-black text-white text-xs font-black uppercase tracking-widest rounded-2xl shadow-2xl hover:bg-yellow-600 transition-colors">Rejoindre</a>
+                            <a href="{% url 'account_login' %}" class="text-xl font-black uppercase tracking-[0.2em] text-gray-900 hover:text-yellow-600 transition">Sign In</a>
+                            <a href="{% url 'account_signup' %}" class="py-5 bg-black text-white text-xs font-black uppercase tracking-widest rounded-2xl shadow-2xl hover:bg-yellow-600 transition-colors">Join Us</a>
                         </div>
                     {% endif %}
                 </nav>

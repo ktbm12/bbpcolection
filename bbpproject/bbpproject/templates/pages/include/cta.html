@@ -1,13 +1,28 @@
- <section class="py-20 bg-black">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-4xl md:text-5xl font-serif font-bold text-white mb-6">
-                Prête à Transformer Votre Look ?
+<section class="py-32 bg-black relative overflow-hidden">
+    <!-- Background Accents -->
+    <div class="absolute top-0 left-0 w-full h-full opacity-20">
+        <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-yellow-600/30 blur-[150px] rounded-full -translate-y-1/2 translate-x-1/2"></div>
+        <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-yellow-600/20 blur-[150px] rounded-full translate-y-1/2 -translate-x-1/2"></div>
+    </div>
+
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+        <div class="animate-reveal">
+            <p class="text-yellow-600 text-xs tracking-[0.5em] uppercase mb-8 font-black">Your Journey Starts Here</p>
+            <h2 class="text-5xl md:text-8xl font-serif font-bold text-white mb-10 leading-[0.9]">
+                Ready to Become<br/>
+                <span class="text-yellow-600 italic">Unforgettable?</span>
             </h2>
-            <p class="text-gray-300 text-xl mb-8">
-                Rejoignez des milliers de femmes satisfaites et découvrez la différence LuxeHair
+            <p class="text-gray-400 text-xl md:text-2xl mb-12 max-w-2xl mx-auto font-light leading-relaxed">
+                Join thousands of women who have embraced the Luxe standard. Exceptional hair is just a click away.
             </p>
-            <button class="bg-yellow-600 hover:bg-yellow-700 text-black px-10 py-4 rounded-full font-bold text-lg transition shadow-xl">
-                Commander Maintenant
-            </button>
+            <div class="flex flex-col sm:flex-row gap-6 justify-center">
+                <a href="{% url 'product:product_list' %}" class="px-14 py-6 bg-yellow-600 text-black rounded-full font-black uppercase tracking-[0.2em] text-[10px] hover:bg-white hover:scale-105 transition-all shadow-[0_20px_60px_rgba(212,175,55,0.3)]">
+                    Order Now
+                </a>
+                <a href="#" class="px-14 py-6 border border-white/20 text-white rounded-full font-black uppercase tracking-[0.2em] text-[10px] hover:bg-white hover:text-black hover:scale-105 transition-all">
+                    Consultation
+                </a>
+            </div>
         </div>
-    </section>
+    </div>
+</section>

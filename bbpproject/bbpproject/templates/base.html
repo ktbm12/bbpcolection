@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}LuxeHair - Mèches de Haute Gamme{% endblock %}</title>
+    <title>{% block title %}BBP Collection - Premium Hair Bundles{% endblock %}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
     <link href="https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,400,300&display=swap" rel="stylesheet">
@@ -64,7 +64,7 @@
             notification.innerHTML = `
                 <i class="fas ${icon}"></i>
                 <div class="flex-1">
-                    <p class="text-xs font-black uppercase tracking-widest text-yellow-600 mb-0.5">${type === 'success' ? 'Succès' : 'Attention'}</p>
+                    <p class="text-xs font-black uppercase tracking-widest text-yellow-600 mb-0.5">${type === 'success' ? 'Success' : 'Warning'}</p>
                     <p class="text-sm font-medium text-gray-200">${message}</p>
                 </div>
                 <button onclick="this.parentElement.remove()" class="text-gray-500 hover:text-white transition">
