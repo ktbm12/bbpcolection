@@ -63,7 +63,7 @@ def get_or_create_cart(request):
     if not cart:
         # Fallback or create new
         cart = Cart.objects.create(session_key=request.session.session_key, user=None)
-        request.session['cart_id'] = cart.id
+        request.session['cart_id'] = str(cart.id)
         request.session.modified = True
         
     return cart
