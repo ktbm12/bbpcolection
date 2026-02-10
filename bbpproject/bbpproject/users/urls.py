@@ -25,6 +25,11 @@ from bbpproject.users.views.dashboards.admin_orders_view import (
     AdminOrderDetailView,
     update_order_status,
 )
+from bbpproject.users.views.dashboards.admin_reviews_view import (
+    AdminReviewListView,
+    toggle_review_approval,
+    delete_review,
+)
 
 app_name = "users"
 
@@ -35,6 +40,9 @@ urlpatterns = [
     path('dashboard/admin/orders/', AdminOrderListView.as_view(), name='admin_orders'),
     path('dashboard/admin/orders/<uuid:pk>/', AdminOrderDetailView.as_view(), name='admin_order_detail'),
     path('dashboard/admin/orders/<uuid:pk>/update-status/', update_order_status, name='update_order_status'),
+    path('dashboard/admin/reviews/', AdminReviewListView.as_view(), name='admin_reviews'),
+    path('dashboard/admin/reviews/<uuid:pk>/toggle/', toggle_review_approval, name='toggle_review_approval'),
+    path('dashboard/admin/reviews/<uuid:pk>/delete/', delete_review, name='delete_review'),
     path('dashboard/user/', UserDashboardView.as_view(), name='user_dashboard'),
     path('dashboard/user/orders/', UserOrdersView.as_view(), name='user_orders'),
 ]
