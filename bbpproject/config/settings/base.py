@@ -310,6 +310,16 @@ CELERY_TASK_SEND_SENT_EVENT = True
 # https://docs.celeryq.dev/en/stable/userguide/configuration.html#worker-hijack-root-logger
 CELERY_WORKER_HIJACK_ROOT_LOGGER = False
 
+# Celery Beat Schedule
+# ------------------------------------------------------------------------------
+from celery.schedules import crontab
+CELERY_BEAT_SCHEDULE = {
+    "check-low-stock-daily": {
+        "task": "product.tasks.check_low_stock_task",
+        "schedule": crontab(hour=8, minute=0),  # Daily at 8 AM
+    },
+}
+
 # django-allauth
 # ------------------------------------------------------------------------------
 ACCOUNT_ALLOW_REGISTRATION = env.bool("DJANGO_ACCOUNT_ALLOW_REGISTRATION", True)

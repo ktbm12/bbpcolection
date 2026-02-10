@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 0; padding: 0; background-color: #f9f9f9; color: #333; }
+        .container { max-width: 600px; margin: 20px auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .header { background-color: #000000; padding: 40px 20px; text-align: center; }
+        .header h1 { margin: 0; font-size: 28px; letter-spacing: -1px; }
+        .header .brand-bbp { color: #d4a017; }
+        .header .brand-collection { color: #ffffff; }
+        .content { padding: 40px; line-height: 1.6; }
+        .footer { background-color: #f4f4f4; padding: 20px; text-align: center; font-size: 12px; color: #888; }
+        .btn { display: inline-block; padding: 14px 28px; background-color: #d4a017; color: #ffffff !important; text-decoration: none; border-radius: 8px; font-weight: bold; margin-top: 20px; }
+        .order-summary { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .order-summary th { text-align: left; padding-bottom: 10px; border-bottom: 2px solid #eee; font-size: 12px; text-transform: uppercase; color: #999; }
+        .order-summary td { padding: 15px 0; border-bottom: 1px solid #eee; }
+        .total-row td { font-weight: bold; font-size: 18px; border-top: 2px solid #eee; border-bottom: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><span class="brand-bbp">bbp</span><span class="brand-collection">collection</span></h1>
+        </div>
+        
+        <div class="content">
+            {% block content %}{% endblock %}
+        </div>
+        
+        <div class="footer">
+            <p>&copy; {{ year }} bbpcollection. All rights reserved.</p>
+            <p>123 Luxury Street, Douala, Cameroon</p>
+            <p>
+                <a href="#" style="color: #888; text-decoration: underline;">Privacy Policy</a> | 
+                <a href="#" style="color: #888; text-decoration: underline;">Contact Us</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

@@ -76,6 +76,37 @@ def update_order_status(request, pk):
         
         messages.success(request, f"Commande #{order.order_number} mise à jour vers '{new_status}'.")
         
+        # Send notification emails
+        from core.email_utils import send_templated_email
+        from django.contrib.sites.shortcuts import get_current_site
+        from django.urls import reverse
+        
+        current_site = get_current_site(request)
+        domain = current_site.domain
+        protocol = 'https' if request.is_secure() else 'http'
+        
+        context = {
+            'user': order.user,
+            'order': order,
+            'dashboard_url': f"{protocol}://{domain}{reverse('users:user_orders')}"
+        }
+        
+        if new_status == 'SHIPPED':
+            send_templated_email(
+                subject=f"Votre commande #{order.order_number} a été expédiée ! - bbpcollection",
+                to_email=order.user.email,
+                template_name='emails/order_shipped.html',
+                context=context
+            )
+        elif new_status == 'DELIVERED':
+            context['review_url'] = f"{protocol}://{domain}{reverse('product:product_detail', kwargs={'pk': order.items.first().product.id})}" # Link to first product for review
+            send_templated_email(
+                subject=f"Votre commande #{order.order_number} a été livrée ! - bbpcollection",
+                to_email=order.user.email,
+                template_name='emails/order_delivered.html',
+                context=context
+            )
+        
         return JsonResponse({
             'success': True,
             'status': new_status,

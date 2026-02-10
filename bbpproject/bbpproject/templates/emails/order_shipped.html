@@ -1,0 +1,24 @@
+{% extends "emails/base_email.html" %}
+
+{% block content %}
+<h2 style="color: #000; font-size: 24px;">Votre commande est en route ! 🚚</h2>
+<p>Bonne nouvelle {{ user.name|default:user.username }},</p>
+<p>Votre commande <strong>#{{ order.order_number }}</strong> a été expédiée et elle arrive bientôt chez vous !</p>
+
+<div style="background-color: #f9f9f9; border-radius: 8px; padding: 20px; margin: 20px 0;">
+    <p style="margin: 0;"><strong>Statut actuel :</strong> Expédiée</p>
+    <p style="margin: 5px 0 0 0;"><strong>Destination :</strong> {{ order.shipping_city }}</p>
+</div>
+
+<p>Notre livreur vous contactera au numéro <strong>{{ order.shipping_phone }}</strong> lors de son arrivée.</p>
+
+<p>Merci de votre confiance et à très bientôt !</p>
+
+<div style="text-align: center;">
+    <a href="{{ dashboard_url }}" class="btn">Voir les détails</a>
+</div>
+
+<p style="margin-top: 40px; font-size: 14px; color: #666;">
+    Vous avez reçu cet e-mail car vous avez passé une commande sur bbpcollection.
+</p>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "emails/base_email.html" %}
+
+{% block content %}
+<h2 style="color: #000; font-size: 24px;">Votre commande a été livrée ! 🎉</h2>
+<p>Bonjour {{ user.name|default:user.username }},</p>
+<p>Nous espérons que vous appréciez vos nouveaux articles de la commande <strong>#{{ order.order_number }}</strong>.</p>
+
+<div style="background-color: #fff9e6; border-radius: 8px; padding: 25px; margin: 30px 0; border: 1px solid #ffeeba; text-align: center;">
+    <h3 style="margin-top: 0; color: #856404;">Votre avis compte pour nous !</h3>
+    <p>Pourriez-vous prendre un moment pour nous dire ce que vous pensez de vos articles ? Votre avis aide les autres membres de la communauté.</p>
+    <a href="{{ review_url }}" class="btn" style="background-color: #000;">Laisser un avis</a>
+</div>
+
+<p>Merci d'avoir choisi bbpcollection.</p>
+
+<p style="margin-top: 40px; font-size: 14px; color: #666;">
+    Si vous n'avez pas reçu votre commande, veuillez nous contacter immédiatement.
+</p>
+{% endblock %}

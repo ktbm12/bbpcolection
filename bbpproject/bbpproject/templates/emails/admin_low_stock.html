@@ -1,0 +1,31 @@
+{% extends "emails/base_email.html" %}
+
+{% block content %}
+<h2 style="color: #d9534f; font-size: 24px;">Alerte de Stock Faible ⚠️</h2>
+<p>Certains produits ont atteint ou sont en dessous du seuil critique de <strong>{{ threshold }}</strong> unités.</p>
+
+<div style="background-color: #f9f9f9; border-radius: 8px; padding: 20px; margin: 20px 0;">
+    <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr style="border-bottom: 2px solid #ddd;">
+                <th style="padding: 10px; text-align: left;">Produit</th>
+                <th style="padding: 10px; text-align: center;">Stock actuel</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 10px;">{{ product.name }}</td>
+                <td style="padding: 10px; text-align: center; color: #d9534f; font-weight: bold;">{{ product.stock }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<p>Veuillez réapprovisionner ces articles dès que possible pour éviter les ruptures de stock.</p>
+
+<div style="text-align: center;">
+    <a href="{{ admin_url|default:'#' }}" class="btn" style="background-color: #000;">Gérer l'inventaire</a>
+</div>
+{% endblock %}
