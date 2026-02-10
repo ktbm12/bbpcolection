@@ -51,13 +51,15 @@ class Product(CFPBaseModel):
 
     @property
     def avg_rating(self):
-        # Simulation d'une note premium pour la démo
-        return 4.5
+        """Calculate average rating from approved reviews."""
+        from django.db.models import Avg
+        result = self.reviews.filter(is_approved=True).aggregate(avg=Avg('rating'))
+        return round(result['avg'], 1) if result['avg'] else 0
 
     @property
     def review_count(self):
-        # Simulation d'un nombre d'avis pour la démo
-        return 128
+        """Count approved reviews."""
+        return self.reviews.filter(is_approved=True).count()
 
     @property
     def get_main_image_url(self):
@@ -189,3 +191,37 @@ class Wishlist(CFPBaseModel):
 
     def __str__(self):
         return f"Wishlist de {self.user.username}"
+
+
+class Review(CFPBaseModel):
+    """Customer reviews for products."""
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="reviews")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="reviews")
+    rating = models.PositiveSmallIntegerField(
+        validators=[MinValueValidator(1)],
+        help_text="Rating from 1 to 5 stars"
+    )
+    title = models.CharField(max_length=200, blank=True)
+    comment = models.TextField()
+    is_verified_purchase = models.BooleanField(default=False)
+    is_approved = models.BooleanField(default=True)  # Admin moderation
+    
+    class Meta(CFPBaseModel.Meta):
+        verbose_name = _("avis")
+        verbose_name_plural = _("avis")
+        unique_together = ['product', 'user']  # One review per user per product
+        ordering = ['-created']
+
+    def __str__(self):
+        return f"Review by {self.user.username} for {self.product.name} ({self.rating}★)"
+
+    def save(self, *args, **kwargs):
+        # Check if user has purchased this product
+        if not self.pk:  # Only on creation
+            has_purchased = OrderItem.objects.filter(
+                order__user=self.user,
+                product=self.product,
+                order__status__in=['DELIVERED', 'CONFIRMED']
+            ).exists()
+            self.is_verified_purchase = has_purchased
+        super().save(*args, **kwargs)

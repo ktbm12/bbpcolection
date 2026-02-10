@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 
 from .models import (
     Category, Product, ProductImage,
-    Cart, CartItem, Order, OrderItem
+    Cart, CartItem, Order, OrderItem, Review
 )
 
 
@@ -99,3 +99,13 @@ class OrderItemAdmin(admin.ModelAdmin):
     list_filter = ('order__status', 'product__category')
     search_fields = ('product__name', 'order__order_number')
     readonly_fields = ('subtotal',)
+
+
+@admin.register(Review)
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ('product', 'user', 'rating', 'is_verified_purchase', 'is_approved', 'created')
+    list_filter = ('rating', 'is_verified_purchase', 'is_approved', 'created')
+    search_fields = ('product__name', 'user__username', 'title', 'comment')
+    readonly_fields = ('created', 'modified', 'is_verified_purchase')
+    list_editable = ('is_approved',)
+    date_hierarchy = 'created'

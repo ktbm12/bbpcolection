@@ -16,6 +16,7 @@ from .views.checkout_view import CheckoutView, OrderConfirmationView
 
 from .views.produc_create_view import ProductDashboardView, product_edit, product_delete
 from .views.wishlist_view import WishlistView, toggle_wishlist, wishlist_to_cart, wishlist_add_all_to_cart
+from .views.review_view import submit_review
 
 app_name = "product"
 
@@ -37,6 +38,9 @@ urlpatterns = [
     path('wishlist/toggle/<uuid:product_id>/', toggle_wishlist, name='toggle_wishlist'),
     path('wishlist/move-to-cart/<uuid:product_id>/', wishlist_to_cart, name='move_to_cart'),
     path('wishlist/move-all-to-cart/', wishlist_add_all_to_cart, name='wishlist_add_all_to_cart'),
+    
+    # Reviews
+    path('<uuid:product_id>/review/submit/', submit_review, name='submit_review'),
    
     path(
     "dashboard/products/",
