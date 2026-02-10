@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Confirmation - BBP Collection{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-white flex items-center justify-center py-16 px-4">
+    <div class="max-w-xl w-full text-center space-y-8">
+        
+        <!-- Success Icon -->
+        <div class="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6">
+            <i class="fas fa-check text-4xl text-green-500"></i>
+        </div>
+
+        <div>
+            <h1 class="font-display text-4xl text-gray-900 mb-2">Commande confirmée !</h1>
+            <p class="text-gray-500 text-lg">Merci pour votre confiance, {{ request.user.first_name }}.</p>
+        </div>
+
+        {% if order %}
+        <div class="bg-gray-50 rounded-2xl p-8 border border-gray-100 text-left space-y-4">
+            <div class="flex justify-between items-center pb-4 border-b border-gray-200">
+                <span class="text-gray-500">Numéro de commande</span>
+                <span class="font-mono font-bold text-gray-900">{{ order.order_number }}</span>
+            </div>
+            
+            <div class="flex justify-between items-center pb-4 border-b border-gray-200">
+                <span class="text-gray-500">Date</span>
+                <span class="font-medium text-gray-900">{{ order.created|date:"d M Y" }}</span>
+            </div>
+            
+            <div class="flex justify-between items-center pb-4 border-b border-gray-200">
+                <span class="text-gray-500">Total</span>
+                <span class="font-black text-xl text-yellow-600">{{ order.total_amount|intcomma }} FCFA</span>
+            </div>
+            
+            <div class="pt-2">
+                <p class="text-sm text-gray-500 mb-1">Adresse de livraison</p>
+                <p class="font-medium text-gray-900">{{ order.shipping_address }}</p>
+                <p class="font-medium text-gray-900">{{ order.shipping_city }}</p>
+                <p class="font-medium text-gray-900">{{ order.shipping_phone }}</p>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="grid gap-4 md:grid-cols-2">
+            <a href="{% url 'product:product_list' %}" class="px-8 py-4 bg-gray-100 hover:bg-gray-200 text-gray-900 font-bold rounded-xl transition flex items-center justify-center gap-2">
+                <i class="fas fa-arrow-left"></i>
+                Continuer les achats
+            </a>
+            <a href="{% url 'users:user_dashboard' %}" class="px-8 py-4 bg-yellow-600 hover:bg-yellow-700 text-white font-bold rounded-xl transition shadow-lg shadow-yellow-600/20 flex items-center justify-center gap-2">
+                <i class="fas fa-user"></i>
+                Mon Compte
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

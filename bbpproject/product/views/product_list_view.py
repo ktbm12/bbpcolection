@@ -35,7 +35,29 @@ class ProductListView(ListView):
             category = get_object_or_404(Category, slug=category_slug)
             qs = qs.filter(category=category)
 
-        # 2. Tri dynamique
+        # 2. Filtre par Prix
+        price_min = self.request.GET.get('price_min')
+        price_max = self.request.GET.get('price_max')
+        if price_min:
+            qs = qs.filter(price__gte=price_min)
+        if price_max:
+            qs = qs.filter(price__lte=price_max)
+
+        # 3. Filtre Disponibilité
+        in_stock = self.request.GET.get('in_stock')
+        if in_stock == '1':
+            qs = qs.filter(stock__gt=0)
+
+        # 4. Recherche (Nom, Description, Catégorie)
+        q = self.request.GET.get('q')
+        if q:
+            qs = qs.filter(
+                Q(name__icontains=q) |
+                Q(description__icontains=q) |
+                Q(category__name__icontains=q)
+            )
+
+        # 5. Tri dynamique
         sort = self.request.GET.get('sort')
         if sort:
             if sort == 'price_asc':
@@ -47,16 +69,7 @@ class ProductListView(ListView):
             elif sort == 'rating':
                 # On garde l'option mais sans tri réel tant que Review n'existe pas
                 pass
-
-        # Optionnel : recherche texte simple (si tu veux l'ajouter plus tard)
-        q = self.request.GET.get('q')
-        if q:
-            qs = qs.filter(
-                Q(name__icontains=q) |
-                Q(description__icontains=q) |
-                Q(category__name__icontains=q)
-            )
-
+        
         return qs
 
     def get_context_data(self, **kwargs):

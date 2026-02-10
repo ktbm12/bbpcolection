@@ -1,0 +1,63 @@
+{% extends "pages/user_dashboard/base_user.html" %}
+
+{% block title %}My Orders - BBP Collection{% endblock %}
+
+{% block content %}
+<div class="p-6 lg:p-12 max-w-7xl mx-auto">
+
+    <!-- Header -->
+    <div class="mb-10">
+        <h1 class="text-4xl font-black text-black tracking-tight mb-2">My Orders</h1>
+        <p class="text-gray-500 font-medium">View and manage your order history.</p>
+    </div>
+
+    <!-- Orders List -->
+    <div class="space-y-6">
+        {% if orders %}
+            <div class="bg-white rounded-[2rem] border border-gray-100 shadow-[0_20px_50px_rgba(0,0,0,0.02)] overflow-hidden">
+                <div class="divide-y divide-gray-50">
+                    {% for order in orders %}
+                        {% include "pages/user_dashboard/components/order_card.html" with order=order %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            {% if is_paginated %}
+            <div class="flex justify-center mt-8">
+                <nav class="flex gap-2">
+                    {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white border border-gray-200 hover:bg-black hover:text-white transition">
+                        <i class="fas fa-chevron-left"></i>
+                    </a>
+                    {% endif %}
+                    
+                    <span class="w-10 h-10 flex items-center justify-center rounded-xl bg-yellow-600 text-white font-bold">
+                        {{ page_obj.number }}
+                    </span>
+
+                    {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white border border-gray-200 hover:bg-black hover:text-white transition">
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                    {% endif %}
+                </nav>
+            </div>
+            {% endif %}
+
+        {% else %}
+            <div class="text-center py-20 bg-gray-50 rounded-[2rem] border border-dashed border-gray-200">
+                <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
+                    <i class="fas fa-box-open text-gray-300 text-4xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">No orders found</h3>
+                <p class="text-gray-500 mb-8">You haven't placed any orders yet.</p>
+                <a href="{% url 'product:product_list' %}" class="inline-block px-8 py-3 bg-black text-white rounded-xl font-bold uppercase text-xs tracking-widest hover:bg-yellow-600 transition shadow-lg shadow-black/20">
+                    Start Shopping
+                </a>
+            </div>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

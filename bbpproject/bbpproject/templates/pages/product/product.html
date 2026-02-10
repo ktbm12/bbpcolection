@@ -127,44 +127,76 @@
 <section class="py-12 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <!-- Filter Bar -->
-        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-12">
+        <!-- Advanced Search & Filter Toolbar -->
+        <form method="get" class="mb-12 space-y-6">
             
-            <!-- Category Filters -->
-            <div class="flex flex-wrap gap-3">
-                <a href="?" class="filter-btn {% if not category %}active{% endif %} px-6 py-2.5 rounded-full border-2 border-black text-sm font-semibold transition-all hover:bg-black hover:text-yellow-600">
-                    Tous
-                </a>
-                <a href="?category=lisse" class="filter-btn {% if category == 'lisse' %}active{% endif %} px-6 py-2.5 rounded-full border-2 border-black text-sm font-semibold transition-all hover:bg-black hover:text-yellow-600">
-                    Lisses
-                </a>
-                <a href="?category=ondulee" class="filter-btn {% if category == 'ondulee' %}active{% endif %} px-6 py-2.5 rounded-full border-2 border-black text-sm font-semibold transition-all hover:bg-black hover:text-yellow-600">
-                    Ondulées
-                </a>
-                <a href="?category=bouclee" class="filter-btn {% if category == 'bouclee' %}active{% endif %} px-6 py-2.5 rounded-full border-2 border-black text-sm font-semibold transition-all hover:bg-black hover:text-yellow-600">
-                    Bouclées
-                </a>
-                <a href="?category=premium" class="filter-btn {% if category == 'premium' %}active{% endif %} px-6 py-2.5 rounded-full border-2 border-black text-sm font-semibold transition-all hover:bg-black hover:text-yellow-600">
-                    Premium
-                </a>
-            </div>
-            
-            <!-- Sort -->
-            <div class="flex gap-3">
-                <form method="get" class="flex gap-3">
-                    {% if category %}
-                    <input type="hidden" name="category" value="{{ category }}">
-                    {% endif %}
-                    <select name="sort" onchange="this.form.submit()" class="px-4 py-2.5 border-2 border-black rounded-full font-medium text-sm focus:outline-none focus:border-yellow-600">
+            <!-- Top Row: Search & Sort -->
+            <div class="flex flex-col lg:flex-row justify-between gap-4">
+                <!-- Search -->
+                <div class="relative flex-1 max-w-2xl">
+                    <input type="text" name="q" value="{{ request.GET.q|default:'' }}" 
+                           placeholder="Rechercher un produit, une texture..." 
+                           class="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 focus:border-yellow-600 focus:ring-1 focus:ring-yellow-600 outline-none transition-all shadow-sm">
+                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                </div>
+
+                <!-- Sort & Submit -->
+                <div class="flex gap-3">
+                    <select name="sort" onchange="this.form.submit()" class="px-4 py-3 border border-gray-200 rounded-xl bg-white font-medium text-sm focus:border-yellow-600 outline-none cursor-pointer hover:border-gray-300">
                         <option value="">Trier par: Popularité</option>
                         <option value="price_asc" {% if request.GET.sort == 'price_asc' %}selected{% endif %}>Prix: Croissant</option>
                         <option value="price_desc" {% if request.GET.sort == 'price_desc' %}selected{% endif %}>Prix: Décroissant</option>
                         <option value="newest" {% if request.GET.sort == 'newest' %}selected{% endif %}>Nouveautés</option>
-                        <option value="rating" {% if request.GET.sort == 'rating' %}selected{% endif %}>Meilleures Notes</option>
                     </select>
-                </form>
+                    
+                    <button type="submit" class="bg-black text-white px-6 py-3 rounded-xl font-bold text-sm hover:bg-gray-800 transition shadow-lg">
+                        Filtrer
+                    </button>
+                    
+                    {% if request.GET.q or request.GET.category or request.GET.price_min or request.GET.in_stock %}
+                    <a href="{% url 'product:product_list' %}" class="flex items-center justify-center px-4 py-3 border border-gray-200 rounded-xl text-gray-500 hover:bg-gray-50 hover:text-red-500 transition" title="Réinitialiser">
+                        <i class="fas fa-times"></i>
+                    </a>
+                    {% endif %}
+                </div>
             </div>
-        </div>
+
+            <!-- Middle Row: Categories (Horizontal Scrollable) -->
+            <div class="flex flex-wrap gap-3 pb-2 border-b border-gray-100 mb-6">
+                <button type="submit" name="category" value="" 
+                        class="px-5 py-2 rounded-full border border-gray-200 text-sm font-bold transition-all {% if not category %}bg-black text-white border-black{% else %}bg-white text-gray-600 hover:border-black hover:text-black{% endif %}">
+                    Tout voir
+                </button>
+                {% for cat in categories %}
+                <button type="submit" name="category" value="{{ cat.slug }}"
+                        class="px-5 py-2 rounded-full border border-gray-200 text-sm font-bold transition-all {% if category.slug == cat.slug %}bg-black text-white border-black{% else %}bg-white text-gray-600 hover:border-black hover:text-black{% endif %}">
+                    {{ cat.name }}
+                </button>
+                {% endfor %}
+            </div>
+
+            <!-- Bottom Row: Granular Filters (Price, Stock) -->
+            <div class="flex flex-wrap items-center gap-6 text-sm text-gray-600 bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                <span class="font-bold text-black uppercase tracking-wider text-xs">Filtres rapides:</span>
+                
+                <!-- Price Range -->
+                <div class="flex items-center gap-2">
+                    <span class="text-gray-500">Prix:</span>
+                    <input type="number" name="price_min" value="{{ request.GET.price_min }}" placeholder="Min" class="w-20 px-3 py-1.5 rounded-lg border border-gray-200 text-xs focus:border-yellow-600 outline-none">
+                    <span class="text-gray-400">-</span>
+                    <input type="number" name="price_max" value="{{ request.GET.price_max }}" placeholder="Max" class="w-20 px-3 py-1.5 rounded-lg border border-gray-200 text-xs focus:border-yellow-600 outline-none">
+                </div>
+
+                <!-- Divider -->
+                <div class="w-px h-6 bg-gray-200"></div>
+
+                <!-- Stock Checkbox -->
+                <label class="flex items-center gap-2 cursor-pointer select-none hover:text-black">
+                    <input type="checkbox" name="in_stock" value="1" {% if request.GET.in_stock %}checked{% endif %} class="w-4 h-4 rounded border-gray-300 text-yellow-600 focus:ring-yellow-600 transition">
+                    <span class="font-medium">En stock uniquement</span>
+                </label>
+            </div>
+        </form>
 
         <!-- Results Count -->
         <div class="mb-8">

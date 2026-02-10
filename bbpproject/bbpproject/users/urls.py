@@ -19,6 +19,8 @@ from django.views.generic import (
 from product.models import Product, Category
 
 
+from bbpproject.users.views.dashboards.orders_view import UserOrdersView
+
 app_name = "users"
 
 urlpatterns = [
@@ -26,6 +28,7 @@ urlpatterns = [
     path('dashboard/redirect/', smart_home_redirect_view, name='dashboard_redirect'),
     path('dashboard/admin/', AdminDashboardView.as_view(), name='admin_dashboard'),
     path('dashboard/user/', UserDashboardView.as_view(), name='user_dashboard'),
+    path('dashboard/user/orders/', UserOrdersView.as_view(), name='user_orders'),
 ]
 
 

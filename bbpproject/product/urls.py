@@ -11,13 +11,11 @@ from .views.cart_detail_view import (
     add_to_cart,
     get_cart_count,
     apply_promo_code,
-    CheckoutPlaceholderView,
 )
-from .views.produc_create_view import ProductDashboardView
-from .views.produc_create_view import product_edit
-from .views.produc_create_view import product_delete
-from .views.wishlist_view import WishlistView, toggle_wishlist, wishlist_to_cart, wishlist_add_all_to_cart
+from .views.checkout_view import CheckoutView, OrderConfirmationView
 
+from .views.produc_create_view import ProductDashboardView, product_edit, product_delete
+from .views.wishlist_view import WishlistView, toggle_wishlist, wishlist_to_cart, wishlist_add_all_to_cart
 
 app_name = "product"
 
@@ -27,7 +25,8 @@ urlpatterns = [
     path('cartdetail/', CartDetailView.as_view(), name='cart_detail'),
     path('cart/count/', get_cart_count, name='cart_count'),
     path('cart/apply-promo/', apply_promo_code, name='apply_promo'),
-    path('checkout/', CheckoutPlaceholderView.as_view(), name='checkout'),
+    path('checkout/', CheckoutView.as_view(), name='checkout'),
+    path('checkout/confirmation/', OrderConfirmationView.as_view(), name='order_confirmation'),
     path('update/<uuid:item_id>/', UpdateCartItemView.as_view(), name='update_item'),
     path('remove/<uuid:item_id>/', RemoveCartItemView.as_view(), name='remove_item'),
     path('add/<uuid:product_id>/', add_to_cart, name='add_item'),

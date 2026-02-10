@@ -1,5 +1,5 @@
 from django import forms
-from product.models import Product, ProductImage
+from product.models import Product, ProductImage, Order
 
 
 class ProductForm(forms.ModelForm):
@@ -72,3 +72,23 @@ ProductImageFormSet = forms.inlineformset_factory(
     extra=1,
     can_delete=True
 )
+
+class ShippingForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ['shipping_address', 'shipping_city', 'shipping_phone']
+        widgets = {
+            'shipping_address': forms.Textarea(attrs={
+                'class': 'w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-yellow-600 focus:border-transparent outline-none transition',
+                'placeholder': 'Adresse complète (Quartier, Rue, Porte...)',
+                'rows': 3
+            }),
+            'shipping_city': forms.TextInput(attrs={
+                'class': 'w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-yellow-600 focus:border-transparent outline-none transition',
+                'placeholder': 'Ville'
+            }),
+            'shipping_phone': forms.TextInput(attrs={
+                'class': 'w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-yellow-600 focus:border-transparent outline-none transition',
+                'placeholder': 'Numéro de téléphone'
+            }),
+        }
