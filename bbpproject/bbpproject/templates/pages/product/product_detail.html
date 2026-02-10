@@ -137,8 +137,8 @@
                             Ajouter au Panier
                         </button>
                         <button onclick="toggleFavorite('{{ product.id }}', this)"
-                                class="p-5 border-2 border-gray-100 rounded-2xl transition-all active:scale-95 flex items-center justify-center {% if product|is_in_wishlist:user %}bg-red-50 border-red-200 text-red-500{% else %}text-gray-900 hover:text-red-500 hover:bg-gray-50{% endif %}">
-                            <i class="{% if product|is_in_wishlist:user %}fas{% else %}far{% endif %} fa-heart text-xl"></i>
+                                class="p-5 border-2 border-gray-100 rounded-2xl transition-all active:scale-95 flex items-center justify-center {% if product|is_in_wishlist:request %}bg-red-50 border-red-200 text-red-500{% else %}text-gray-900 hover:text-red-500 hover:bg-gray-50{% endif %}">
+                            <i class="{% if product|is_in_wishlist:request %}fas{% else %}far{% endif %} fa-heart text-xl"></i>
                         </button>
                     </div>
                 </div>

@@ -1,5 +1,6 @@
+# product/context_processors.py
 from .views.cart_detail_view import get_or_create_cart, get_cart_summary
-from .models import Wishlist
+from .views.wishlist_view import get_wishlist_count
 
 def cart_counter(request):
     """
@@ -10,15 +11,13 @@ def cart_counter(request):
         'wishlist_count': 0
     }
     
-    if request.user.is_authenticated:
-        # Cart count
-        cart = get_or_create_cart(request)
-        if cart:
-            summary = get_cart_summary(cart)
-            context['cart_items_count'] = summary.get('cart_items_count', 0)
-        
-        # Wishlist count
-        wishlist, created = Wishlist.objects.get_or_create(user=request.user)
-        context['wishlist_count'] = wishlist.products.count()
+    # Cart count (works for auth and guest now)
+    cart = get_or_create_cart(request)
+    if cart:
+        summary = get_cart_summary(cart)
+        context['cart_items_count'] = summary.get('cart_items_count', 0)
+    
+    # Wishlist count
+    context['wishlist_count'] = get_wishlist_count(request)
         
     return context

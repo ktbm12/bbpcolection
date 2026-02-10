@@ -268,8 +268,8 @@
                         </button>
                     
                         <button onclick="toggleFavorite('{{ product.id }}', this)"
-                                class="wishlist-btn w-10 h-10 flex items-center justify-center border rounded-lg hover:bg-gray-100 transition-colors {% if product|is_in_wishlist:user %}bg-red-50 border-red-200 text-red-500{% endif %}">
-                            <i class="{% if product|is_in_wishlist:user %}fas{% else %}far{% endif %} fa-heart"></i>
+                                class="wishlist-btn w-10 h-10 flex items-center justify-center border rounded-lg hover:bg-gray-100 transition-colors {% if product|is_in_wishlist:request %}bg-red-50 border-red-200 text-red-500{% endif %}">
+                            <i class="{% if product|is_in_wishlist:request %}fas{% else %}far{% endif %} fa-heart"></i>
                         </button>
                     </div>
                     

@@ -42,15 +42,33 @@ def get_cart_summary(cart):
 
 def get_or_create_cart(request):
     """
-    Récupère le panier actif de l'utilisateur connecté.
+    Récupère le panier actif de l'utilisateur (connecté ou guest via session).
     """
-    if not request.user.is_authenticated:
-        return None
+    # 1. Utilisateur connecté
+    if request.user.is_authenticated:
+        cart, created = Cart.objects.get_or_create(user=request.user)
+        return cart
 
-    cart, created = Cart.objects.get_or_create(user=request.user)
+    # 2. Utilisateur guest (Session)
+    if not request.session.session_key:
+        request.session.create()
+    
+    # Check if we have a cart_id in session
+    cart_id = request.session.get('cart_id')
+    cart = None
+    
+    if cart_id:
+        cart = Cart.objects.filter(id=cart_id, user__isnull=True).first()
+        
+    if not cart:
+        # Fallback or create new
+        cart = Cart.objects.create(session_key=request.session.session_key, user=None)
+        request.session['cart_id'] = cart.id
+        request.session.modified = True
+        
     return cart
 
-class CartDetailView(LoginRequiredMixin, TemplateView):
+class CartDetailView(TemplateView):
     template_name = "pages/product/cart.html"
 
     def get_context_data(self, **kwargs):
@@ -77,14 +95,18 @@ class CartDetailView(LoginRequiredMixin, TemplateView):
         return context
 
 @method_decorator(require_POST, name='dispatch')
-class UpdateCartItemView(LoginRequiredMixin, TemplateView):
+class UpdateCartItemView(TemplateView):
     def post(self, request, *args, **kwargs):
         item_id = kwargs.get('item_id')
         quantity = request.POST.get('quantity')
         try:
             quantity = int(quantity)
             if quantity < 1: quantity = 1
-            item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
+            
+            # Vérif plus souple : on check que l'item appartient au panier courant (user ou session)
+            current_cart = get_or_create_cart(request)
+            item = get_object_or_404(CartItem, id=item_id, cart=current_cart)
+            
             item.quantity = quantity
             item.save()
             return JsonResponse({'success': True, **get_cart_summary(item.cart)})
@@ -92,11 +114,13 @@ class UpdateCartItemView(LoginRequiredMixin, TemplateView):
             return JsonResponse({'success': False, 'error': 'Invalide'}, status=400)
 
 @method_decorator(require_POST, name='dispatch')
-class RemoveCartItemView(LoginRequiredMixin, TemplateView):
+class RemoveCartItemView(TemplateView):
     def post(self, request, *args, **kwargs):
         item_id = kwargs.get('item_id')
         try:
-            item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
+            current_cart = get_or_create_cart(request)
+            item = get_object_or_404(CartItem, id=item_id, cart=current_cart)
+            
             cart = item.cart
             item.delete()
             return JsonResponse({'success': True, **get_cart_summary(cart)})
@@ -104,7 +128,6 @@ class RemoveCartItemView(LoginRequiredMixin, TemplateView):
             return JsonResponse({'success': False, 'error': 'Introuvable'}, status=404)
 
 @require_POST
-@login_required
 def add_to_cart(request, product_id):
     try:
         product = get_object_or_404(Product, id=product_id, is_active=True)
@@ -122,16 +145,16 @@ def add_to_cart(request, product_id):
         item.refresh_from_db()
         return JsonResponse({'success': True, **get_cart_summary(cart)})
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         return JsonResponse({'success': False, 'error': str(e)}, status=400)
 
-@login_required
 def get_cart_count(request):
     cart = get_or_create_cart(request)
     count = CartItem.objects.filter(cart=cart).aggregate(total=Sum('quantity'))['total'] or 0
     return JsonResponse({'count': count})
 
 @require_POST
-@login_required
 def apply_promo_code(request):
     # Placeholder pour la logique promo
     return JsonResponse({'success': False, 'error': 'Codes promos non activés pour le moment'})
