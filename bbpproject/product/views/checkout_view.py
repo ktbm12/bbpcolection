@@ -22,7 +22,6 @@ class CheckoutView(LoginRequiredMixin, FormView):
         cart = get_or_create_cart(self.request)
         if not cart:
             return context
-            
         summary = get_cart_summary(cart)
         context.update(summary)
         context['cart_items'] = cart.items.select_related('product').all()
