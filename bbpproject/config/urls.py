@@ -9,7 +9,7 @@ from django.views.generic import TemplateView
 from drf_spectacular.views import SpectacularAPIView
 from drf_spectacular.views import SpectacularSwaggerView
 from rest_framework.authtoken.views import obtain_auth_token
-from core.views import LegalPageView
+# from core.views import LegalPageView # Removed as it's now in core/urls.py
 
 
 urlpatterns = [
@@ -22,7 +22,8 @@ urlpatterns = [
      path("product/", include("product.urls")),         # ← avec slash final
     
     path("accounts/", include("allauth.urls")),
-    path("legal/<slug:slug>/", LegalPageView.as_view(), name="legal_page"),
+    path("legal/", include("core.urls")),
+    # path("legal/<slug:slug>/", LegalPageView.as_view(), name="legal_page"), # Removed
     # Your stuff: custom urls includes go here
     # ...
     # Media files

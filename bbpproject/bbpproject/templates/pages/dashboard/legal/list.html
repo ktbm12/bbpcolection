@@ -1,0 +1,159 @@
+{% extends "pages/dashboard/dashboard_base.html" %}
+{% load static %}
+
+{% block dashboard_content %}
+<div class="space-y-8">
+    <!-- Header Section -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+        <div>
+            <h1 class="text-3xl font-serif font-bold text-gray-900">Legal Pages</h1>
+            <p class="text-gray-500 mt-1">Manage your store's terms, privacy policy, and other legal documents.</p>
+        </div>
+        <a href="{% url 'core:dashboard_legal_create' %}" class="inline-flex items-center justify-center px-6 py-3 bg-black text-white font-bold rounded-xl hover:bg-yellow-600 hover:text-black transition duration-300 gap-2 shadow-lg shadow-black/10">
+            <i class="fas fa-plus"></i>
+            Create New Page
+        </a>
+    </div>
+
+    <!-- Stats Overview -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+            <div class="flex items-center gap-4">
+                <div class="p-3 bg-yellow-100 text-yellow-600 rounded-xl">
+                    <i class="fas fa-file-contract text-xl"></i>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Total Pages</p>
+                    <p class="text-2xl font-bold">{{ legal_pages.count }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+            <div class="flex items-center gap-4">
+                <div class="p-3 bg-green-100 text-green-600 rounded-xl">
+                    <i class="fas fa-check-circle text-xl"></i>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Active</p>
+                    <p class="text-2xl font-bold">{{ legal_pages.filter.is_active.count|default:"0" }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Table Section -->
+    <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-gray-50/50">
+                        <th class="px-8 py-5 text-sm font-semibold text-gray-600">Title & Slug</th>
+                        <th class="px-8 py-5 text-sm font-semibold text-gray-600">Status</th>
+                        <th class="px-8 py-5 text-sm font-semibold text-gray-600">Last Updated</th>
+                        <th class="px-8 py-5 text-sm font-semibold text-gray-600 text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    {% for page in legal_pages %}
+                    <tr class="hover:bg-gray-50/50 transition duration-200">
+                        <td class="px-8 py-6">
+                            <div class="font-bold text-gray-900">{{ page.title }}</div>
+                            <div class="text-sm text-gray-500">/legal/{{ page.slug }}/</div>
+                        </td>
+                        <td class="px-8 py-6">
+                            {% if page.is_active %}
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">
+                                <span class="w-1.5 h-1.5 rounded-full bg-green-500 mr-2"></span>
+                                Active
+                            </span>
+                            {% else %}
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-700">
+                                <span class="w-1.5 h-1.5 rounded-full bg-gray-400 mr-2"></span>
+                                Inactive
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td class="px-8 py-6 text-sm text-gray-500">
+                            {{ page.modified|date:"M d, Y" }}
+                        </td>
+                        <td class="px-8 py-6 text-right">
+                            <div class="flex items-center justify-end gap-2">
+                                <a href="{% url 'core:legal_page_detail' page.slug %}" target="_blank" class="p-2 text-gray-400 hover:text-yellow-600 transition" title="View Public Page">
+                                    <i class="fas fa-external-link-alt"></i>
+                                </a>
+                                <a href="{% url 'core:dashboard_legal_update' page.pk %}" class="p-2 text-gray-400 hover:text-black transition" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <button onclick="openDeleteModal('{{ page.pk }}', '{{ page.title|escapejs }}')" class="p-2 text-gray-400 hover:text-red-600 transition" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="px-8 py-12 text-center">
+                            <div class="max-w-xs mx-auto">
+                                <div class="bg-gray-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <i class="fas fa-file-invoice text-2xl text-gray-400"></i>
+                                </div>
+                                <h3 class="text-lg font-bold text-gray-900 mb-1">No legal pages yet</h3>
+                                <p class="text-gray-500 text-sm mb-6">Start by creating your first legal document.</p>
+                                <a href="{% url 'core:dashboard_legal_create' %}" class="inline-flex items-center text-yellow-600 font-bold hover:text-yellow-700">
+                                    Create one now <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md p-6">
+        <div class="bg-white rounded-3xl shadow-2xl p-8 border border-gray-100">
+            <div class="w-20 h-20 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i class="fas fa-exclamation-triangle text-3xl"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 text-center mb-2">Are you sure?</h3>
+            <p class="text-gray-500 text-center mb-8">You are about to delete <span id="deletePageTitle" class="font-bold text-gray-900"></span>. This action cannot be undone.</p>
+            
+            <form id="deleteForm" method="post" action="">
+                {% csrf_token %}
+                <div class="flex gap-4">
+                    <button type="button" onclick="closeDeleteModal()" class="flex-1 px-6 py-3 border-2 border-gray-200 text-gray-600 font-bold rounded-xl hover:border-gray-300 transition">
+                        Cancel
+                    </button>
+                    <button type="submit" class="flex-1 px-6 py-3 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 transition shadow-lg shadow-red-600/20">
+                        Delete Page
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function openDeleteModal(pk, title) {
+    const modal = document.getElementById('deleteModal');
+    const form = document.getElementById('deleteForm');
+    const titleSpan = document.getElementById('deletePageTitle');
+    
+    titleSpan.textContent = title;
+    form.action = `/legal/dashboard/admin/legal/${pk}/delete/`;
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeDeleteModal() {
+    const modal = document.getElementById('deleteModal');
+    modal.classList.add('hidden');
+    document.body.style.overflow = 'auto';
+}
+</script>
+{% endblock %}

@@ -11,12 +11,12 @@ class CFPBaseModel(TimeStampedModel):
         primary_key=True,
         default=uuid4,
         editable=False,
-        verbose_name="Identifiant",
-        help_text="Identifiant unique universel"
+        verbose_name="Identifier",
+        help_text="Universal unique identifier"
     )
 
     is_active = models.BooleanField(
-        _("actif / visible"),
+        _("active / visible"),
         default=True,
         db_index=True
     )
@@ -30,13 +30,13 @@ class CFPBaseModel(TimeStampedModel):
 
 
 class LegalPage(CFPBaseModel):
-    title = models.CharField(_("titre"), max_length=200)
+    title = models.CharField(_("title"), max_length=200)
     slug = models.SlugField(_("slug"), unique=True, max_length=255)
-    content = models.TextField(_("contenu"), help_text=_("Contenu au format HTML ou texte brut"))
+    content = models.TextField(_("content"), help_text=_("Content in HTML or raw text format"))
 
     class Meta(CFPBaseModel.Meta):
-        verbose_name = _("page légale")
-        verbose_name_plural = _("pages légales")
+        verbose_name = _("legal page")
+        verbose_name_plural = _("legal pages")
 
     def __str__(self):
         return self.title
