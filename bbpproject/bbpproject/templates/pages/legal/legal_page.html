@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{{ legal_page.title }} - bbpcollection{% endblock %}
+
+{% block content %}
+<div class="bg-gray-50 min-h-screen py-12">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Breadcrumbs -->
+        <nav class="flex mb-8 text-sm text-gray-500" aria-label="Breadcrumb">
+            <ol class="flex items-center space-x-2">
+                <li>
+                    <a href="/" class="hover:text-yellow-600 transition">Accueil</a>
+                </li>
+                <li class="flex items-center space-x-2">
+                    <i class="fas fa-chevron-right text-xs"></i>
+                    <span class="font-medium text-gray-900">{{ legal_page.title }}</span>
+                </li>
+            </ol>
+        </nav>
+
+        <!-- Page Header -->
+        <div class="bg-white rounded-3xl p-8 md:p-12 shadow-sm border border-gray-100 mb-8">
+            <h1 class="text-4xl font-serif font-bold text-gray-900 mb-4">{{ legal_page.title }}</h1>
+            <div class="flex items-center text-sm text-gray-500">
+                <i class="far fa-calendar-alt mr-2"></i>
+                {% blocktrans with date=legal_page.modified|date:"d F Y" %}Dernière mise à jour : {{ date }}{% endblocktrans %}
+            </div>
+        </div>
+
+        <!-- content -->
+        <div class="bg-white rounded-3xl p-8 md:p-12 shadow-sm border border-gray-100">
+            <div class="prose prose-yellow max-w-none prose-headings:font-serif prose-headings:font-bold prose-p:text-gray-600 prose-li:text-gray-600">
+                {{ legal_page.content|safe }}
+            </div>
+        </div>
+
+        <!-- CTA footer -->
+        <div class="mt-12 text-center">
+            <p class="text-gray-500 mb-4">Vous avez des questions sur nos conditions ?</p>
+            <a href="#" class="inline-flex items-center justify-center px-8 py-3 bg-yellow-600 text-black font-bold rounded-full hover:bg-yellow-700 transition shadow-lg shadow-yellow-600/20">
+                Contactez-nous
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .prose h2 { margin-top: 2rem; margin-bottom: 1rem; font-size: 1.5rem; }
+    .prose p { margin-bottom: 1.5rem; line-height: 1.8; }
+    .prose ul { list-style-type: disc; margin-left: 1.5rem; margin-bottom: 1.5rem; }
+    .prose li { margin-bottom: 0.5rem; }
+</style>
+{% endblock %}
