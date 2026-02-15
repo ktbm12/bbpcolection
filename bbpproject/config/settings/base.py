@@ -393,3 +393,12 @@ SOCIALACCOUNT_PROVIDERS = {
         "OAUTH_PKCE_ENABLED": True,
     }
 }
+# PAYMENT SETTINGS
+# ------------------------------------------------------------------------------
+STRIPE_PUBLISHABLE_KEY = env("STRIPE_PUBLISHABLE_KEY", default="")
+STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY", default="")
+STRIPE_WEBHOOK_SECRET = env("STRIPE_WEBHOOK_SECRET", default="")
+
+PAYPAL_CLIENT_ID = env("PAYPAL_CLIENT_ID", default="")
+PAYPAL_CLIENT_SECRET = env("PAYPAL_CLIENT_SECRET", default="")
+PAYPAL_MODE = env("PAYPAL_MODE", default="sandbox")

@@ -43,6 +43,7 @@ class CheckoutView(LoginRequiredMixin, FormView):
         try:
             with transaction.atomic():
                 summary = get_cart_summary(cart)
+                payment_method = form.cleaned_data['payment_method']
                 
                 # Create Order
                 order = Order.objects.create(
@@ -52,7 +53,8 @@ class CheckoutView(LoginRequiredMixin, FormView):
                     shipping_city=form.cleaned_data['shipping_city'],
                     shipping_phone=form.cleaned_data['shipping_phone'],
                     status="PENDING",
-                    payment_method="CASH" # Simplified
+                    payment_method=payment_method,
+                    payment_status="PENDING"
                 )
                 
                 # Create Order Items
@@ -65,54 +67,68 @@ class CheckoutView(LoginRequiredMixin, FormView):
                         unit_price=item.product.price,
                         subtotal=item.subtotal
                     )
+                
+                # We don't clear the cart or send emails here for Stripe/PayPal
+                # because we wait for verification. 
+                # For Cash, we do it now.
+                
+                if payment_method == 'CASH':
+                    # Clear Cart
+                    cart_items.delete()
+                    # Save order ID in session
+                    self.request.session['last_order_id'] = str(order.id)
                     
-                # Clear Cart
-                cart_items.delete()
-                # Save order ID in session
-                self.request.session['last_order_id'] = str(order.id)
+                    # Send Emails
+                    self._send_order_emails(order)
+                    return super().form_valid(form)
                 
-                # Send Emails asynchronously
-                from core.email_utils import send_templated_email
-                from django.contrib.sites.shortcuts import get_current_site
+                elif payment_method == 'STRIPE':
+                    return redirect('product:stripe_checkout', order_id=order.id)
                 
-                current_site = get_current_site(self.request)
-                domain = current_site.domain
-                protocol = 'https' if self.request.is_secure() else 'http'
-                
-                # Context for user email
-                user_context = {
-                    'user': self.request.user,
-                    'order': order,
-                    'dashboard_url': f"{protocol}://{domain}{reverse('users:user_orders')}"
-                }
-                send_templated_email(
-                    subject=f"Confirmation de commande #{order.order_number} - bbpcollection",
-                    to_email=self.request.user.email,
-                    template_name='emails/order_confirmation.html',
-                    context=user_context
-                )
-                
-                # Context for admin email
-                from django.conf import settings
-                admin_context = {
-                    'order': order,
-                    'admin_url': f"{protocol}://{domain}{reverse('users:admin_order_detail', kwargs={'pk': order.pk})}"
-                }
-                # Send to ADMINS defined in settings
-                if hasattr(settings, 'ADMINS') and settings.ADMINS:
-                    admin_email = settings.ADMINS[0][1]
-                    send_templated_email(
-                        subject=f"🔔 Nouvelle commande: #{order.order_number}",
-                        to_email=admin_email,
-                        template_name='emails/admin_new_order.html',
-                        context=admin_context
-                    )
-                
+                elif payment_method == 'PAYPAL':
+                    return redirect('product:paypal_checkout', order_id=order.id)
+
         except Exception as e:
             messages.error(self.request, f"Erreur lors de la commande: {str(e)}")
             return self.form_invalid(form)
             
         return super().form_valid(form)
+
+    def _send_order_emails(self, order):
+        from core.email_utils import send_templated_email
+        from django.contrib.sites.shortcuts import get_current_site
+        from django.conf import settings
+        
+        current_site = get_current_site(self.request)
+        domain = current_site.domain
+        protocol = 'https' if self.request.is_secure() else 'http'
+        
+        # User email
+        user_context = {
+            'user': self.request.user,
+            'order': order,
+            'dashboard_url': f"{protocol}://{domain}{reverse('users:user_orders')}"
+        }
+        send_templated_email(
+            subject=f"Confirmation de commande #{order.order_number} - bbpcollection",
+            to_email=self.request.user.email,
+            template_name='emails/order_confirmation.html',
+            context=user_context
+        )
+        
+        # Admin email
+        admin_context = {
+            'order': order,
+            'admin_url': f"{protocol}://{domain}{reverse('users:admin_order_detail', kwargs={'pk': order.pk})}"
+        }
+        if hasattr(settings, 'ADMINS') and settings.ADMINS:
+            admin_email = settings.ADMINS[0][1]
+            send_templated_email(
+                subject=f"🔔 Nouvelle commande: #{order.order_number}",
+                to_email=admin_email,
+                template_name='emails/admin_new_order.html',
+                context=admin_context
+            )
 
 class OrderConfirmationView(LoginRequiredMixin, TemplateView):
     template_name = "pages/product/order_confirmation.html"

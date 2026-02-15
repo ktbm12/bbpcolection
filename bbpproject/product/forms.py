@@ -74,9 +74,20 @@ ProductImageFormSet = forms.inlineformset_factory(
 )
 
 class ShippingForm(forms.ModelForm):
+    PAYMENT_CHOICES = [
+        ('STRIPE', 'Stripe (Credit Card)'),
+        ('PAYPAL', 'PayPal'),
+        ('CASH', 'Cash on Delivery'),
+    ]
+    payment_method = forms.ChoiceField(
+        choices=PAYMENT_CHOICES, 
+        widget=forms.RadioSelect(attrs={'class': 'hidden'}),
+        initial='STRIPE'
+    )
+
     class Meta:
         model = Order
-        fields = ['shipping_address', 'shipping_city', 'shipping_phone']
+        fields = ['shipping_address', 'shipping_city', 'shipping_phone', 'payment_method']
         widgets = {
             'shipping_address': forms.Textarea(attrs={
                 'class': 'w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-yellow-600 focus:border-transparent outline-none transition',

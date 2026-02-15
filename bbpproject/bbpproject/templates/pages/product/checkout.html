@@ -69,20 +69,41 @@
                     </form>
                 </div>
 
-                <!-- Payment Method (Mock) -->
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 opacity-75 grayscale-0">
+                <!-- Payment Method -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
                     <h2 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                         <span class="w-8 h-8 rounded-full bg-gray-900 text-white flex items-center justify-center text-sm">2</span>
-                        Paiement
+                        Mode de paiement
                     </h2>
-                    <div class="p-4 border border-gray-200 rounded-xl flex items-center gap-4 bg-gray-50">
-                        <i class="fas fa-money-bill-wave text-green-600 text-xl"></i>
-                        <div>
-                            <p class="font-bold text-gray-900">Paiement à la livraison</p>
-                            <p class="text-sm text-gray-500">Payez en espèces à la réception de votre commande.</p>
-                        </div>
-                        <i class="fas fa-check-circle text-yellow-600 ml-auto text-xl"></i>
+                    
+                    <div class="grid grid-cols-1 gap-4" id="payment-methods">
+                        {% for value, text in form.payment_method.field.choices %}
+                        <label class="payment-method-label cursor-pointer relative p-4 border-2 rounded-xl flex items-center gap-4 transition-all duration-300 {% if form.payment_method.value == value %}border-yellow-600 bg-yellow-50/50{% else %}border-gray-100 hover:border-gray-200{% endif %}" data-value="{{ value }}">
+                            <input type="radio" name="payment_method" value="{{ value }}" class="hidden" {% if form.payment_method.value == value %}checked{% endif %}>
+                            <div class="w-12 h-12 rounded-lg bg-gray-50 flex items-center justify-center">
+                                {% if value == 'STRIPE' %}
+                                    <i class="fas fa-credit-card text-blue-600 text-xl"></i>
+                                {% elif value == 'PAYPAL' %}
+                                    <i class="fab fa-paypal text-blue-800 text-xl"></i>
+                                {% else %}
+                                    <i class="fas fa-money-bill-wave text-green-600 text-xl"></i>
+                                {% endif %}
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-bold text-gray-900">{{ text }}</p>
+                                <p class="text-xs text-gray-500">
+                                    {% if value == 'STRIPE' %}Cartes bancaires (Stripe){% elif value == 'PAYPAL' %}Compte PayPal ou Carte{% else %}Paiement lors de la livraison{% endif %}
+                                </p>
+                            </div>
+                            <div class="radio-indicator w-6 h-6 rounded-full border-2 {% if form.payment_method.value == value %}border-yellow-600 bg-yellow-600{% else %}border-gray-200{% endif %} flex items-center justify-center transition-colors">
+                                <i class="fas fa-check text-white text-[10px] {% if form.payment_method.value != value %}hidden{% endif %}"></i>
+                            </div>
+                        </label>
+                        {% endfor %}
                     </div>
+                    {% if form.payment_method.errors %}
+                        <p class="mt-2 text-sm text-red-500">{{ form.payment_method.errors.0 }}</p>
+                    {% endif %}
                 </div>
 
             </div>
@@ -157,4 +178,43 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block inline_javascript %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const labels = document.querySelectorAll('.payment-method-label');
+        
+        labels.forEach(label => {
+            label.addEventListener('click', function() {
+                // Reset all
+                labels.forEach(l => {
+                    l.classList.remove('border-yellow-600', 'bg-yellow-50/50');
+                    l.classList.add('border-gray-100');
+                    const indicator = l.querySelector('.radio-indicator');
+                    if (indicator) {
+                        indicator.classList.remove('border-yellow-600', 'bg-yellow-600');
+                        indicator.classList.add('border-gray-200');
+                    }
+                    const check = l.querySelector('.fa-check');
+                    if (check) check.classList.add('hidden');
+                });
+                
+                // Set active
+                this.classList.add('border-yellow-600', 'bg-yellow-50/50');
+                this.classList.remove('border-gray-100');
+                const radio = this.querySelector('input[type="radio"]');
+                if (radio) radio.checked = true;
+                
+                const indicator = this.querySelector('.radio-indicator');
+                if (indicator) {
+                    indicator.classList.remove('border-gray-200');
+                    indicator.classList.add('border-yellow-600', 'bg-yellow-600');
+                }
+                const check = this.querySelector('.fa-check');
+                if (check) check.classList.remove('hidden');
+            });
+        });
+    });
+</script>
 {% endblock %}

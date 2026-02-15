@@ -13,6 +13,13 @@ from .views.cart_detail_view import (
     apply_promo_code,
 )
 from .views.checkout_view import CheckoutView, OrderConfirmationView
+from .views.payment_views import (
+    stripe_checkout,
+    stripe_webhook,
+    paypal_checkout,
+    PaymentSuccessView,
+    PaymentCancelView,
+)
 
 from .views.produc_create_view import ProductDashboardView, product_edit, product_delete
 from .views.wishlist_view import WishlistView, toggle_wishlist, wishlist_to_cart, wishlist_add_all_to_cart
@@ -49,8 +56,12 @@ urlpatterns = [
 ),
 path("dashboard/products/<uuid:pk>/edit/", product_edit, name="product_edit"),
 path("dashboard/products/<uuid:pk>/delete/", product_delete, name="product_delete"),
+    
+    # Payments
+    path('payment/stripe/<uuid:order_id>/', stripe_checkout, name='stripe_checkout'),
+    path('payment/stripe/webhook/', stripe_webhook, name='stripe_webhook'),
+    path('payment/paypal/<uuid:order_id>/', paypal_checkout, name='paypal_checkout'),
+    path('payment/success/', PaymentSuccessView.as_view(), name='payment_success'),
+    path('payment/cancel/', PaymentCancelView.as_view(), name='payment_cancel'),
 
 ]
-
-
-

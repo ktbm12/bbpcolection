@@ -136,8 +136,23 @@ class Order(CFPBaseModel):
     shipping_address = models.TextField()
     shipping_city = models.CharField(max_length=100)
     shipping_phone = models.CharField(max_length=20)
-    status = models.CharField(max_length=30, default="PENDING")  # à remplacer par un choices si besoin
+    STATUS_CHOICES = [
+        ("PENDING", "Pending"),
+        ("PROCESSING", "Processing"),
+        ("SHIPPED", "Shipped"),
+        ("DELIVERED", "Delivered"),
+        ("CANCELLED", "Cancelled"),
+    ]
+    PAYMENT_STATUS_CHOICES = [
+        ("PENDING", "Pending"),
+        ("PAID", "Paid"),
+        ("FAILED", "Failed"),
+        ("REFUNDED", "Refunded"),
+    ]
+    status = models.CharField(max_length=30, choices=STATUS_CHOICES, default="PENDING")
     payment_method = models.CharField(max_length=50, blank=True)
+    payment_status = models.CharField(max_length=20, choices=PAYMENT_STATUS_CHOICES, default="PENDING")
+    payment_id = models.CharField(max_length=255, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if not self.order_number:
