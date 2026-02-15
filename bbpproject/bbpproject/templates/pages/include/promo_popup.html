@@ -53,7 +53,7 @@
 
             <!-- Countdown Section -->
             <div class="bg-gray-50 rounded-[2rem] p-6 border border-gray-100">
-                <div class="flex items-center justify-center gap-6" id="countdown-timer" data-end="{{ active_promo.end_date|date:'Y-m-d\TH:i:sZ' }}">
+                <div class="flex items-center justify-center gap-6" id="countdown-timer" data-end="{{ active_promo.end_date|date:'c' }}">
                     <div class="text-center">
                         <div id="days" class="text-3xl font-serif font-bold text-gray-900">00</div>
                         <div class="text-[8px] font-bold text-gray-400 uppercase tracking-widest">Days</div>
@@ -88,6 +88,7 @@
 <script>
     function openPromoPopup() {
         const popup = document.getElementById('promo-popup');
+        if (!popup) return;
         const modal = popup.querySelector('.relative');
         
         // Check if already shown in this session
@@ -118,7 +119,14 @@
         const timerContainer = document.getElementById('countdown-timer');
         if (!timerContainer) return;
 
-        const endDate = new Date(timerContainer.dataset.end).getTime();
+        const dateStr = timerContainer.dataset.end;
+        // Robust parsing for Safari and older browsers
+        const endDate = new Date(dateStr).getTime();
+
+        if (isNaN(endDate)) {
+            console.error("Invalid end date format:", dateStr);
+            return;
+        }
 
         const updateTimer = () => {
             const now = new Date().getTime();
@@ -135,10 +143,15 @@
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-            document.getElementById('days').textContent = String(days).padStart(2, '0');
-            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
-            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
-            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+            const daysEl = document.getElementById('days');
+            const hoursEl = document.getElementById('hours');
+            const minutesEl = document.getElementById('minutes');
+            const secondsEl = document.getElementById('seconds');
+
+            if (daysEl) daysEl.textContent = String(days).padStart(2, '0');
+            if (hoursEl) hoursEl.textContent = String(hours).padStart(2, '0');
+            if (minutesEl) minutesEl.textContent = String(minutes).padStart(2, '0');
+            if (secondsEl) secondsEl.textContent = String(seconds).padStart(2, '0');
         };
 
         const interval = setInterval(updateTimer, 1000);
