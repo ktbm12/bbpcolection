@@ -16,6 +16,10 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 def stripe_checkout(request, order_id):
     order = get_object_or_404(Order, id=order_id, user=request.user)
     
+    if not stripe.api_key:
+        messages.error(request, "Stripe is not configured. Please add STRIPE_SECRET_KEY to your .env file.")
+        return redirect('product:checkout')
+
     if order.payment_status == "PAID":
         messages.info(request, "This order is already paid.")
         return redirect('product:order_confirmation')
