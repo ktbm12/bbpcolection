@@ -1,0 +1,153 @@
+{% if active_promo %}
+<div id="promo-popup" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity duration-500 opacity-0 pointer-events-none">
+    <div class="relative w-full max-w-lg bg-white rounded-[2.5rem] shadow-2xl overflow-hidden transform transition-transform duration-500 scale-90">
+        <!-- Close Button -->
+        <button onclick="closePromoPopup()" class="absolute top-6 right-6 z-10 w-10 h-10 bg-white/80 backdrop-blur-md text-gray-900 rounded-full flex items-center justify-center hover:bg-yellow-600 hover:text-black transition duration-300 shadow-lg">
+            <i class="fas fa-times"></i>
+        </button>
+
+        <!-- Banner Image -->
+        <div class="relative h-48 bg-gray-100 overflow-hidden">
+            {% if active_promo.image %}
+                <img src="{{ active_promo.image.url }}" alt="{{ active_promo.name }}" class="w-full h-full object-cover">
+            {% else %}
+                <div class="w-full h-full bg-gradient-to-br from-yellow-400 via-yellow-500 to-yellow-600 flex items-center justify-center">
+                    <span class="font-display text-4xl text-black/20 uppercase tracking-widest">BBP Flash Sale</span>
+                </div>
+            {% endif %}
+            <!-- Overlay -->
+            <div class="absolute inset-x-0 bottom-0 p-8 bg-gradient-to-t from-white to-transparent">
+                <div class="inline-flex items-center px-4 py-1.5 bg-yellow-600 text-black text-[10px] font-black uppercase tracking-[0.2em] rounded-full shadow-lg mb-2">
+                    Flash Sale
+                </div>
+                <h3 class="text-3xl font-serif font-bold text-gray-900 leading-tight">
+                    {{ active_promo.name }}
+                </h3>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="p-8 space-y-8">
+            <!-- Products Grid (max 3 for popup) -->
+            <div class="grid grid-cols-3 gap-4">
+                {% for item in active_promo.items.all|slice:":3" %}
+                <div class="group relative">
+                    <div class="aspect-[4/5] bg-gray-50 rounded-2xl overflow-hidden mb-2 border border-blue-50/50">
+                        {% if item.product.main_image %}
+                            <img src="{{ item.product.main_image.url }}" alt="{{ item.product.name }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                        {% endif %}
+                    </div>
+                    <p class="text-[10px] font-bold text-gray-900 truncate">{{ item.product.name }}</p>
+                    <div class="flex items-baseline gap-1.5">
+                        <span class="text-xs font-black text-yellow-600">{{ item.promotion_price }} FCFA</span>
+                        <span class="text-[8px] text-gray-400 line-through">{{ item.product.price }} FCFA</span>
+                    </div>
+                    {% if item.special_label %}
+                        <div class="absolute top-2 left-2 px-2 py-0.5 bg-red-500 text-white text-[8px] font-bold rounded-lg uppercase shadow-lg">
+                            {{ item.special_label }}
+                        </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Countdown Section -->
+            <div class="bg-gray-50 rounded-[2rem] p-6 border border-gray-100">
+                <div class="flex items-center justify-center gap-6" id="countdown-timer" data-end="{{ active_promo.end_date|date:'Y-m-d\TH:i:sZ' }}">
+                    <div class="text-center">
+                        <div id="days" class="text-3xl font-serif font-bold text-gray-900">00</div>
+                        <div class="text-[8px] font-bold text-gray-400 uppercase tracking-widest">Days</div>
+                    </div>
+                    <div class="text-2xl text-yellow-600 font-bold">:</div>
+                    <div class="text-center">
+                        <div id="hours" class="text-3xl font-serif font-bold text-gray-900">00</div>
+                        <div class="text-[8px] font-bold text-gray-400 uppercase tracking-widest">Hrs</div>
+                    </div>
+                    <div class="text-2xl text-yellow-600 font-bold">:</div>
+                    <div class="text-center">
+                        <div id="minutes" class="text-3xl font-serif font-bold text-gray-900">00</div>
+                        <div class="text-[8px] font-bold text-gray-400 uppercase tracking-widest">Min</div>
+                    </div>
+                    <div class="text-2xl text-yellow-600 font-bold">:</div>
+                    <div class="text-center">
+                        <div id="seconds" class="text-3xl font-serif font-bold text-gray-900">00</div>
+                        <div class="text-[8px] font-bold text-gray-400 uppercase tracking-widest">Sec</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action -->
+             <a href="{% url 'product:product_list' %}" class="block w-full py-4 bg-black text-white text-center font-bold rounded-2xl hover:bg-yellow-600 hover:text-black transition duration-300 shadow-2xl shadow-black/20 group">
+                Shop the Flash Sale
+                <i class="fas fa-arrow-right ml-2 text-xs group-hover:translate-x-1 transition-transform"></i>
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openPromoPopup() {
+        const popup = document.getElementById('promo-popup');
+        const modal = popup.querySelector('.relative');
+        
+        // Check if already shown in this session
+        if (!sessionStorage.getItem('promo_shown')) {
+            setTimeout(() => {
+                popup.classList.remove('opacity-0', 'pointer-events-none');
+                modal.classList.remove('scale-90');
+                modal.classList.add('scale-100');
+                document.body.style.overflow = 'hidden';
+            }, 2000); // 2 second delay for better impact
+        }
+    }
+
+    function closePromoPopup() {
+        const popup = document.getElementById('promo-popup');
+        const modal = popup.querySelector('.relative');
+        
+        popup.classList.add('opacity-0', 'pointer-events-none');
+        modal.classList.remove('scale-100');
+        modal.classList.add('scale-90');
+        document.body.style.overflow = 'auto';
+        
+        // Don't show again in this session
+        sessionStorage.setItem('promo_shown', 'true');
+    }
+
+    function startCountdown() {
+        const timerContainer = document.getElementById('countdown-timer');
+        if (!timerContainer) return;
+
+        const endDate = new Date(timerContainer.dataset.end).getTime();
+
+        const updateTimer = () => {
+            const now = new Date().getTime();
+            const distance = endDate - now;
+
+            if (distance < 0) {
+                clearInterval(interval);
+                timerContainer.innerHTML = "<span class='text-red-500 font-bold uppercase tracking-widest'>Offer Expired</span>";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = String(days).padStart(2, '0');
+            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+        };
+
+        const interval = setInterval(updateTimer, 1000);
+        updateTimer();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        openPromoPopup();
+        startCountdown();
+    });
+</script>
+{% endif %}

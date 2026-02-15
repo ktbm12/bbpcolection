@@ -1,0 +1,75 @@
+{% extends "pages/dashboard/admin_base.html" %}
+{% load static %}
+
+{% block dashboard_content %}
+<div class="max-w-4xl mx-auto">
+    <!-- Header -->
+    <div class="mb-8 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+            <a href="{% url 'product:promo_list' %}" class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50 transition">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <h1 class="text-3xl font-serif font-bold text-gray-900">
+                {% if object %}Edit Promotion{% else %}Create Promotion{% endif %}
+            </h1>
+        </div>
+    </div>
+
+    <!-- Form Section -->
+    <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
+        <form method="post" enctype="multipart/form-data" class="space-y-6">
+            {% csrf_token %}
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Name -->
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Promotion Name</label>
+                    <input type="text" name="name" value="{{ form.name.value|default:'' }}" class="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-2 focus:ring-yellow-600/20 focus:border-yellow-600 outline-none transition duration-300" placeholder="e.g., Summer Flash Sale 2026">
+                    {% if form.name.errors %}
+                        <p class="mt-2 text-sm text-red-500">{{ form.name.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Description -->
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Description</label>
+                    <textarea name="description" rows="3" class="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-2 focus:ring-yellow-600/20 focus:border-yellow-600 outline-none transition duration-300">{{ form.description.value|default:'' }}</textarea>
+                </div>
+
+                <!-- Dates -->
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Start Date & Time</label>
+                    <input type="datetime-local" name="start_date" value="{{ form.start_date.value|date:'Y-m-d\TH:i'|default:'' }}" class="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-2 focus:ring-yellow-600/20 focus:border-yellow-600 outline-none transition duration-300">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">End Date & Time</label>
+                    <input type="datetime-local" name="end_date" value="{{ form.end_date.value|date:'Y-m-d\TH:i'|default:'' }}" class="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-2 focus:ring-yellow-600/20 focus:border-yellow-600 outline-none transition duration-300">
+                </div>
+
+                <!-- Image -->
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Promotion Banner (optional)</label>
+                    <div class="relative group">
+                        <input type="file" name="image" class="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-2 focus:ring-yellow-600/20 focus:border-yellow-600 outline-none transition duration-300">
+                    </div>
+                </div>
+
+                <!-- Is Active -->
+                <div class="md:col-span-2 flex items-center gap-3">
+                    <input type="checkbox" name="is_active" id="id_is_active" {% if form.is_active.value %}checked{% endif %} class="w-5 h-5 rounded text-yellow-600 focus:ring-yellow-600">
+                    <label for="id_is_active" class="text-sm font-bold text-gray-700">Set as Active</label>
+                </div>
+            </div>
+
+            <div class="pt-6 border-t border-gray-100 flex gap-4">
+                <button type="submit" class="flex-1 py-4 bg-black text-white font-bold rounded-2xl hover:bg-yellow-600 hover:text-black transition duration-300 shadow-xl shadow-black/10">
+                    {% if object %}Save Changes{% else %}Create Promotion{% endif %}
+                </button>
+                <a href="{% url 'product:promo_list' %}" class="px-8 py-4 border-2 border-gray-200 text-gray-600 font-bold rounded-2xl hover:bg-gray-50 transition duration-300">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

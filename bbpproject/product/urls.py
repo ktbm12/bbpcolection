@@ -24,6 +24,10 @@ from .views.payment_views import (
 from .views.produc_create_view import ProductDashboardView, product_edit, product_delete
 from .views.wishlist_view import WishlistView, toggle_wishlist, wishlist_to_cart, wishlist_add_all_to_cart
 from .views.review_view import submit_review
+from .views.dashboard_promo import (
+    PromotionListView, PromotionCreateView, PromotionUpdateView, 
+    PromotionDeleteView, promo_items_manage
+)
 
 app_name = "product"
 
@@ -57,6 +61,13 @@ urlpatterns = [
 path("dashboard/products/<uuid:pk>/edit/", product_edit, name="product_edit"),
 path("dashboard/products/<uuid:pk>/delete/", product_delete, name="product_delete"),
     
+    # Promotions Dashboard
+    path('dashboard/promotions/', PromotionListView.as_view(), name='promo_list'),
+    path('dashboard/promotions/add/', PromotionCreateView.as_view(), name='promo_create'),
+    path('dashboard/promotions/<uuid:pk>/edit/', PromotionUpdateView.as_view(), name='promo_edit'),
+    path('dashboard/promotions/<uuid:pk>/delete/', PromotionDeleteView.as_view(), name='promo_delete'),
+    path('dashboard/promotions/<uuid:pk>/items/', promo_items_manage, name='promo_items_manage'),
+
     # Payments
     path('payment/stripe/<uuid:order_id>/', stripe_checkout, name='stripe_checkout'),
     path('payment/stripe/webhook/', stripe_webhook, name='stripe_webhook'),

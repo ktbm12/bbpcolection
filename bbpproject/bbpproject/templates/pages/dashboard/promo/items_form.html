@@ -1,0 +1,89 @@
+{% extends "pages/dashboard/admin_base.html" %}
+{% load static %}
+
+{% block dashboard_content %}
+<div class="max-w-5xl mx-auto">
+    <!-- Header -->
+    <div class="mb-8 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+            <a href="{% url 'product:promo_list' %}" class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50 transition">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <div>
+                <h1 class="text-3xl font-serif font-bold text-gray-900">Manage Promotion Products</h1>
+                <p class="text-gray-500">{{ promotion.name }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Items Section -->
+    <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
+        <form method="post" class="space-y-6">
+            {% csrf_token %}
+            {{ formset.management_form }}
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="border-b border-gray-100">
+                            <th class="pb-4 text-sm font-bold text-gray-600">Product</th>
+                            <th class="pb-4 text-sm font-bold text-gray-600">Promo Price</th>
+                            <th class="pb-4 text-sm font-bold text-gray-600">Label</th>
+                            <th class="pb-4 text-sm font-bold text-gray-600 text-center">Delete?</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-50">
+                        {% for form in formset %}
+                        <tr class="group">
+                            <td class="py-4 pr-4">
+                                {{ form.id }}
+                                {{ form.product }}
+                                {% if form.product.errors %}
+                                    <p class="mt-1 text-xs text-red-500">{{ form.product.errors.0 }}</p>
+                                {% endif %}
+                            </td>
+                            <td class="py-4 px-4">
+                                {{ form.promotion_price }}
+                                {% if form.promotion_price.errors %}
+                                    <p class="mt-1 text-xs text-red-500">{{ form.promotion_price.errors.0 }}</p>
+                                {% endif %}
+                            </td>
+                            <td class="py-4 px-4">
+                                {{ form.special_label }}
+                            </td>
+                            <td class="py-4 text-center">
+                                {{ form.DELETE }}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pt-6 border-t border-gray-100 flex gap-4">
+                <button type="submit" class="flex-1 py-4 bg-black text-white font-bold rounded-2xl hover:bg-yellow-600 hover:text-black transition duration-300 shadow-xl shadow-black/10">
+                    Save Promotion Items
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    select, input[type="number"], input[type="text"] {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        background: #f9fafb;
+        border: 1px solid #f1f5f9;
+        border-radius: 1rem;
+        font-size: 0.875rem;
+        outline: none;
+        transition: all 0.3s;
+    }
+    select:focus, input:focus {
+        border-color: #d4af37;
+        background: white;
+        box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1);
+    }
+</style>
+{% endblock %}

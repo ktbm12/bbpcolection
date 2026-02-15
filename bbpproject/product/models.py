@@ -240,3 +240,39 @@ class Review(CFPBaseModel):
             ).exists()
             self.is_verified_purchase = has_purchased
         super().save(*args, **kwargs)
+
+
+class Promotion(CFPBaseModel):
+    name = models.CharField(_("promotion name"), max_length=200)
+    description = models.TextField(blank=True)
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
+    image = models.ImageField(upload_to="promotions/%Y/%m/%d/", blank=True, null=True)
+    
+    class Meta(CFPBaseModel.Meta):
+        verbose_name = _("promotion")
+        verbose_name_plural = _("promotions")
+
+    def __str__(self):
+        return self.name
+
+    @property
+    def is_currently_active(self):
+        from django.utils import timezone
+        now = timezone.now()
+        return self.is_active and self.start_date <= now <= self.end_date
+
+
+class PromotionItem(CFPBaseModel):
+    promotion = models.ForeignKey(Promotion, on_delete=models.CASCADE, related_name="items")
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="promotion_items")
+    promotion_price = models.DecimalField(max_digits=10, decimal_places=0)
+    special_label = models.CharField(max_length=50, blank=True, help_text="Ex: Flash Sale, -50%, etc.")
+
+    class Meta(CFPBaseModel.Meta):
+        verbose_name = _("promotion item")
+        verbose_name_plural = _("promotion items")
+        unique_together = ['promotion', 'product']
+
+    def __str__(self):
+        return f"{self.product.name} in {self.promotion.name}"

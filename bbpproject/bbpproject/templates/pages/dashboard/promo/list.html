@@ -1,0 +1,150 @@
+{% extends "pages/dashboard/admin_base.html" %}
+{% load static %}
+
+{% block dashboard_content %}
+<div class="space-y-8">
+    <!-- Header Section -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+        <div>
+            <h1 class="text-3xl font-serif font-bold text-gray-900">Promotions & Flash Sales</h1>
+            <p class="text-gray-500 mt-1">Manage your active promotions, countdowns, and discounted products.</p>
+        </div>
+        <a href="{% url 'product:promo_create' %}" class="inline-flex items-center justify-center px-6 py-3 bg-black text-white font-bold rounded-xl hover:bg-yellow-600 hover:text-black transition duration-300 gap-2 shadow-lg shadow-black/10">
+            <i class="fas fa-plus"></i>
+            Create New Promotion
+        </a>
+    </div>
+
+    <!-- Table Section -->
+    <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-gray-50/50">
+                        <th class="px-8 py-5 text-sm font-semibold text-gray-600">Promotion Name</th>
+                        <th class="px-8 py-5 text-sm font-semibold text-gray-600">Period</th>
+                        <th class="px-8 py-5 text-sm font-semibold text-gray-600">Status</th>
+                        <th class="px-8 py-5 text-sm font-semibold text-gray-600">Items</th>
+                        <th class="px-8 py-5 text-sm font-semibold text-gray-600 text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    {% for promo in promotions %}
+                    <tr class="hover:bg-gray-50/50 transition duration-200">
+                        <td class="px-8 py-6">
+                            <div class="font-bold text-gray-900">{{ promo.name }}</div>
+                            <div class="text-xs text-gray-500 line-clamp-1">{{ promo.description|truncatechars:50 }}</div>
+                        </td>
+                        <td class="px-8 py-6">
+                            <div class="text-sm font-medium text-gray-700">From: {{ promo.start_date|date:"M d, H:i" }}</div>
+                            <div class="text-sm text-gray-500 text-xs">To: {{ promo.end_date|date:"M d, H:i" }}</div>
+                        </td>
+                        <td class="px-8 py-6">
+                            {% if promo.is_currently_active %}
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">
+                                <span class="w-1.5 h-1.5 rounded-full bg-green-500 mr-2"></span>
+                                Active
+                            </span>
+                            {% elif promo.is_active %}
+                                {% if promo.start_date > now %}
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-blue-500 mr-2"></span>
+                                    Scheduled
+                                </span>
+                                {% else %}
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-red-500 mr-2"></span>
+                                    Expired
+                                </span>
+                                {% endif %}
+                            {% else %}
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-700">
+                                <span class="w-1.5 h-1.5 rounded-full bg-gray-400 mr-2"></span>
+                                Paused
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td class="px-8 py-6 text-sm text-gray-600">
+                            {{ promo.items.count }} products
+                        </td>
+                        <td class="px-8 py-6 text-right">
+                            <div class="flex items-center justify-end gap-2">
+                                <a href="{% url 'product:promo_items_manage' promo.pk %}" class="p-2 text-gray-400 hover:text-yellow-600 transition" title="Manage Products">
+                                    <i class="fas fa-box-open"></i>
+                                </a>
+                                <a href="{% url 'product:promo_edit' promo.pk %}" class="p-2 text-gray-400 hover:text-black transition" title="Edit Promotion">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <button onclick="openDeleteModal('{{ promo.pk }}', '{{ promo.name|escapejs }}')" class="p-2 text-gray-400 hover:text-red-600 transition" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="px-8 py-12 text-center">
+                            <div class="max-w-xs mx-auto">
+                                <div class="bg-gray-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <i class="fas fa-percentage text-2xl text-gray-400"></i>
+                                </div>
+                                <h3 class="text-lg font-bold text-gray-900 mb-1">No promotions yet</h3>
+                                <p class="text-gray-500 text-sm mb-6">Create your first flash sale or promotional campaign.</p>
+                                <a href="{% url 'product:promo_create' %}" class="inline-flex items-center text-yellow-600 font-bold hover:text-yellow-700">
+                                    Start a Promotion <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md p-6">
+        <div class="bg-white rounded-3xl shadow-2xl p-8 border border-gray-100">
+            <div class="w-20 h-20 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i class="fas fa-exclamation-triangle text-3xl"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 text-center mb-2">Delete Promotion?</h3>
+            <p class="text-gray-500 text-center mb-8">You are about to delete <span id="deleteItemTitle" class="font-bold text-gray-900"></span>. This action cannot be undone.</p>
+            
+            <form id="deleteForm" method="post" action="">
+                {% csrf_token %}
+                <div class="flex gap-4">
+                    <button type="button" onclick="closeDeleteModal()" class="flex-1 px-6 py-3 border-2 border-gray-200 text-gray-600 font-bold rounded-xl hover:border-gray-300 transition">
+                        Cancel
+                    </button>
+                    <button type="submit" class="flex-1 px-6 py-3 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 transition shadow-lg shadow-red-600/20">
+                        Delete
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function openDeleteModal(pk, title) {
+    const modal = document.getElementById('deleteModal');
+    const form = document.getElementById('deleteForm');
+    const titleSpan = document.getElementById('deleteItemTitle');
+    
+    titleSpan.textContent = title;
+    form.action = `/product/dashboard/promotions/${pk}/delete/`;
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeDeleteModal() {
+    const modal = document.getElementById('deleteModal');
+    modal.classList.add('hidden');
+    document.body.style.overflow = 'auto';
+}
+</script>
+{% endblock %}
