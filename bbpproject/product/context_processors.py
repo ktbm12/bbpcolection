@@ -1,5 +1,7 @@
 from django.utils import timezone
+from django.db.models import Sum
 from .models import Promotion
+from .views.cart_detail_view import get_or_create_cart
 
 def active_promotion(request):
     """
@@ -14,4 +16,14 @@ def active_promotion(request):
     
     return {
         'active_promo': active_promo
+    }
+
+def cart_counter(request):
+    """
+    Exposes the number of items in the current user's cart.
+    """
+    cart = get_or_create_cart(request)
+    count = cart.items.aggregate(total=Sum('quantity'))['total'] or 0
+    return {
+        'cart_count': count
     }
