@@ -14,11 +14,17 @@ from .models import (
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug', 'is_active', 'created', 'modified')
+    list_display = ('name', 'image_preview', 'slug', 'is_active', 'created')
     list_filter = ('is_active',)
     search_fields = ('name', 'slug', 'description')
     prepopulated_fields = {'slug': ('name',)}
     readonly_fields = ('created', 'modified')
+
+    def image_preview(self, obj):
+        if obj.image:
+            return format_html('<img src="{}" style="max-height: 50px; border-radius: 8px;"/>', obj.image.url)
+        return "-"
+    image_preview.short_description = _("Aperçu")
 
 
 class ProductImageInline(admin.TabularInline):

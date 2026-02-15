@@ -11,6 +11,7 @@ class Category(CFPBaseModel):
     name = models.CharField(_("nom"), max_length=120, unique=True)
     slug = models.SlugField(_("slug"), unique=True, max_length=140)
     description = models.TextField(blank=True)
+    image = models.ImageField(_("image"), upload_to="categories/", blank=True, null=True)
 
     class Meta(CFPBaseModel.Meta):
         verbose_name = _("catégorie")

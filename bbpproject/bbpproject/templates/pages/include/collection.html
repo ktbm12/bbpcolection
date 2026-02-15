@@ -18,6 +18,8 @@
             <div class="collection-card group relative bg-gray-950 rounded-[2.5rem] overflow-hidden cursor-pointer h-[32rem] border border-white/5 transition-all duration-700 hover:border-yellow-600/30">
                 {% if category.image %}
                     <img src="{{ category.image.url }}" alt="{{ category.name }}" class="absolute inset-0 w-full h-full object-cover opacity-50 transition-all duration-700 group-hover:scale-110 group-hover:opacity-70">
+                {% elif category.products.all.0.main_image %}
+                    <img src="{{ category.products.all.0.main_image.url }}" alt="{{ category.name }}" class="absolute inset-0 w-full h-full object-cover opacity-50 transition-all duration-700 group-hover:scale-110 group-hover:opacity-70">
                 {% else %}
                     <div class="absolute inset-0 bg-gradient-to-br from-yellow-900/40 to-black/60 opacity-50"></div>
                 {% endif %}
