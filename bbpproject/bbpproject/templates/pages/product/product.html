@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static product_tags %}
 
-{% block title %}Nos Produits - bbpcollection{% endblock %}
+{% block title %}Our Products - bbpcollection{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -114,10 +114,10 @@
         <div class="absolute inset-0" style="background: linear-gradient(135deg, #d4af37 0%, #f4e5c3 50%, #d4af37 100%);"></div>
     </div>
     <div class="relative z-10 text-center">
-        <p class="text-yellow-500 text-sm tracking-widest uppercase mb-2 font-medium">Notre Collection</p>
-        <h1 class="text-5xl md:text-6xl font-serif font-bold text-white mb-4">Nos Produits</h1>
+        <p class="text-yellow-500 text-sm tracking-widest uppercase mb-2 font-medium">Our Collection</p>
+        <h1 class="text-5xl md:text-6xl font-serif font-bold text-white mb-4">Our Products</h1>
         <p class="text-gray-300 text-lg max-w-2xl mx-auto px-4">
-            Découvrez notre gamme complète de mèches haut de gamme 100% naturelles
+            Discover our full range of premium 100% natural bundles
         </p>
     </div>
     <div class="absolute bottom-0 left-0 right-0 h-1" style="background: linear-gradient(135deg, #d4af37 0%, #f4e5c3 50%, #d4af37 100%);"></div>
@@ -135,7 +135,7 @@
                 <!-- Search -->
                 <div class="relative flex-1 max-w-2xl">
                     <input type="text" name="q" value="{{ request.GET.q|default:'' }}" 
-                           placeholder="Rechercher un produit, une texture..." 
+                           placeholder="Search for a product, texture..." 
                            class="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 focus:border-yellow-600 focus:ring-1 focus:ring-yellow-600 outline-none transition-all shadow-sm">
                     <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
                 </div>
@@ -143,18 +143,18 @@
                 <!-- Sort & Submit -->
                 <div class="flex gap-3">
                     <select name="sort" onchange="this.form.submit()" class="px-4 py-3 border border-gray-200 rounded-xl bg-white font-medium text-sm focus:border-yellow-600 outline-none cursor-pointer hover:border-gray-300">
-                        <option value="">Trier par: Popularité</option>
-                        <option value="price_asc" {% if request.GET.sort == 'price_asc' %}selected{% endif %}>Prix: Croissant</option>
-                        <option value="price_desc" {% if request.GET.sort == 'price_desc' %}selected{% endif %}>Prix: Décroissant</option>
-                        <option value="newest" {% if request.GET.sort == 'newest' %}selected{% endif %}>Nouveautés</option>
+                        <option value="">Sort by: Popularity</option>
+                        <option value="price_asc" {% if request.GET.sort == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+                        <option value="price_desc" {% if request.GET.sort == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
+                        <option value="newest" {% if request.GET.sort == 'newest' %}selected{% endif %}>New Arrivals</option>
                     </select>
                     
                     <button type="submit" class="bg-black text-white px-6 py-3 rounded-xl font-bold text-sm hover:bg-gray-800 transition shadow-lg">
-                        Filtrer
+                        Filter
                     </button>
                     
                     {% if request.GET.q or request.GET.category or request.GET.price_min or request.GET.in_stock %}
-                    <a href="{% url 'product:product_list' %}" class="flex items-center justify-center px-4 py-3 border border-gray-200 rounded-xl text-gray-500 hover:bg-gray-50 hover:text-red-500 transition" title="Réinitialiser">
+                    <a href="{% url 'product:product_list' %}" class="flex items-center justify-center px-4 py-3 border border-gray-200 rounded-xl text-gray-500 hover:bg-gray-50 hover:text-red-500 transition" title="Reset">
                         <i class="fas fa-times"></i>
                     </a>
                     {% endif %}
@@ -165,7 +165,7 @@
             <div class="flex flex-wrap gap-3 pb-2 border-b border-gray-100 mb-6">
                 <button type="submit" name="category" value="" 
                         class="px-5 py-2 rounded-full border border-gray-200 text-sm font-bold transition-all {% if not category %}bg-black text-white border-black{% else %}bg-white text-gray-600 hover:border-black hover:text-black{% endif %}">
-                    Tout voir
+                    View All
                 </button>
                 {% for cat in categories %}
                 <button type="submit" name="category" value="{{ cat.slug }}"
@@ -177,11 +177,11 @@
 
             <!-- Bottom Row: Granular Filters (Price, Stock) -->
             <div class="flex flex-wrap items-center gap-6 text-sm text-gray-600 bg-gray-50 p-4 rounded-2xl border border-gray-100">
-                <span class="font-bold text-black uppercase tracking-wider text-xs">Filtres rapides:</span>
+                <span class="font-bold text-black uppercase tracking-wider text-xs">Quick Filters:</span>
                 
                 <!-- Price Range -->
                 <div class="flex items-center gap-2">
-                    <span class="text-gray-500">Prix:</span>
+                    <span class="text-gray-500">Price:</span>
                     <input type="number" name="price_min" value="{{ request.GET.price_min }}" placeholder="Min" class="w-20 px-3 py-1.5 rounded-lg border border-gray-200 text-xs focus:border-yellow-600 outline-none">
                     <span class="text-gray-400">-</span>
                     <input type="number" name="price_max" value="{{ request.GET.price_max }}" placeholder="Max" class="w-20 px-3 py-1.5 rounded-lg border border-gray-200 text-xs focus:border-yellow-600 outline-none">
@@ -193,7 +193,7 @@
                 <!-- Stock Checkbox -->
                 <label class="flex items-center gap-2 cursor-pointer select-none hover:text-black">
                     <input type="checkbox" name="in_stock" value="1" {% if request.GET.in_stock %}checked{% endif %} class="w-4 h-4 rounded border-gray-300 text-yellow-600 focus:ring-yellow-600 transition">
-                    <span class="font-medium">En stock uniquement</span>
+                    <span class="font-medium">In stock only</span>
                 </label>
             </div>
         </form>
@@ -201,7 +201,7 @@
         <!-- Results Count -->
         <div class="mb-8">
             <p class="text-gray-600 font-medium">
-                <span class="text-black font-bold">{{ products.paginator.count }}</span> produit{{ products.paginator.count|pluralize }} disponible{{ products.paginator.count|pluralize }}
+                <span class="text-black font-bold">{{ products.paginator.count }}</span> product{{ products.paginator.count|pluralize }} available
             </p>
         </div>
 
@@ -296,7 +296,7 @@
                     <div class="flex gap-2 items-center">
                         <button onclick="addToCart('{{ product.id }}')"
                                 class="bg-yellow-600 hover:bg-yellow-700 text-black flex-1 py-2 rounded-lg text-sm font-semibold">
-                            Ajouter au panier
+                            Add to cart
                         </button>
                     
                         <button onclick="toggleFavorite('{{ product.id }}', this)"
@@ -352,13 +352,13 @@
 <!-- Newsletter CTA -->
 <section class="py-16 bg-black">
     <div class="max-w-4xl mx-auto px-4 text-center">
-        <h3 class="text-3xl font-serif font-bold text-white mb-4">Restez Informée</h3>
-        <p class="text-gray-300 mb-8">Recevez nos offres exclusives et nouveautés en avant-première</p>
+        <h3 class="text-3xl font-serif font-bold text-white mb-4">Stay Informed</h3>
+        <p class="text-gray-300 mb-8">Receive our exclusive offers and news first</p>
         <form method="post" action="" class="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
             {% csrf_token %}
-            <input type="email" name="email" placeholder="Votre adresse email" required class="flex-1 px-6 py-4 rounded-full border-2 border-yellow-600 bg-transparent text-white placeholder-gray-400 focus:outline-none focus:border-yellow-500">
+            <input type="email" name="email" placeholder="Your email address" required class="flex-1 px-6 py-4 rounded-full border-2 border-yellow-600 bg-transparent text-white placeholder-gray-400 focus:outline-none focus:border-yellow-500">
             <button type="submit" class="bg-yellow-600 hover:bg-yellow-700 text-black px-8 py-4 rounded-full font-bold transition">
-                S'abonner
+                Subscribe
             </button>
         </form>
     </div>
@@ -381,7 +381,7 @@
         .then(response => response.json())
             .then(data => {
                 if(data.success) {
-                    if (window.showPremiumNotification) window.showPremiumNotification('Produit ajouté au panier !');
+                    if (window.showPremiumNotification) window.showPremiumNotification('Product added to cart!');
                     // Mise à jour de tous les badges (desktop + mobile)
                     document.querySelectorAll('.cart-items-badge').forEach(badge => {
                         badge.textContent = data.cart_items_count;

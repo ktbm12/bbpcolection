@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static humanize product_tags %}
 
-{% block title %}Ma Wishlist - bbpcollection{% endblock %}
+{% block title %}My Wishlist - bbpcollection{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -59,14 +59,14 @@
         <!-- Header -->
         <div class="flex flex-col md:flex-row justify-between items-center mb-12 gap-6">
             <div>
-                <h1 class="text-4xl font-serif font-bold text-gray-900 mb-2">Ma Wishlist</h1>
-                <p class="text-gray-500">{{ wishlist_items.count }} article{{ wishlist_items.count|pluralize }} sauvegardé{{ wishlist_items.count|pluralize }}</p>
+                <h1 class="text-4xl font-serif font-bold text-gray-900 mb-2">My Wishlist</h1>
+                <p class="text-gray-500">{{ wishlist_items.count }} item{{ wishlist_items.count|pluralize }} saved</p>
             </div>
             
             {% if wishlist_items %}
             <button onclick="addAllToCart()" class="bg-black hover:bg-yellow-600 text-white hover:text-black px-8 py-4 rounded-full font-bold uppercase tracking-widest text-xs transition-all shadow-xl hover:shadow-yellow-600/20 active:scale-95 flex items-center gap-3">
                 <i class="fas fa-shopping-bag text-lg"></i>
-                Tout ajouter au panier
+                Add all to cart
             </button>
             {% endif %}
         </div>
@@ -103,7 +103,7 @@
                         <div class="product-card-header flex justify-between items-start mb-2">
                             <div>
                                 <p class="text-sm text-gray-600">
-                                    {{ product.category.name|default:"Catégorie" }}
+                                    {{ product.category.name|default:"Category" }}
                                 </p>
                             </div>
                             
@@ -137,7 +137,7 @@
                             <button onclick="addToCart('{{ product.id }}')"
                                     class="w-full bg-yellow-600 hover:bg-yellow-700 text-black py-3 rounded-lg text-sm font-bold uppercase tracking-wide transition-colors flex items-center justify-center gap-2">
                                 <i class="fas fa-cart-plus"></i>
-                                Ajouter au panier
+                                Add to cart
                             </button>
                         </div>
             
@@ -150,10 +150,10 @@
                 <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6 text-gray-300">
                     <i class="far fa-heart text-4xl"></i>
                 </div>
-                <h3 class="text-2xl font-serif font-bold text-gray-900 mb-2">Votre wishlist est vide</h3>
-                <p class="text-gray-500 mb-8 max-w-md mx-auto">Parcourez nos collections et sauvegardez vos coups de cœur pour plus tard.</p>
+                <h3 class="text-2xl font-serif font-bold text-gray-900 mb-2">Your wishlist is empty</h3>
+                <p class="text-gray-500 mb-8 max-w-md mx-auto">Browse our collections and save your favorites for later.</p>
                 <a href="{% url 'product:product_list' %}" class="inline-flex items-center px-8 py-4 bg-black text-white font-black uppercase tracking-widest text-xs rounded-full hover:bg-yellow-600 hover:text-black transition shadow-xl shadow-black/10">
-                    Commencer le shopping
+                    Start Shopping
                 </a>
             </div>
         {% endif %}
@@ -163,7 +163,7 @@
 
 <script>
     function removeFromWishlist(productId, btn) {
-        if(!confirm('Retirer cet article de la wishlist ?')) return;
+        if(!confirm('Remove this item from your wishlist?')) return;
 
         fetch(`/product/wishlist/toggle/${productId}/`, {
             method: 'POST',
@@ -195,7 +195,7 @@
                     if(data.wishlist_count === 0) badge.classList.add('hidden');
                 }
                 
-                showNotification('Retiré de la wishlist');
+                showNotification('Removed from wishlist');
             }
         });
     }
@@ -212,7 +212,7 @@
         .then(response => response.json())
         .then(data => {
             if(data.success) {
-                if (window.showPremiumNotification) window.showPremiumNotification('Produit ajouté au panier !');
+                if (window.showPremiumNotification) window.showPremiumNotification('Product added to cart!');
                 document.querySelectorAll('.cart-items-badge').forEach(badge => {
                     badge.textContent = data.cart_items_count;
                 });
@@ -221,7 +221,7 @@
     }
 
     function addAllToCart() {
-        if(!confirm('Ajouter tous les articles au panier ?')) return;
+        if(!confirm('Add all items to cart?')) return;
 
         fetch('{% url "product:wishlist_add_all_to_cart" %}', {
             method: 'POST',

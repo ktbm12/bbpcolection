@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static humanize %}
 
-{% block title %}Mon Panier - bbpcollection{% endblock %}
+{% block title %}My Cart - bbpcollection{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -80,21 +80,21 @@
 <nav class="bg-gray-50 py-6 mt-20">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ol class="flex items-center space-x-3 text-sm">
-            <li><a href="{% url 'users:home' %}" class="text-gray-600 hover:text-yellow-600">Accueil</a></li>
+            <li><a href="{% url 'users:home' %}" class="text-gray-600 hover:text-yellow-600">Home</a></li>
             <li><i class="fas fa-chevron-right text-gray-400 text-xs"></i></li>
-            <li class="font-semibold text-black">Panier</li>
+            <li class="font-semibold text-black">Cart</li>
         </ol>
     </div>
 </nav>
 
 <section class="py-12 bg-white min-h-screen">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 class="text-4xl md:text-5xl font-serif font-bold mb-2">Mon Panier</h1>
+        <h1 class="text-4xl md:text-5xl font-serif font-bold mb-2">My Cart</h1>
         <p class="text-gray-600 mb-10">
             {% if cart_items_count %}
-                {{ cart_items_count }} article{{ cart_items_count|pluralize }} • {{ total|floatformat:0|intcomma }} FCFA
+                {{ cart_items_count }} item{{ cart_items_count|pluralize }} • {{ total|floatformat:0|intcomma }} FCFA
             {% else %}
-                Votre panier est vide
+                Your cart is empty
             {% endif %}
         </p>
 
@@ -167,7 +167,7 @@
 
                 <div class="mt-8">
                     <a href="{% url 'product:product_list' %}" class="inline-flex items-center gap-2 text-black hover:text-yellow-600 font-medium">
-                        <i class="fas fa-arrow-left"></i> Continuer mes achats
+                        <i class="fas fa-arrow-left"></i> Continue Shopping
                     </a>
                 </div>
             </div>
@@ -175,15 +175,15 @@
             <!-- Résumé commande (sticky) -->
             <div class="lg:col-span-1">
                 <div class="summary-card bg-gray-50 rounded-2xl border border-gray-200 p-8">
-                    <h2 class="text-2xl font-serif font-bold mb-6">Résumé</h2>
+                    <h2 class="text-2xl font-serif font-bold mb-6">Summary</h2>
 
-                    <!-- Code promo -->
+                    <!-- Promo code -->
                     <form id="promo-form" class="mb-8">
-                        <label class="block text-sm font-medium mb-2">Code promo</label>
+                        <label class="block text-sm font-medium mb-2">Promo code</label>
                         <div class="flex gap-2">
-                            <input type="text" id="promo_code" placeholder="Entrez votre code" class="flex-1 px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:border-yellow-600 focus:ring-2 focus:ring-yellow-200">
+                            <input type="text" id="promo_code" placeholder="Enter code" class="flex-1 px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:border-yellow-600 focus:ring-2 focus:ring-yellow-200">
                             <button type="submit" class="px-6 py-3 bg-black text-yellow-600 rounded-full font-semibold hover:bg-gray-900 transition">
-                                Appliquer
+                                Apply
                             </button>
                         </div>
                         <p id="promo-message" class="mt-2 text-sm"></p>
@@ -191,20 +191,20 @@
 
                     <div class="space-y-4 text-sm">
                         <div class="flex justify-between">
-                            <span class="text-gray-700">Sous-total</span>
+                            <span class="text-gray-700">Subtotal</span>
                             <span id="subtotal">{{ subtotal|floatformat:0|intcomma }} FCFA</span>
                         </div>
 
                         <div class="flex justify-between text-green-600" id="discount-row" {% if not discount %}style="display:none"{% endif %}>
-                            <span>Réduction</span>
+                            <span>Discount</span>
                             <span id="discount">-{{ discount|floatformat:0|intcomma }} FCFA</span>
                         </div>
 
                         <div class="flex justify-between">
-                            <span class="text-gray-700">Livraison</span>
+                            <span class="text-gray-700">Shipping</span>
                             <span id="shipping">
                                 {% if cart_total >= free_shipping_threshold %}
-                                    <span class="text-green-600">Gratuite</span>
+                                    <span class="text-green-600">Free</span>
                                 {% else %}
                                     {{ shipping_cost|floatformat:0|intcomma }} FCFA
                                 {% endif %}
@@ -219,9 +219,9 @@
                             </div>
                             <p class="text-xs text-gray-600 mt-2 text-center" id="shipping-message">
                                 {% if cart_total >= free_shipping_threshold %}
-                                    Livraison gratuite appliquée !
+                                    Free shipping applied!
                                 {% else %}
-                                    Plus que <strong>{{ free_shipping_remaining|floatformat:0|intcomma }} FCFA</strong> pour la livraison gratuite
+                                    Only <strong>{{ free_shipping_remaining|floatformat:0|intcomma }} FCFA</strong> away from free shipping
                                 {% endif %}
                             </p>
                         </div>
@@ -237,10 +237,10 @@
 
                     <div class="mt-8 space-y-4">
                         <a href="{% url 'product:checkout' %}" class="block w-full bg-yellow-600 hover:bg-yellow-700 text-black text-center py-4 rounded-full font-bold text-lg transition shadow-lg hover:shadow-xl">
-                            Passer la commande
+                            Checkout
                         </a>
                         <a href="{% url 'product:product_list' %}" class="block w-full border-2 border-black text-center py-4 rounded-full font-semibold hover:bg-black hover:text-yellow-600 transition">
-                            Continuer les achats
+                            Continue Shopping
                         </a>
                     </div>
                 </div>
@@ -253,12 +253,12 @@
             <div class="w-32 h-32 mx-auto mb-8 rounded-full bg-gray-100 flex items-center justify-center">
                 <i class="fas fa-shopping-bag text-gray-300 text-5xl"></i>
             </div>
-            <h2 class="text-3xl font-serif font-bold mb-4">Votre panier est vide</h2>
+            <h2 class="text-3xl font-serif font-bold mb-4">Your cart is empty</h2>
             <p class="text-gray-600 mb-10 max-w-lg mx-auto">
-                Parcourez notre collection exclusive de mèches 100% naturelles premium
+                Browse our exclusive collection of premium 100% natural bundles
             </p>
             <a href="{% url 'product:product_list' %}" class="inline-block bg-yellow-600 hover:bg-yellow-700 text-black px-12 py-5 rounded-full font-bold text-lg transition shadow-xl hover:shadow-2xl">
-                Découvrir la collection
+                Explore Collection
             </a>
         </div>
         {% endif %}
@@ -303,18 +303,18 @@ async function updateQuantity(itemId, quantity) {
 
             if (data.success) {
                 updateCartDisplay(data);
-                if (window.showPremiumNotification) window.showPremiumNotification('Quantité mise à jour');
+                if (window.showPremiumNotification) window.showPremiumNotification('Quantity updated');
             } else {
-                if (window.showPremiumNotification) window.showPremiumNotification(data.error || 'Erreur lors de la mise à jour', 'error');
+                if (window.showPremiumNotification) window.showPremiumNotification(data.error || 'Error during update', 'error');
             }
         } catch (err) {
-            if (window.showPremiumNotification) window.showPremiumNotification('Erreur réseau', 'error');
+            if (window.showPremiumNotification) window.showPremiumNotification('Network error', 'error');
         }
 }
 
 // Suppression article
 async function removeItem(itemId) {
-    if (!confirm('Retirer cet article ?')) return;
+    if (!confirm('Remove this item?')) return;
 
     try {
         const response = await fetch(`/product/remove/${itemId}/`, {
@@ -329,7 +329,7 @@ async function removeItem(itemId) {
         if (data.success) {
             document.querySelector(`[data-item-id="${itemId}"]`).remove();
             updateCartDisplay(data);
-            showToast('Article retiré');
+            showToast('Item removed');
             
             // Si panier vide après suppression
             if (data.cart_items_count === 0) {
@@ -339,7 +339,7 @@ async function removeItem(itemId) {
             showToast(data.error || 'Erreur', 'error');
         }
     } catch (err) {
-        showToast('Erreur réseau', 'error');
+        showToast('Network error', 'error');
     }
 }
 
@@ -360,9 +360,9 @@ function updateCartDisplay(data) {
         discountRow.style.display = 'none';
     }
     
-    // Livraison
+    // Shipping
     document.getElementById('shipping').innerHTML = data.shipping_free 
-        ? '<span class="text-green-600">Gratuite</span>'
+        ? '<span class="text-green-600">Free</span>'
         : `${data.shipping_cost.toLocaleString()} FCFA`;
     
     // Barre progression
