@@ -5,35 +5,36 @@
         
         <!-- Slide 1: General Elegance -->
         <div class="carousel-slide active absolute inset-0 h-full w-full">
-            <div class="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent z-10"></div>
-            <div class="absolute inset-0 bg-gradient-to-br from-yellow-900/40 to-black/60 z-0"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-black via-black/40 to-transparent z-10"></div>
+            <div class="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black to-transparent z-10 opacity-60"></div>
             <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=1920&h=1080&fit=crop" alt="Natural Premium Hair" class="absolute inset-0 w-full h-full object-cover transform scale-105 motion-safe:animate-slowZoom">
             
             <div class="relative z-20 h-full flex items-center">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
                     <div class="max-w-4xl">
-                        <div class="overflow-hidden mb-6">
-                            <p class="text-yellow-500 text-sm md:text-base tracking-[0.4em] uppercase font-black animate-slideUp" style="animation-delay: 0.2s">
+                        <div class="overflow-hidden mb-6 flex items-center gap-4">
+                            <div class="w-12 h-[1px] bg-yellow-600"></div>
+                            <p class="text-yellow-500 text-xs md:text-sm tracking-[0.5em] uppercase font-black animate-slideUp" style="animation-delay: 0.2s">
                                 The 2026 Collection
                             </p>
                         </div>
                         <div class="overflow-hidden mb-6">
-                            <h1 class="text-6xl md:text-8xl lg:text-9xl font-serif font-bold text-white leading-[0.9] animate-slideUp" style="animation-delay: 0.4s">
+                            <h1 class="text-6xl md:text-[8rem] font-serif font-bold text-white leading-[0.85] animate-slideUp" style="animation-delay: 0.4s">
                                 Pure<br/>
-                                <span class="text-yellow-600 italic">Sophistication</span>
+                                <span class="bg-gradient-to-r from-yellow-400 via-yellow-600 to-yellow-400 bg-clip-text text-transparent italic">Luxury</span>
                             </h1>
                         </div>
-                        <div class="overflow-hidden mb-8">
-                            <p class="text-xl md:text-2xl text-gray-300 font-light leading-relaxed max-w-2xl animate-slideUp" style="animation-delay: 0.6s">
-                                Discover the world's most exquisite 100% raw human hair, meticulously sourced for the modern icon.
+                        <div class="overflow-hidden mb-10">
+                            <p class="text-lg md:text-xl text-gray-300 font-light leading-relaxed max-w-xl animate-slideUp" style="animation-delay: 0.6s">
+                                Uncompromising quality for the modern icon. Discover 100% raw human hair meticulously sourced just for you.
                             </p>
                         </div>
                         <div class="flex flex-col sm:flex-row gap-6 animate-slideUp" style="animation-delay: 0.8s">
-                            <a href="{% url 'product:product_list' %}" class="group relative px-12 py-5 bg-yellow-600 text-black rounded-full font-black uppercase tracking-widest text-sm transition-all hover:bg-white hover:scale-105 shadow-2xl overflow-hidden">
-                                <span class="relative z-10">Shop Collection</span>
+                            <a href="{% url 'product:product_list' %}" class="group relative px-14 py-5 bg-white text-black rounded-full font-black uppercase tracking-widest text-[10px] transition-all hover:bg-yellow-600 hover:scale-105 shadow-2xl overflow-hidden">
+                                <span class="relative z-10">Shop Now</span>
                             </a>
-                            <a href="#about" class="group relative px-12 py-5 border border-white text-white rounded-full font-black uppercase tracking-widest text-sm transition-all hover:bg-white hover:text-black hover:scale-105 overflow-hidden">
-                                <span class="relative z-10">Our Story</span>
+                            <a href="#collections" class="group relative px-14 py-5 border border-white/30 backdrop-blur-md text-white rounded-full font-black uppercase tracking-widest text-[10px] transition-all hover:bg-white hover:text-black hover:scale-105 overflow-hidden">
+                                <span class="relative z-10">Collections</span>
                             </a>
                         </div>
                     </div>
@@ -43,31 +44,31 @@
 
         <!-- Slide 2: Brazilian Boldness -->
         <div class="carousel-slide absolute inset-0 h-full w-full opacity-0">
-            <div class="absolute inset-0 bg-gradient-to-l from-black via-black/80 to-transparent z-10"></div>
-            <div class="absolute inset-0 bg-gradient-to-br from-gray-900/60 to-yellow-900/40 z-0"></div>
+            <div class="absolute inset-0 bg-gradient-to-l from-black via-black/40 to-transparent z-10"></div>
             <img src="https://images.unsplash.com/photo-1492106087820-71f1a00d2b11?w=1920&h=1080&fit=crop" alt="Premium Brazilian Hair" class="absolute inset-0 w-full h-full object-cover">
             
             <div class="relative z-20 h-full flex items-center">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
                     <div class="max-w-4xl ml-auto text-right">
-                        <div class="overflow-hidden mb-6">
-                            <p class="text-yellow-500 text-sm md:text-base tracking-[0.4em] uppercase font-black">
+                        <div class="overflow-hidden mb-6 flex items-center justify-end gap-4">
+                            <p class="text-yellow-500 text-xs md:text-sm tracking-[0.5em] uppercase font-black">
                                 Signature Quality
                             </p>
+                            <div class="w-12 h-[1px] bg-yellow-600"></div>
                         </div>
                         <div class="overflow-hidden mb-6">
-                            <h1 class="text-6xl md:text-8xl lg:text-9xl font-serif font-bold text-white leading-[0.9]">
+                            <h1 class="text-6xl md:text-[8rem] font-serif font-bold text-white leading-[0.85]">
                                 Raw<br/>
-                                <span class="text-yellow-600 italic">Brazilian</span>
+                                <span class="text-yellow-600 italic">Divine</span>
                             </h1>
                         </div>
-                        <div class="overflow-hidden mb-8">
-                            <p class="text-xl md:text-2xl text-gray-300 font-light leading-relaxed max-w-2xl ml-auto">
-                                Unrivaled luster and strength. Designed for those who demand nothing but the absolute best.
+                        <div class="overflow-hidden mb-10">
+                            <p class="text-lg md:text-xl text-gray-300 font-light leading-relaxed max-w-xl ml-auto">
+                                Exceptional luster, legendary strength. Elevate your presence with the BBP signature range.
                             </p>
                         </div>
                         <div class="flex flex-col sm:flex-row gap-6 justify-end">
-                            <a href="{% url 'product:product_list' %}" class="group relative px-12 py-5 bg-yellow-600 text-black rounded-full font-black uppercase tracking-widest text-sm transition-all hover:bg-white hover:scale-105 shadow-2xl overflow-hidden">
+                            <a href="{% url 'product:product_list' %}" class="group relative px-14 py-5 bg-yellow-600 text-black rounded-full font-black uppercase tracking-widest text-[10px] transition-all hover:bg-white hover:scale-105 shadow-2xl overflow-hidden">
                                 <span class="relative z-10">Explore Now</span>
                             </a>
                         </div>
@@ -78,32 +79,31 @@
 
         <!-- Slide 3: Limited Offer -->
         <div class="carousel-slide absolute inset-0 h-full w-full opacity-0">
-            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent z-10"></div>
-            <div class="absolute inset-0 bg-gradient-to-br from-black/80 to-yellow-900/50 z-0"></div>
+            <div class="absolute inset-0 bg-black/40 z-10"></div>
             <img src="https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=1920&h=1080&fit=crop" alt="Exclusive Offer" class="absolute inset-0 w-full h-full object-cover">
             
             <div class="relative z-20 h-full flex items-center justify-center text-center">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
                     <div class="max-w-4xl mx-auto">
                         <div class="overflow-hidden mb-6">
-                            <p class="text-yellow-500 text-sm md:text-base tracking-[0.4em] uppercase font-black">
+                            <p class="text-yellow-500 text-xs md:text-sm tracking-[0.5em] uppercase font-black">
                                 Limited Time Experience
                             </p>
                         </div>
                         <div class="overflow-hidden mb-6">
-                            <h1 class="text-6xl md:text-8xl lg:text-9xl font-serif font-bold text-white leading-tight">
-                                Up to<br/>
-                                <span class="text-yellow-600">30% OFF</span>
+                            <h1 class="text-6xl md:text-[8rem] font-serif font-bold text-white leading-tight">
+                                Luxury<br/>
+                                <span class="text-yellow-600">Rewards</span>
                             </h1>
                         </div>
-                        <div class="overflow-hidden mb-8">
-                            <p class="text-xl md:text-2xl text-gray-300 font-light leading-relaxed max-w-2xl mx-auto">
-                                Elevate your presence with our luxury collection. The ultimate hair investment starts here.
+                        <div class="overflow-hidden mb-10">
+                            <p class="text-lg md:text-xl text-gray-300 font-light leading-relaxed max-w-2xl mx-auto">
+                                The ultimate hair investment starts here. Experience the BBP difference today.
                             </p>
                         </div>
                         <div class="flex justify-center">
-                            <a href="{% url 'product:product_list' %}" class="group relative px-12 py-5 bg-yellow-600 text-black rounded-full font-black uppercase tracking-widest text-sm transition-all hover:bg-white hover:scale-105 shadow-2xl overflow-hidden">
-                                <span class="relative z-10">Claim the Offer</span>
+                            <a href="{% url 'product:product_list' %}" class="group relative px-14 py-5 bg-white text-black rounded-full font-black uppercase tracking-widest text-[10px] transition-all hover:bg-yellow-600 hover:scale-105 shadow-2xl overflow-hidden">
+                                <span class="relative z-10">Claim Your Offer</span>
                             </a>
                         </div>
                     </div>

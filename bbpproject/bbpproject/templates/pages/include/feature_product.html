@@ -9,131 +9,63 @@
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
-            <!-- Product 1 -->
-            <div class="group bg-white rounded-[2rem] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.03)] hover:shadow-[0_30px_60px_rgba(0,0,0,0.1)] transition-all duration-700 border border-gray-50 flex flex-col h-full animate-reveal" style="animation-delay: 0.1s">
+            {% for product in featured_products %}
+            <div class="group bg-white rounded-[2rem] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.03)] hover:shadow-[0_30px_60px_rgba(0,0,0,0.1)] transition-all duration-700 border border-gray-50 flex flex-col h-full animate-reveal" style="animation-delay: {{ forloop.counter }}00ms">
                 <div class="relative overflow-hidden bg-gray-100 aspect-[4/5]">
                     <div class="absolute inset-0 bg-gradient-to-br from-yellow-50 to-yellow-100/30"></div>
+                    {% if product.created|date:"Y-m-d" > "2026-02-01" %}
                     <div class="absolute top-6 left-6 bg-yellow-600 text-black px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest z-20">
                         New Arrival
                     </div>
-                    <div class="absolute inset-0 flex items-center justify-center transition-transform duration-700 group-hover:scale-110">
-                        <i class="fas fa-image text-gray-300 text-6xl opacity-20"></i>
-                    </div>
+                    {% endif %}
+                    
+                    {% if product.main_image %}
+                        <img src="{{ product.main_image.url }}" alt="{{ product.name }}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    {% else %}
+                        <div class="absolute inset-0 flex items-center justify-center transition-transform duration-700 group-hover:scale-110">
+                            <i class="fas fa-image text-gray-300 text-6xl opacity-20"></i>
+                        </div>
+                    {% endif %}
+
                     <!-- Quick Add Overlay -->
                     <div class="absolute inset-x-0 bottom-0 p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-500 z-30">
-                        <button class="w-full bg-black text-white py-4 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-yellow-600 transition-colors">
+                        <button onclick="addToCart('{{ product.id }}')" class="w-full bg-black text-white py-4 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-yellow-600 transition-colors">
                             Add to Cart
                         </button>
                     </div>
                 </div>
                 <div class="p-8 flex flex-col flex-1">
-                    <p class="text-[10px] font-black text-yellow-600 uppercase tracking-widest mb-2">Straight</p>
-                    <h3 class="text-xl font-bold mb-3 group-hover:text-yellow-600 transition-colors">Sleek Bone Straight 24"</h3>
+                    <p class="text-[10px] font-black text-yellow-600 uppercase tracking-widest mb-2">{{ product.category.name }}</p>
+                    <h3 class="text-xl font-bold mb-3 group-hover:text-yellow-600 transition-colors">
+                        <a href="{% url 'product:product_detail' product.pk %}">{{ product.name }}</a>
+                    </h3>
                     <div class="flex items-center mb-6">
                         <div class="flex text-yellow-500 text-[10px] gap-0.5">
-                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            {% with rating=product.avg_rating %}
+                                {% for i in "12345" %}
+                                    <i class="{% if forloop.counter <= rating %}fas{% else %}far{% endif %} fa-star"></i>
+                                {% endfor %}
+                            {% endwith %}
                         </div>
-                        <span class="text-gray-400 text-[10px] font-bold ml-3 uppercase tracking-tighter">128 Reviews</span>
-                    </div>
-                    <div class="mt-auto flex items-center justify-between">
-                        <span class="text-2xl font-black text-black">$145.00</span>
-                        <a href="#" class="text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-yellow-600 transition-colors">Details <i class="fas fa-arrow-right ml-1"></i></a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product 2 -->
-            <div class="group bg-white rounded-[2rem] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.03)] hover:shadow-[0_30px_60px_rgba(0,0,0,0.1)] transition-all duration-700 border border-gray-50 flex flex-col h-full animate-reveal" style="animation-delay: 0.2s">
-                <div class="relative overflow-hidden bg-gray-100 aspect-[4/5]">
-                    <div class="absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-100/30"></div>
-                    <div class="absolute inset-0 flex items-center justify-center transition-transform duration-700 group-hover:scale-110">
-                        <i class="fas fa-image text-gray-300 text-6xl opacity-20"></i>
-                    </div>
-                    <div class="absolute inset-x-0 bottom-0 p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-500 z-30">
-                        <button class="w-full bg-black text-white py-4 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-yellow-600 transition-colors">
-                            Add to Cart
-                        </button>
-                    </div>
-                </div>
-                <div class="p-8 flex flex-col flex-1">
-                    <p class="text-[10px] font-black text-yellow-600 uppercase tracking-widest mb-2">Wavy</p>
-                    <h3 class="text-xl font-bold mb-3 group-hover:text-yellow-600 transition-colors">Brazilian Body Wave 20"</h3>
-                    <div class="flex items-center mb-6">
-                        <div class="flex text-yellow-500 text-[10px] gap-0.5">
-                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
-                        </div>
-                        <span class="text-gray-400 text-[10px] font-bold ml-3 uppercase tracking-tighter">96 Reviews</span>
-                    </div>
-                    <div class="mt-auto flex items-center justify-between">
-                        <span class="text-2xl font-black text-black">$120.00</span>
-                        <a href="#" class="text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-yellow-600 transition-colors">Details <i class="fas fa-arrow-right ml-1"></i></a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product 3 -->
-            <div class="group bg-white rounded-[2rem] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.03)] hover:shadow-[0_30px_60px_rgba(0,0,0,0.1)] transition-all duration-700 border border-gray-50 flex flex-col h-full animate-reveal" style="animation-delay: 0.3s">
-                <div class="relative overflow-hidden bg-gray-100 aspect-[4/5]">
-                    <div class="absolute inset-0 bg-gradient-to-br from-yellow-50 to-yellow-100/30"></div>
-                    <div class="absolute top-6 right-6 bg-black text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest z-20">
-                        -20% OFF
-                    </div>
-                    <div class="absolute inset-0 flex items-center justify-center transition-transform duration-700 group-hover:scale-110">
-                        <i class="fas fa-image text-gray-300 text-6xl opacity-20"></i>
-                    </div>
-                    <div class="absolute inset-x-0 bottom-0 p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-500 z-30">
-                        <button class="w-full bg-black text-white py-4 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-yellow-600 transition-colors">
-                            Add to Cart
-                        </button>
-                    </div>
-                </div>
-                <div class="p-8 flex flex-col flex-1">
-                    <p class="text-[10px] font-black text-yellow-600 uppercase tracking-widest mb-2">Curly</p>
-                    <h3 class="text-xl font-bold mb-3 group-hover:text-yellow-600 transition-colors">Deep Curly Divine 18"</h3>
-                    <div class="flex items-center mb-6">
-                        <div class="flex text-yellow-500 text-[10px] gap-0.5">
-                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                        </div>
-                        <span class="text-gray-400 text-[10px] font-bold ml-3 uppercase tracking-tighter">203 Reviews</span>
+                        <span class="text-gray-400 text-[10px] font-bold ml-3 uppercase tracking-tighter">{{ product.review_count }} Reviews</span>
                     </div>
                     <div class="mt-auto flex items-center justify-between">
                         <div>
-                            <span class="text-2xl font-black text-black">$98.00</span>
-                            <span class="text-sm text-gray-400 line-through ml-2">$130.00</span>
+                            <span class="text-2xl font-black text-black">{{ product.price }} FCFA</span>
+                            {% if product.old_price %}
+                            <span class="text-sm text-gray-400 line-through ml-2">{{ product.old_price }} FCFA</span>
+                            {% endif %}
                         </div>
-                        <a href="#" class="text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-yellow-600 transition-colors">Details <i class="fas fa-arrow-right ml-1"></i></a>
+                        <a href="{% url 'product:product_detail' product.pk %}" class="text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-yellow-600 transition-colors">Details <i class="fas fa-arrow-right ml-1"></i></a>
                     </div>
                 </div>
             </div>
-
-            <!-- Product 4 -->
-            <div class="group bg-white rounded-[2rem] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.03)] hover:shadow-[0_30px_60px_rgba(0,0,0,0.1)] transition-all duration-700 border border-gray-50 flex flex-col h-full animate-reveal" style="animation-delay: 0.4s">
-                <div class="relative overflow-hidden bg-gray-100 aspect-[4/5]">
-                    <div class="absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-100/30"></div>
-                    <div class="absolute inset-0 flex items-center justify-center transition-transform duration-700 group-hover:scale-110">
-                        <i class="fas fa-image text-gray-300 text-6xl opacity-20"></i>
-                    </div>
-                    <div class="absolute inset-x-0 bottom-0 p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-500 z-30">
-                        <button class="w-full bg-black text-white py-4 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-yellow-600 transition-colors">
-                            Add to Cart
-                        </button>
-                    </div>
-                </div>
-                <div class="p-8 flex flex-col flex-1">
-                    <p class="text-[10px] font-black text-yellow-600 uppercase tracking-widest mb-2">Premium</p>
-                    <h3 class="text-xl font-bold mb-3 group-hover:text-yellow-600 transition-colors">Raw Burmese Curly 26"</h3>
-                    <div class="flex items-center mb-6">
-                        <div class="flex text-yellow-500 text-[10px] gap-0.5">
-                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
-                        </div>
-                        <span class="text-gray-400 text-[10px] font-bold ml-3 uppercase tracking-tighter">87 Reviews</span>
-                    </div>
-                    <div class="mt-auto flex items-center justify-between">
-                        <span class="text-2xl font-black text-black">$180.00</span>
-                        <a href="#" class="text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-yellow-600 transition-colors">Details <i class="fas fa-arrow-right ml-1"></i></a>
-                    </div>
-                </div>
+            {% empty %}
+            <div class="col-span-full py-12 text-center text-gray-500">
+                <i class="fas fa-box-open text-4xl mb-4 opacity-20"></i>
+                <p>No featured products found.</p>
             </div>
+            {% endfor %}
         </div>
         
         <!-- View All Button -->

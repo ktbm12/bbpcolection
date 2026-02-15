@@ -1,4 +1,10 @@
 from django.shortcuts import render
+from product.models import Product, Category
 
 def home_view(request):
-    return render(request, 'pages/home.html')
+    context = {
+        'categories': Category.objects.filter(is_active=True),
+        'featured_products': Product.objects.filter(is_active=True, is_featured=True)[:8],
+        'new_arrivals': Product.objects.filter(is_active=True).order_by('-created')[:8],
+    }
+    return render(request, 'pages/home.html', context)
