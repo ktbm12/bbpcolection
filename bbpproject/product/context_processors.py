@@ -25,5 +25,24 @@ def cart_counter(request):
     cart = get_or_create_cart(request)
     count = cart.items.aggregate(total=Sum('quantity'))['total'] or 0
     return {
-        'cart_count': count
+        'cart_count': count,
+        'cart_items_count': count   # Matching navbar expectation
+    }
+
+def wishlist_counter(request):
+    """
+    Exposes the number of products in the current user's wishlist.
+    """
+    count = 0
+    if request.user.is_authenticated:
+        wishlist = getattr(request.user, 'wishlist', None)
+        if wishlist:
+            count = wishlist.products.count()
+    else:
+        # Support guest users via session
+        wishlist_ids = request.session.get('wishlist_ids', [])
+        count = len(wishlist_ids)
+        
+    return {
+        'wishlist_count': count
     }

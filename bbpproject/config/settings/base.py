@@ -199,6 +199,7 @@ TEMPLATES = [
                 "product.context_processors.active_promotion",
                 "bbpproject.users.context_processors.allauth_settings",
                 "product.context_processors.cart_counter",
+                "product.context_processors.wishlist_counter",
             ],
         },
     },

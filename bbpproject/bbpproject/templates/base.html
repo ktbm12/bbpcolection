@@ -130,16 +130,15 @@
                         icon.classList.add('far');
                     }
                     
-                    // Update Navbar Badge
-                    const badge = document.getElementById('wishlist-badge');
-                    if(badge) {
+                    // Update Navbar Badges
+                    document.querySelectorAll('.wishlist-items-badge').forEach(badge => {
                         badge.textContent = data.wishlist_count;
                         if(data.wishlist_count > 0) {
                             badge.classList.remove('hidden');
                         } else {
                             badge.classList.add('hidden');
                         }
-                    }
+                    });
 
                     // Notification
                     if (window.showPremiumNotification) {
