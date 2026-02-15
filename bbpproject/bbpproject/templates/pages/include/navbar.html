@@ -23,8 +23,8 @@
             <div class="hidden md:flex items-center space-x-8 order-3">
                 <a href="{% url 'users:home' %}" class="text-[11px] lg:text-xs font-black uppercase tracking-[0.2em] text-gray-900 hover:text-yellow-600 transition">Home</a>
                 <a href="{% url 'product:product_list' %}" class="text-[11px] lg:text-xs font-black uppercase tracking-[0.2em] text-gray-900 hover:text-yellow-600 transition">Collections</a>
-                <a href="#" class="text-[11px] lg:text-xs font-black uppercase tracking-[0.2em] text-gray-900 hover:text-yellow-600 transition">About</a>
-                <a href="#" class="text-[11px] lg:text-xs font-black uppercase tracking-[0.2em] text-gray-900 hover:text-yellow-600 transition">Contact</a>
+                <a href="{% url 'users:about' %}" class="text-[11px] lg:text-xs font-black uppercase tracking-[0.2em] text-gray-900 hover:text-yellow-600 transition">About</a>
+                <a href="{% url 'users:contact' %}" class="text-[11px] lg:text-xs font-black uppercase tracking-[0.2em] text-gray-900 hover:text-yellow-600 transition">Contact</a>
             </div>
 
             <!-- Actions (Cart, Account - Always visible) -->
@@ -129,8 +129,8 @@
                             {{ wishlist_count|default:0 }}
                         </span>
                     </a>
-                    <a href="#" class="text-4xl font-serif font-bold text-gray-900 hover:text-yellow-600 transition">About</a>
-                    <a href="#" class="text-4xl font-serif font-bold text-gray-900 hover:text-yellow-600 transition">Contact</a>
+                    <a href="{% url 'users:about' %}" class="text-4xl font-serif font-bold text-gray-900 hover:text-yellow-600 transition">About</a>
+                    <a href="{% url 'users:contact' %}" class="text-4xl font-serif font-bold text-gray-900 hover:text-yellow-600 transition">Contact</a>
 
                     <div class="w-16 h-1.5 bg-yellow-600 rounded-full mx-auto"></div>
 

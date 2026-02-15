@@ -31,10 +31,14 @@ from bbpproject.users.views.dashboards.admin_reviews_view import (
     delete_review,
 )
 
+from bbpproject.users.views.static_views import AboutView, ContactView
+
 app_name = "users"
 
 urlpatterns = [
     path('', home_view, name='home'),
+    path('about/', AboutView.as_view(), name='about'),
+    path('contact/', ContactView.as_view(), name='contact'),
     path('dashboard/redirect/', smart_home_redirect_view, name='dashboard_redirect'),
     path('dashboard/admin/', AdminDashboardView.as_view(), name='admin_dashboard'),
     path('dashboard/admin/orders/', AdminOrderListView.as_view(), name='admin_orders'),
