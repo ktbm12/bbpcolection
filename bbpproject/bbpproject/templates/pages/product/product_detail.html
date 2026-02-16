@@ -320,9 +320,12 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                 {% for item in related_products %}
                 <a href="{% url 'product:product_detail' item.id %}" class="recommendation-card group">
-                    <div class="aspect-[3/4] rounded-[2rem] overflow-hidden bg-gray-100 mb-6 relative">
+                    <div class="aspect-[3/4] rounded-[2rem] overflow-hidden bg-gray-100 mb-6 relative skeleton">
                         {% if item.main_image %}
-                            <img src="{{ item.main_image.url }}" alt="{{ item.name }}" class="w-full h-full object-cover transition-transform duration-700">
+                            <img src="{{ item.main_image.url }}" 
+                                 alt="{{ item.name }}" 
+                                 class="w-full h-full object-cover transition-transform duration-700 img-fade-in"
+                                 onload="this.classList.add('img-loaded'); this.parentElement.classList.remove('skeleton')">
                         {% endif %}
                         <div class="absolute inset-0 bg-black/5 group-hover:bg-black/0 transition-colors"></div>
                     </div>

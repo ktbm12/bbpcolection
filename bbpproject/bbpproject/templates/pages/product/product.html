@@ -212,11 +212,13 @@
             <div class="product-card bg-white rounded-2xl overflow-hidden border-2 border-gray-200 hover:border-yellow-600 group">
             
                 <!-- IMAGE -->
-                <div class="product-image relative h-80 overflow-hidden">
+                <div class="product-image relative h-80 overflow-hidden skeleton">
                     <a href="{% url 'product:product_detail' product.id %}" class="absolute inset-0">
                         {% if product.get_main_image_url %}
-                            <img src="{{ product.get_main_image_url }}" alt="{{ product.name }}"
-                                 class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                            <img src="{{ product.get_main_image_url }}" 
+                                 alt="{{ product.name }}"
+                                 class="w-full h-full object-cover group-hover:scale-110 transition duration-700 img-fade-in"
+                                 onload="this.classList.add('img-loaded'); this.parentElement.classList.remove('skeleton')">
                         {% else %}
                             <div class="absolute inset-0 bg-gray-100 flex items-center justify-center">
                                 <i class="fas fa-image text-gray-300 text-7xl"></i>
