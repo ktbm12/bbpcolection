@@ -77,188 +77,262 @@
 {% block content %}
 
 <!-- Breadcrumb -->
-<nav class="bg-gray-50 py-6 mt-20">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <ol class="flex items-center space-x-3 text-sm">
-            <li><a href="{% url 'users:home' %}" class="text-gray-600 hover:text-yellow-600">Home</a></li>
-            <li><i class="fas fa-chevron-right text-gray-400 text-xs"></i></li>
-            <li class="font-semibold text-black">Cart</li>
-        </ol>
+<nav class="bg-white py-6 mt-20 border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:text-left">
+        <h1 class="text-3xl md:text-4xl font-serif font-black text-gray-900 mb-2">Votre Panier d'Apprentissage</h1>
+        <p class="text-gray-500 font-medium capitalize">Vous êtes presque prêt à commencer votre parcours d'apprentissage !</p>
     </div>
 </nav>
 
-<section class="py-12 bg-white min-h-screen">
+<section class="py-12 bg-[#F8F9FB] min-h-screen">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 class="text-4xl md:text-5xl font-serif font-bold mb-2">My Cart</h1>
-        <p class="text-gray-600 mb-10">
-            {% if cart_items_count %}
-                {{ cart_items_count }} item{{ cart_items_count|pluralize }} • {{ total|floatformat:0|intcomma }} FCFA
-            {% else %}
-                Your cart is empty
-            {% endif %}
-        </p>
+        
+        <!-- Progress Steps -->
+        <div class="flex items-center justify-center mb-16 max-w-2xl mx-auto px-4">
+            <div class="flex-1 flex flex-col items-center gap-2 group">
+                <div class="w-12 h-12 bg-black text-yellow-500 rounded-full flex items-center justify-center font-black shadow-xl shadow-black/20 relative z-10 transition-transform group-hover:scale-110">1</div>
+                <span class="text-xs font-black uppercase tracking-widest text-black">Panier</span>
+            </div>
+            <div class="flex-1 h-0.5 bg-gray-200 -mt-6"></div>
+            <div class="flex-1 flex flex-col items-center gap-2 group opacity-40">
+                <div class="w-12 h-12 bg-white text-gray-400 border-2 border-dashed border-gray-200 rounded-full flex items-center justify-center font-black relative z-10">2</div>
+                <span class="text-xs font-bold uppercase tracking-widest text-gray-400">Paiement</span>
+            </div>
+            <div class="flex-1 h-0.5 bg-gray-200 -mt-6"></div>
+            <div class="flex-1 flex flex-col items-center gap-2 group opacity-40">
+                <div class="w-12 h-12 bg-white text-gray-400 border-2 border-dashed border-gray-200 rounded-full flex items-center justify-center font-black relative z-10">3</div>
+                <span class="text-xs font-bold uppercase tracking-widest text-gray-400">Succès</span>
+            </div>
+        </div>
 
         {% if cart_items %}
-        <div class="grid lg:grid-cols-3 gap-10">
-            <!-- Liste des articles -->
-            <div class="lg:col-span-2 space-y-6" id="cart-items-container">
-                {% for item in cart_items %}
-                <div class="cart-item bg-white border border-gray-200 rounded-2xl p-4 sm:p-6" data-item-id="{{ item.id }}">
-                    <div class="flex flex-col sm:flex-row gap-6">
-                        <!-- Image -->
-                        <div class="w-full sm:w-32 h-48 sm:h-32 rounded-xl overflow-hidden bg-gray-50 flex-shrink-0 relative group">
-                            <a href="{% url 'product:product_detail' item.product.id %}">
-                                {% if item.product.main_image %}
-                                <img src="{{ item.product.main_image.url }}" alt="{{ item.product.name }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
-                                {% else %}
-                                <div class="w-full h-full flex items-center justify-center text-gray-300">
-                                    <i class="fas fa-image text-4xl"></i>
-                                </div>
-                                {% endif %}
-                            </a>
-                        </div>
+        <div class="grid lg:grid-cols-12 gap-12">
+            <!-- Item list -->
+            <div class="lg:col-span-8 space-y-8">
+                <div class="flex items-center justify-between bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+                    <span class="text-lg font-black text-gray-900">
+                        {{ cart_items_count }} cours dans le panier
+                    </span>
+                    <button id="clear-cart-btn" class="text-sm font-black text-red-500 hover:text-red-600 transition flex items-center gap-2 group">
+                        <i class="fas fa-trash-alt group-hover:animate-bounce"></i>
+                        Vider le Panier
+                    </button>
+                </div>
 
-                        <!-- Infos -->
-                        <div class="flex-1 flex flex-col justify-between">
-                            <div>
-                                <div class="flex justify-between items-start mb-2">
-                                    <a href="{% url 'product:product_detail' item.product.id %}">
-                                        <h3 class="text-lg sm:text-xl font-serif font-bold hover:text-yellow-600 transition">{{ item.product.name }}</h3>
-                                    </a>
-                                    <button class="remove-item text-gray-400 hover:text-red-500 transition p-2 hover:bg-red-50 rounded-full" data-item-id="{{ item.id }}">
-                                        <i class="fas fa-trash-can"></i>
-                                    </button>
-                                </div>
-
-                                <div class="text-xs sm:text-sm font-bold uppercase tracking-wide text-gray-400 mb-4">
-                                    {{ item.product.category.name }} 
-                                    {% if item.product.length %}• {{ item.product.length }}"{% endif %}
-                                </div>
-                            </div>
-
-                            <div class="flex flex-row items-center justify-between mt-4 sm:mt-0 pt-4 sm:pt-0 border-t sm:border-t-0 border-gray-100">
-                                <!-- Quantité -->
-                                <div class="flex items-center gap-3 bg-gray-50 rounded-full p-1 border border-gray-200">
-                                    <button class="quantity-btn decrease w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-sm hover:shadow-md hover:text-yellow-600 transition disabled:opacity-50" data-item-id="{{ item.id }}" {% if item.quantity <= 1 %}disabled{% endif %}>
-                                        <i class="fas fa-minus text-[10px]"></i>
-                                    </button>
-                                    <input type="number" class="quantity-input w-8 text-center bg-transparent border-none p-0 text-sm font-bold focus:ring-0" value="{{ item.quantity }}" min="1" readonly>
-                                    <button class="quantity-btn increase w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-sm hover:shadow-md hover:text-yellow-600 transition" data-item-id="{{ item.id }}">
-                                        <i class="fas fa-plus text-[10px]"></i>
-                                    </button>
-                                </div>
-
-                                <!-- Prix -->
-                                <div class="text-right">
-                                    <div class="text-lg sm:text-xl font-bold text-black">
-                                        {{ item.line_total|floatformat:0|intcomma }} FCFA
-                                    </div>
-                                    {% if item.product.old_price %}
-                                    <div class="text-xs text-red-500 line-through font-medium">
-                                        {{ item.product.old_price|floatformat:0|intcomma }} FCFA
+                <div class="space-y-6" id="cart-items-container">
+                    {% for item in cart_items %}
+                    <div class="cart-item bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-500" data-item-id="{{ item.id }}">
+                        <div class="flex flex-col md:flex-row gap-8">
+                            <!-- Image -->
+                            <div class="w-full md:w-56 h-40 md:h-32 rounded-xl overflow-hidden bg-gray-50 flex-shrink-0 relative group shadow-inner">
+                                <a href="{% url 'product:product_detail' item.product.id %}">
+                                    {% if item.product.get_main_image_url %}
+                                    <img src="{{ item.product.get_main_image_url }}" alt="{{ item.product.name }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                                    {% else %}
+                                    <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
+                                        <i class="fas fa-image text-4xl text-gray-200"></i>
                                     </div>
                                     {% endif %}
+                                </a>
+                                {% if item.product.is_featured %}
+                                <div class="absolute top-2 left-2 px-3 py-1 bg-yellow-600 text-black text-[10px] font-black rounded-lg uppercase shadow-lg backdrop-blur-md">
+                                    Meilleures ventes
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Infos -->
+                            <div class="flex-1 flex flex-col justify-between">
+                                <div class="space-y-2">
+                                    <div class="flex justify-between items-start gap-4">
+                                        <a href="{% url 'product:product_detail' item.product.id %}">
+                                            <h3 class="text-xl font-serif font-black text-gray-900 hover:text-yellow-600 transition-colors leading-tight">{{ item.product.name }}</h3>
+                                        </a>
+                                        <button class="remove-item text-gray-300 hover:text-red-500 transition-colors p-2 hover:bg-red-50 rounded-xl" data-item-id="{{ item.id }}">
+                                            <i class="fas fa-times text-lg"></i>
+                                        </button>
+                                    </div>
+
+                                    <p class="text-sm font-bold text-gray-500">
+                                        par <span class="text-black">{{ item.product.brand.name|default:"Mathieu Tchoupe" }}</span>
+                                    </p>
+
+                                    <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-[11px] font-black uppercase tracking-widest text-gray-400">
+                                        <span class="flex items-center gap-1.5 text-blue-600 bg-blue-50 px-3 py-1 rounded-full border border-blue-100/50">
+                                            <i class="fas fa-layer-group"></i> {{ item.product.category.name }}
+                                        </span>
+                                        <span class="flex items-center gap-1.5">
+                                            <i class="far fa-clock"></i> 2h30m
+                                        </span>
+                                        <span class="flex items-center gap-1.5">
+                                            <i class="fas fa-signal"></i> Beginner
+                                        </span>
+                                        <span class="flex items-center gap-1.5 text-yellow-600">
+                                            <i class="fas fa-star"></i> 4.9 (1.2k)
+                                        </span>
+                                        <span class="flex items-center gap-1.5 text-green-600">
+                                            <i class="fas fa-certificate"></i> Certificat
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-row items-center justify-between mt-6 pt-6 border-t border-gray-50">
+                                    <!-- Quantité -->
+                                    <div class="flex items-center gap-4 bg-gray-50 p-1.5 rounded-2xl border border-gray-100">
+                                        <button class="quantity-btn decrease w-8 h-8 flex items-center justify-center bg-white rounded-xl shadow-sm hover:shadow-md hover:text-red-500 transition disabled:opacity-50" data-item-id="{{ item.id }}" {% if item.quantity <= 1 %}disabled{% endif %}>
+                                            <i class="fas fa-minus text-[10px]"></i>
+                                        </button>
+                                        <input type="number" class="quantity-input w-8 text-center bg-transparent border-none p-0 text-sm font-black focus:ring-0" value="{{ item.quantity }}" min="1" readonly>
+                                        <button class="quantity-btn increase w-8 h-8 flex items-center justify-center bg-white rounded-xl shadow-sm hover:shadow-md hover:text-green-600 transition" data-item-id="{{ item.id }}">
+                                            <i class="fas fa-plus text-[10px]"></i>
+                                        </button>
+                                    </div>
+
+                                    <div class="flex items-center gap-6">
+                                        <button class="text-xs font-black text-yellow-600 hover:text-yellow-700 uppercase tracking-widest">Appliquer le coupon</button>
+                                        <!-- Prix -->
+                                        <div class="text-right">
+                                            <div class="text-2xl font-black text-black">
+                                                ${{ item.line_total|floatformat:2|intcomma }}
+                                            </div>
+                                            {% if item.product.old_price %}
+                                            <div class="text-xs text-gray-400 line-through font-bold">
+                                                ${{ item.product.old_price|floatformat:2|intcomma }}
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
 
-                <div class="mt-8">
-                    <a href="{% url 'product:product_list' %}" class="inline-flex items-center gap-2 text-black hover:text-yellow-600 font-medium">
-                        <i class="fas fa-arrow-left"></i> Continue Shopping
+                <div class="mt-12 bg-white p-6 rounded-2xl border border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-6">
+                    <a href="{% url 'product:product_list' %}" class="flex items-center gap-3 text-black font-black uppercase tracking-widest text-sm group">
+                        <i class="fas fa-arrow-left transition-transform group-hover:-translate-x-2"></i> 
+                        Continuer à explorer les cours
                     </a>
                 </div>
             </div>
 
-            <!-- Résumé commande (sticky) -->
-            <div class="lg:col-span-1">
-                <div class="summary-card bg-gray-50 rounded-2xl border border-gray-200 p-8">
-                    <h2 class="text-2xl font-serif font-bold mb-6">Summary</h2>
+            <!-- Order Summary -->
+            <div class="lg:col-span-4 lg:sticky lg:top-24 h-fit">
+                <div class="bg-white rounded-3xl border border-gray-100 p-8 shadow-2xl shadow-gray-200/50 space-y-8">
+                    <h2 class="text-2xl font-serif font-black text-gray-900 border-b border-gray-50 pb-6">Récapitulatif de la commande</h2>
 
-                    <!-- Promo code -->
-                    <form id="promo-form" class="mb-8">
-                        <label class="block text-sm font-medium mb-2">Promo code</label>
-                        <div class="flex gap-2">
-                            <input type="text" id="promo_code" placeholder="Enter code" class="flex-1 px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:border-yellow-600 focus:ring-2 focus:ring-yellow-200">
-                            <button type="submit" class="px-6 py-3 bg-black text-yellow-600 rounded-full font-semibold hover:bg-gray-900 transition">
-                                Apply
-                            </button>
-                        </div>
-                        <p id="promo-message" class="mt-2 text-sm"></p>
-                    </form>
-
-                    <div class="space-y-4 text-sm">
-                        <div class="flex justify-between">
-                            <span class="text-gray-700">Subtotal</span>
-                            <span id="subtotal">{{ subtotal|floatformat:0|intcomma }} FCFA</span>
+                    <div class="space-y-4">
+                        <div class="flex justify-between text-gray-500 font-bold">
+                            <span>Sous-total ({{ cart_items_count }} cours)</span>
+                            <span id="subtotal" class="text-black">${{ subtotal|floatformat:2|intcomma }}</span>
                         </div>
 
-                        <div class="flex justify-between text-green-600" id="discount-row" {% if not discount %}style="display:none"{% endif %}>
-                            <span>Discount</span>
-                            <span id="discount">-{{ discount|floatformat:0|intcomma }} FCFA</span>
+                        <div class="flex justify-between text-yellow-600 font-bold" id="discount-row" {% if not discount %}style="display:none"{% endif %}>
+                            <span>Remise</span>
+                            <span id="discount">-${{ discount|floatformat:2|intcomma }}</span>
                         </div>
 
-                        <div class="flex justify-between">
-                            <span class="text-gray-700">Shipping</span>
-                            <span id="shipping">
-                                {% if cart_total >= free_shipping_threshold %}
-                                    <span class="text-green-600">Free</span>
-                                {% else %}
-                                    {{ shipping_cost|floatformat:0|intcomma }} FCFA
-                                {% endif %}
-                            </span>
+                        <div class="flex justify-between text-gray-500 font-bold">
+                            <span>Frais de service</span>
+                            <span class="text-green-600">Gratuit</span>
                         </div>
 
-                        <!-- Barre progression livraison gratuite -->
-                        {% if free_shipping_threshold %}
-                        <div class="mt-4">
-                            <div class="progress-bar">
-                                <div class="progress-fill" id="progress-fill" style="width: {{ shipping_progress }}%"></div>
-                            </div>
-                            <p class="text-xs text-gray-600 mt-2 text-center" id="shipping-message">
-                                {% if cart_total >= free_shipping_threshold %}
-                                    Free shipping applied!
-                                {% else %}
-                                    Only <strong>{{ free_shipping_remaining|floatformat:0|intcomma }} FCFA</strong> away from free shipping
-                                {% endif %}
-                            </p>
-                        </div>
-                        {% endif %}
-
-                        <div class="pt-6 border-t border-gray-300 mt-6">
-                            <div class="flex justify-between items-center text-xl font-bold">
-                                <span>Total</span>
-                                <span id="grand-total">{{ total|floatformat:0|intcomma }} FCFA</span>
+                        <div class="pt-6 border-t border-gray-100 mt-6">
+                            <div class="flex justify-between items-center">
+                                <span class="text-xl font-black text-gray-900 uppercase tracking-widest">Total</span>
+                                <span id="grand-total" class="text-3xl font-black text-black">${{ total|floatformat:2|intcomma }}</span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="mt-8 space-y-4">
-                        <a href="{% url 'product:checkout' %}" class="block w-full bg-yellow-600 hover:bg-yellow-700 text-black text-center py-4 rounded-full font-bold text-lg transition shadow-lg hover:shadow-xl">
-                            Checkout
+                    <div class="space-y-4">
+                        <a href="{% url 'product:checkout' %}" class="block w-full bg-black text-white hover:bg-yellow-600 hover:text-black text-center py-5 rounded-2xl font-black text-lg transition-all duration-500 shadow-xl shadow-black/10 group">
+                            Passer à la Caisse
+                            <i class="fas fa-chevron-right ml-2 text-xs transition-transform group-hover:translate-x-2"></i>
                         </a>
-                        <a href="{% url 'product:product_list' %}" class="block w-full border-2 border-black text-center py-4 rounded-full font-semibold hover:bg-black hover:text-yellow-600 transition">
-                            Continue Shopping
-                        </a>
+                        
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="flex flex-col items-center gap-2 p-3 bg-gray-50 rounded-xl border border-gray-100">
+                                <i class="fas fa-shield-alt text-green-500"></i>
+                                <span class="text-[10px] font-black uppercase text-gray-500 text-center">Paiement sécurisé</span>
+                            </div>
+                            <div class="flex flex-col items-center gap-2 p-3 bg-gray-50 rounded-xl border border-gray-100">
+                                <i class="fas fa-undo text-blue-500"></i>
+                                <span class="text-[10px] font-black uppercase text-gray-500 text-center leading-tight">7 jours remboursement</span>
+                            </div>
+                        </div>
+
+                        <div class="pt-6 space-y-4">
+                            <p class="text-[10px] font-black uppercase tracking-widest text-gray-400 text-center">Moyens de Paiement Acceptés</p>
+                            <div class="flex justify-center flex-wrap gap-4 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
+                                <i class="fab fa-cc-visa text-3xl hover:text-[#1A1F71]"></i>
+                                <i class="fab fa-cc-mastercard text-3xl hover:text-[#EB001B]"></i>
+                                <i class="fab fa-cc-stripe text-3xl hover:text-[#635BFF]"></i>
+                                <i class="fab fa-cc-paypal text-2xl hover:text-[#003087]"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        {% else %}
-        <!-- Panier vide -->
-        <div class="text-center py-32">
-            <div class="w-32 h-32 mx-auto mb-8 rounded-full bg-gray-100 flex items-center justify-center">
-                <i class="fas fa-shopping-bag text-gray-300 text-5xl"></i>
+        <!-- Recommended Section -->
+        <div class="mt-24 space-y-12">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-gray-100 pb-8">
+                <div class="space-y-2">
+                    <h2 class="text-3xl md:text-4xl font-serif font-black text-gray-900">Recommended for you</h2>
+                    <p class="text-gray-500 font-medium">Based on your browsing history and interests</p>
+                </div>
+                <a href="{% url 'product:product_list' %}" class="w-fit px-6 py-3 bg-white border-2 border-black text-black font-black uppercase tracking-widest text-xs rounded-xl hover:bg-black hover:text-yellow-500 transition-all duration-300">
+                    View All
+                </a>
             </div>
-            <h2 class="text-3xl font-serif font-bold mb-4">Your cart is empty</h2>
-            <p class="text-gray-600 mb-10 max-w-lg mx-auto">
-                Browse our exclusive collection of premium 100% natural bundles
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                {% for prod in recommended_products %}
+                <div class="group bg-white rounded-3xl overflow-hidden border border-gray-100 hover:shadow-2xl hover:shadow-gray-200/80 transition-all duration-500">
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="{{ prod.get_main_image_url }}" alt="{{ prod.name }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4 flex gap-2">
+                            <span class="px-2 py-1 bg-white/90 backdrop-blur-sm text-black text-[10px] font-black rounded uppercase">
+                                8h20m
+                            </span>
+                        </div>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <h3 class="font-serif font-black text-gray-900 line-clamp-2 leading-snug group-hover:text-yellow-600 transition-colors">
+                            {{ prod.name }}
+                        </h3>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xl font-black text-black">${{ prod.price|floatformat:2|intcomma }}</span>
+                            <button onclick="addToCart('{{ prod.id }}')" class="w-10 h-10 flex items-center justify-center bg-black text-yellow-500 rounded-xl hover:bg-yellow-600 hover:text-black transition-all duration-300">
+                                <i class="fas fa-cart-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        {% else %}
+        <!-- Empty cart -->
+        <div class="max-w-xl mx-auto text-center py-24">
+            <div class="w-40 h-40 mx-auto mb-10 rounded-full bg-white flex items-center justify-center shadow-xl shadow-gray-100 relative">
+                <i class="fas fa-shopping-basket text-gray-200 text-6xl"></i>
+                <div class="absolute -top-2 -right-2 w-12 h-12 bg-yellow-500 text-black rounded-full flex items-center justify-center border-4 border-[#F8F9FB] animate-bounce">
+                    <i class="fas fa-ghost"></i>
+                </div>
+            </div>
+            <h2 class="text-4xl font-serif font-black text-gray-900 mb-4">Votre panier est vide</h2>
+            <p class="text-gray-500 font-medium mb-12">
+                Le paysage du développement est en pleine mutation. Ne restez pas à la traîne, commencez votre parcours dès aujourd'hui.
             </p>
-            <a href="{% url 'product:product_list' %}" class="inline-block bg-yellow-600 hover:bg-yellow-700 text-black px-12 py-5 rounded-full font-bold text-lg transition shadow-xl hover:shadow-2xl">
-                Explore Collection
+            <a href="{% url 'product:product_list' %}" class="inline-flex items-center gap-3 bg-black text-white hover:bg-yellow-600 hover:text-black px-12 py-5 rounded-2xl font-black uppercase tracking-widest transition-all duration-500 shadow-2xl shadow-black/20 group">
+                Explorer les cours
+                <i class="fas fa-arrow-right transition-transform group-hover:translate-x-2"></i>
             </a>
         </div>
         {% endif %}
@@ -312,7 +386,7 @@ async function updateQuantity(itemId, quantity) {
         }
 }
 
-// Suppression article
+// Remove item
 async function removeItem(itemId) {
     if (!confirm('Remove this item?')) return;
 
@@ -331,7 +405,7 @@ async function removeItem(itemId) {
             updateCartDisplay(data);
             showToast('Item removed');
             
-            // Si panier vide après suppression
+            // If cart empty after removal
             if (data.cart_items_count === 0) {
                 location.reload();
             }
@@ -343,19 +417,24 @@ async function removeItem(itemId) {
     }
 }
 
-// Mise à jour affichage global
+// Global display update
 function updateCartDisplay(data) {
-    // Sous-total
-    document.getElementById('subtotal').textContent = `${data.subtotal.toLocaleString()} FCFA`;
+    const formatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+    });
+
+    // Subtotal
+    document.getElementById('subtotal').textContent = formatter.format(data.subtotal);
     
     // Total
-    document.getElementById('grand-total').textContent = `${data.total.toLocaleString()} FCFA`;
+    document.getElementById('grand-total').textContent = formatter.format(data.total);
     
-    // Réduction
+    // Discount
     const discountRow = document.getElementById('discount-row');
     if (data.discount > 0) {
         discountRow.style.display = 'flex';
-        document.getElementById('discount').textContent = `-${data.discount.toLocaleString()} FCFA`;
+        document.getElementById('discount').textContent = `-${formatter.format(data.discount)}`;
     } else {
         discountRow.style.display = 'none';
     }
@@ -363,19 +442,19 @@ function updateCartDisplay(data) {
     // Shipping
     document.getElementById('shipping').innerHTML = data.shipping_free 
         ? '<span class="text-green-600">Free</span>'
-        : `${data.shipping_cost.toLocaleString()} FCFA`;
+        : formatter.format(data.shipping_cost);
     
-    // Barre progression
+    // Progress bar
     if (document.getElementById('progress-fill')) {
         document.getElementById('progress-fill').style.width = `${data.shipping_progress}%`;
     }
     
-    // Message livraison gratuite
+    // Free shipping message
     if (document.getElementById('shipping-message')) {
         document.getElementById('shipping-message').textContent = data.shipping_message;
     }
     
-    // Nombre articles (header)
+    // Item count (header)
     document.querySelectorAll('.cart-items-badge').forEach(el => {
         el.textContent = data.cart_items_count;
     });
@@ -403,6 +482,30 @@ document.addEventListener('click', async (e) => {
     }
 });
 
+// Clear cart
+document.getElementById('clear-cart-btn')?.addEventListener('click', async () => {
+    if (!confirm('Voulez-vous vraiment vider votre panier ?')) return;
+
+    try {
+        const response = await fetch('/product/cart/clear/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken,
+            }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            location.reload();
+        } else {
+            showToast(data.error || 'Erreur', 'error');
+        }
+    } catch (err) {
+        showToast('Network error', 'error');
+    }
+});
+
 // Gestion promo
 document.getElementById('promo-form')?.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -423,13 +526,19 @@ document.getElementById('promo-form')?.addEventListener('submit', async (e) => {
         
         if (data.success) {
             updateCartDisplay(data);
-            document.getElementById('promo-message').innerHTML = `<span class="text-green-600">Code appliqué : -${data.discount.toLocaleString()} FCFA</span>`;
+            const discountFormatted = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(data.discount);
+            document.getElementById('promo-message').innerHTML = `<span class="text-green-600">Code applied : -${discountFormatted}</span>`;
             document.getElementById('promo_code').value = '';
         } else {
             document.getElementById('promo-message').innerHTML = `<span class="text-red-600">${data.error}</span>`;
         }
     } catch (err) {
-        document.getElementById('promo-message').innerHTML = '<span class="text-red-600">Erreur lors de l\'application</span>';
+        document.getElementById('promo-message').innerHTML = '<span class="text-red-600">Error applying code</span>';
+    }
+    // Initial progress bar
+    const progressFill = document.getElementById('progress-fill');
+    if (progressFill) {
+        progressFill.style.width = '{{ shipping_progress|default:0 }}%';
     }
 });
 </script>

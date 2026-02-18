@@ -1,13 +1,22 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}BBP Collection - Premium Hair Bundles{% endblock %}</title>
+    <meta name="description" content="Discover premium 100% natural human hair bundles, extensions, and lace systems at BBP Collection. Luxury hair redefined.">
+    <meta name="keywords" content="premium hair bundles, human hair extensions, luxury hair, BBP Collection, hair salon quality">
+    <meta property="og:title" content="BBP Collection - Premium Hair Bundles">
+    <meta property="og:description" content="Luxury 100% natural human hair. Shop our exclusive collection today.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:image" content="{% static 'images/og-image.jpg' %}">
+    
+    <title>{% block title %}BBP Collection | Luxury Human Hair Bundles{% endblock %}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
     <link href="https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,400,300&display=swap" rel="stylesheet">
-    {% load static %}
+   
     <link rel="stylesheet" href="{% static 'css/output.css' %}">
 
     {% block extra_head %}{% endblock %}

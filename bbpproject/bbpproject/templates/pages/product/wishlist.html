@@ -123,10 +123,10 @@
                             </a>
                             
                             <div class="flex items-baseline gap-2">
-                                <span class="font-bold text-black text-lg">{{ product.price|floatformat:0|intcomma }} FCFA</span>
+                                <span class="font-bold text-black text-lg">${{ product.price|floatformat:2|intcomma }}</span>
                                 {% if product.old_price %}
                                 <span class="line-through text-gray-400 text-sm">
-                                    {{ product.old_price|floatformat:0|intcomma }} FCFA
+                                    ${{ product.old_price|floatformat:2|intcomma }}
                                 </span>
                                 {% endif %}
                             </div>

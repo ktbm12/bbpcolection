@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load static product_tags %}
+{% load static humanize product_tags %}
 
 {% block title %}Our Products - bbpcollection{% endblock %}
 
@@ -279,17 +279,16 @@
                         <div>
                             {% if product.old_price %}
                             <span class="font-bold text-black">
-                                {{ product.price|floatformat:0 }}
+                                ${{ product.price|floatformat:2|intcomma }}
                             </span>
                             <span class="line-through text-gray-400 ml-1">
-                                {{ product.old_price|floatformat:0 }}
+                                ${{ product.old_price|floatformat:2|intcomma }}
                             </span>
                             {% else %}
                             <span class="font-bold text-black">
-                                {{ product.price|floatformat:0 }}
+                                ${{ product.price|floatformat:2|intcomma }}
                             </span>
                             {% endif %}
-                            FCFA
                         </div>
             
                     </div>

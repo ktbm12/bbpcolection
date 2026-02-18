@@ -74,7 +74,7 @@ def update_order_status(request, pk):
         order.status = new_status
         order.save()
         
-        messages.success(request, f"Commande #{order.order_number} mise à jour vers '{new_status}'.")
+        messages.success(request, f"Order #{order.order_number} updated to '{new_status}'.")
         
         # Send notification emails
         from core.email_utils import send_templated_email
@@ -93,7 +93,7 @@ def update_order_status(request, pk):
         
         if new_status == 'SHIPPED':
             send_templated_email(
-                subject=f"Votre commande #{order.order_number} a été expédiée ! - bbpcollection",
+                subject=f"Your order #{order.order_number} has been shipped! - bbpcollection",
                 to_email=order.user.email,
                 template_name='emails/order_shipped.html',
                 context=context
@@ -101,7 +101,7 @@ def update_order_status(request, pk):
         elif new_status == 'DELIVERED':
             context['review_url'] = f"{protocol}://{domain}{reverse('product:product_detail', kwargs={'pk': order.items.first().product.id})}" # Link to first product for review
             send_templated_email(
-                subject=f"Votre commande #{order.order_number} a été livrée ! - bbpcollection",
+                subject=f"Your order #{order.order_number} has been delivered! - bbpcollection",
                 to_email=order.user.email,
                 template_name='emails/order_delivered.html',
                 context=context

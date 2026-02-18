@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mon Profil - Bbpcollection</title>
+    <title>My Profile - Bbpcollection</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -175,13 +175,13 @@
             </div>
             
             <div class="hidden lg:block">
-                <h2 class="text-xl font-bold text-black">Mon Profil</h2>
+                <h2 class="text-xl font-bold text-black">My Profile</h2>
             </div>
             
             <div class="flex items-center gap-4">
                 <a href="/dashboard" class="text-gray-600 hover:text-yellow-600 transition flex items-center gap-2">
                     <i class="fas fa-arrow-left"></i>
-                    <span class="hidden md:inline">Retour au dashboard</span>
+                    <span class="hidden md:inline">Back to Dashboard</span>
                 </a>
             </div>
         </div>
@@ -190,20 +190,13 @@
     <!-- Sidebar -->
     <aside id="sidebar" class="sidebar">
         <div class="p-6 border-b border-gray-200">
-            <h1 class="text-3xl font-serif font-bold">
-                <span class="text-yellow-600">Luxe</span>Hair
-            </h1>
-            <p class="text-gray-500 text-sm mt-1">Mon Espace Client</p>
-        </div>
-        
-        <div class="p-6 border-b border-gray-200">
             <div class="flex items-center gap-4 mb-4">
                 <div class="w-16 h-16 bg-yellow-600 rounded-full flex items-center justify-center">
                     <span class="text-white font-bold text-2xl">A</span>
                 </div>
                 <div>
-                    <p class="text-black font-bold text-lg">Aïcha Mbella</p>
-                    <p class="text-gray-500 text-sm">Cliente VIP</p>
+                    <p class="text-black font-bold text-lg">Aicha Mbella</p>
+                    <p class="text-gray-500 text-sm">VIP Customer</p>
                 </div>
             </div>
         </div>
@@ -212,39 +205,39 @@
             <div class="space-y-2">
                 <a href="/dashboard" class="menu-item flex items-center gap-3 px-4 py-3 text-gray-700 rounded-lg">
                     <i class="fas fa-home w-5"></i>
-                    <span>Tableau de bord</span>
+                    <span>Dashboard</span>
                 </a>
                 
                 <a href="#" class="menu-item active flex items-center gap-3 px-4 py-3 text-gray-700 rounded-lg">
                     <i class="fas fa-user w-5"></i>
-                    <span>Mon profil</span>
+                    <span>My Profile</span>
                 </a>
                 
                 <a href="/orders" class="menu-item flex items-center gap-3 px-4 py-3 text-gray-700 rounded-lg">
                     <i class="fas fa-shopping-bag w-5"></i>
-                    <span>Mes commandes</span>
+                    <span>My Orders</span>
                 </a>
                 
                 <a href="/wishlist" class="menu-item flex items-center gap-3 px-4 py-3 text-gray-700 rounded-lg">
                     <i class="fas fa-heart w-5"></i>
-                    <span>Favoris</span>
+                    <span>Wishlist</span>
                 </a>
                 
                 <a href="/addresses" class="menu-item flex items-center gap-3 px-4 py-3 text-gray-700 rounded-lg">
                     <i class="fas fa-map-marker-alt w-5"></i>
-                    <span>Adresses</span>
+                    <span>Addresses</span>
                 </a>
                 
                 <a href="/settings" class="menu-item flex items-center gap-3 px-4 py-3 text-gray-700 rounded-lg">
                     <i class="fas fa-cog w-5"></i>
-                    <span>Paramètres</span>
+                    <span>Settings</span>
                 </a>
             </div>
             
             <div class="mt-8 pt-6 border-t border-gray-200">
                 <a href="/logout" class="menu-item flex items-center gap-3 px-4 py-3 text-red-600 rounded-lg hover:bg-red-50">
                     <i class="fas fa-sign-out-alt w-5"></i>
-                    <span>Déconnexion</span>
+                    <span>Logout</span>
                 </a>
             </div>
         </nav>
@@ -272,16 +265,16 @@
                     
                     <!-- Profile Info -->
                     <div class="flex-1 text-center md:text-left">
-                        <h1 class="text-3xl font-serif font-bold mb-2">Aïcha Mbella</h1>
+                        <h1 class="text-3xl font-serif font-bold mb-2">Aicha Mbella</h1>
                         <p class="text-gray-300 mb-4">aicha.mbella@email.com • +237 6XX XXX XXX</p>
                         <div class="flex flex-wrap gap-4 justify-center md:justify-start">
                             <div class="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
                                 <i class="fas fa-star text-yellow-500 mr-2"></i>
-                                <span class="font-semibold">Cliente VIP</span>
+                                <span class="font-semibold">VIP Customer</span>
                             </div>
                             <div class="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
                                 <i class="fas fa-calendar text-yellow-500 mr-2"></i>
-                                <span>Membre depuis Jan 2024</span>
+                                <span>Member since Jan 2024</span>
                             </div>
                         </div>
                     </div>
@@ -290,7 +283,7 @@
                     <div class="grid grid-cols-2 gap-4 text-center">
                         <div>
                             <p class="text-3xl font-bold text-yellow-500">12</p>
-                            <p class="text-gray-300 text-sm">Commandes</p>
+                            <p class="text-gray-300 text-sm">Orders</p>
                         </div>
                         <div>
                             <p class="text-3xl font-bold text-yellow-500">2,450</p>
@@ -305,15 +298,15 @@
                 <div class="flex gap-8 overflow-x-auto">
                     <button class="tab-button active pb-4 px-4 font-semibold whitespace-nowrap" data-tab="personal">
                         <i class="fas fa-user mr-2"></i>
-                        Informations personnelles
+                        Personal Information
                     </button>
                     <button class="tab-button pb-4 px-4 font-semibold whitespace-nowrap text-gray-600" data-tab="security">
                         <i class="fas fa-lock mr-2"></i>
-                        Sécurité
+                        Security
                     </button>
                     <button class="tab-button pb-4 px-4 font-semibold whitespace-nowrap text-gray-600" data-tab="preferences">
                         <i class="fas fa-sliders-h mr-2"></i>
-                        Préférences
+                        Preferences
                     </button>
                     <button class="tab-button pb-4 px-4 font-semibold whitespace-nowrap text-gray-600" data-tab="notifications">
                         <i class="fas fa-bell mr-2"></i>
@@ -327,18 +320,18 @@
                 
                 <!-- Personal Info Tab -->
                 <div id="personal" class="tab-content active">
-                    <h2 class="text-2xl font-bold text-black mb-6">Informations personnelles</h2>
+                    <h2 class="text-2xl font-bold text-black mb-6">Personal Information</h2>
                     
                     <form class="space-y-6">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <!-- First Name -->
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                    Prénom <span class="text-red-500">*</span>
+                                    First Name <span class="text-red-500">*</span>
                                 </label>
                                 <input 
                                     type="text" 
-                                    value="Aïcha"
+                                    value="Aicha"
                                     class="input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none"
                                 >
                             </div>
@@ -346,7 +339,7 @@
                             <!-- Last Name -->
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                    Nom <span class="text-red-500">*</span>
+                                    Last Name <span class="text-red-500">*</span>
                                 </label>
                                 <input 
                                     type="text" 
@@ -371,7 +364,7 @@
                         <!-- Phone -->
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                Téléphone <span class="text-red-500">*</span>
+                                Phone <span class="text-red-500">*</span>
                             </label>
                             <input 
                                 type="tel" 
@@ -383,7 +376,7 @@
                         <!-- Date of Birth -->
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                Date de naissance
+                                Date of Birth
                             </label>
                             <input 
                                 type="date" 
@@ -395,13 +388,13 @@
                         <!-- Gender -->
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                Genre
+                                Gender
                             </label>
                             <select class="input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none">
-                                <option>Féminin</option>
-                                <option>Masculin</option>
-                                <option>Autre</option>
-                                <option>Préfère ne pas dire</option>
+                                <option>Female</option>
+                                <option>Male</option>
+                                <option>Other</option>
+                                <option>Prefer not to say</option>
                             </select>
                         </div>
                         
@@ -413,17 +406,17 @@
                             <textarea 
                                 rows="4"
                                 class="input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none resize-none"
-                                placeholder="Parlez-nous un peu de vous..."
-                            >Passionnée de beauté et de mode, j'adore découvrir de nouveaux produits capillaires de qualité.</textarea>
+                                placeholder="Tell us a bit about yourself..."
+                            >Passionate about beauty and fashion, I love discovering new high-quality hair products.</textarea>
                         </div>
                         
                         <!-- Buttons -->
                         <div class="flex gap-4 pt-4">
                             <button type="submit" class="bg-yellow-600 hover:bg-yellow-700 text-black px-8 py-3 rounded-xl font-bold transition">
-                                Enregistrer les modifications
+                                Save Changes
                             </button>
                             <button type="button" class="border-2 border-gray-300 text-gray-700 hover:border-gray-400 px-8 py-3 rounded-xl font-semibold transition">
-                                Annuler
+                                Cancel
                             </button>
                         </div>
                     </form>
@@ -431,15 +424,15 @@
 
                 <!-- Security Tab -->
                 <div id="security" class="tab-content">
-                    <h2 class="text-2xl font-bold text-black mb-6">Sécurité</h2>
+                    <h2 class="text-2xl font-bold text-black mb-6">Security</h2>
                     
                     <!-- Change Password -->
                     <div class="mb-8">
-                        <h3 class="text-lg font-bold text-black mb-4">Changer le mot de passe</h3>
+                        <h3 class="text-lg font-bold text-black mb-4">Change Password</h3>
                         <form class="space-y-4">
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                    Mot de passe actuel
+                                    Current Password
                                 </label>
                                 <input 
                                     type="password" 
@@ -450,7 +443,7 @@
                             
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                    Nouveau mot de passe
+                                    New Password
                                 </label>
                                 <input 
                                     type="password" 
@@ -461,7 +454,7 @@
                             
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                    Confirmer le nouveau mot de passe
+                                    Confirm New Password
                                 </label>
                                 <input 
                                     type="password" 
@@ -471,7 +464,7 @@
                             </div>
                             
                             <button type="submit" class="bg-yellow-600 hover:bg-yellow-700 text-black px-8 py-3 rounded-xl font-bold transition">
-                                Mettre à jour le mot de passe
+                                Update Password
                             </button>
                         </form>
                     </div>
@@ -480,8 +473,8 @@
                     <div class="border-t-2 border-gray-200 pt-8">
                         <div class="flex items-start justify-between">
                             <div>
-                                <h3 class="text-lg font-bold text-black mb-2">Authentification à deux facteurs</h3>
-                                <p class="text-gray-600 text-sm">Ajoutez une couche de sécurité supplémentaire à votre compte</p>
+                                <h3 class="text-lg font-bold text-black mb-2">Two-Factor Authentication</h3>
+                                <p class="text-gray-600 text-sm">Add an extra layer of security to your account</p>
                             </div>
                             <label class="relative inline-flex items-center cursor-pointer">
                                 <input type="checkbox" class="sr-only peer">
@@ -492,7 +485,7 @@
                     
                     <!-- Sessions -->
                     <div class="border-t-2 border-gray-200 pt-8 mt-8">
-                        <h3 class="text-lg font-bold text-black mb-4">Sessions actives</h3>
+                        <h3 class="text-lg font-bold text-black mb-4">Active Sessions</h3>
                         
                         <div class="space-y-4">
                             <div class="flex items-center justify-between p-4 border-2 border-gray-200 rounded-xl">
@@ -502,11 +495,11 @@
                                     </div>
                                     <div>
                                         <p class="font-semibold text-black">Windows • Chrome</p>
-                                        <p class="text-sm text-gray-600">Yaoundé, Cameroun • Session actuelle</p>
-                                        <p class="text-xs text-gray-500">Dernière activité: Il y a quelques secondes</p>
+                                        <p class="text-sm text-gray-600">Yaounde, Cameroon • Current session</p>
+                                        <p class="text-xs text-gray-500">Last activity: A few seconds ago</p>
                                     </div>
                                 </div>
-                                <span class="text-green-600 text-sm font-semibold">Actif</span>
+                                <span class="text-green-600 text-sm font-semibold">Active</span>
                             </div>
                             
                             <div class="flex items-center justify-between p-4 border-2 border-gray-200 rounded-xl">
@@ -516,12 +509,12 @@
                                     </div>
                                     <div>
                                         <p class="font-semibold text-black">iPhone • Safari</p>
-                                        <p class="text-sm text-gray-600">Yaoundé, Cameroun</p>
-                                        <p class="text-xs text-gray-500">Dernière activité: Il y a 2 heures</p>
+                                        <p class="text-sm text-gray-600">Yaounde, Cameroon</p>
+                                        <p class="text-xs text-gray-500">Last activity: 2 hours ago</p>
                                     </div>
                                 </div>
                                 <button class="text-red-600 hover:text-red-700 text-sm font-semibold">
-                                    Déconnecter
+                                    Logout
                                 </button>
                             </div>
                         </div>
@@ -530,43 +523,42 @@
 
                 <!-- Preferences Tab -->
                 <div id="preferences" class="tab-content">
-                    <h2 class="text-2xl font-bold text-black mb-6">Préférences</h2>
+                    <h2 class="text-2xl font-bold text-black mb-6">Preferences</h2>
                     
                     <div class="space-y-6">
                         <!-- Language -->
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                Langue
+                                Language
                             </label>
                             <select class="input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none">
-                                <option>Français</option>
-                                <option>Anglais</option>
+                                <option>English</option>
+                                <option>French</option>
                             </select>
                         </div>
                         
                         <!-- Currency -->
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                Devise
+                                Currency
                             </label>
                             <select class="input-field w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none">
-                                <option>FCFA (XAF)</option>
-                                <option>Euro (EUR)</option>
                                 <option>Dollar (USD)</option>
+                                <option>Euro (EUR)</option>
                             </select>
                         </div>
                         
                         <!-- Theme -->
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-4">
-                                Thème
+                                Theme
                             </label>
                             <div class="grid grid-cols-3 gap-4">
                                 <label class="relative cursor-pointer">
                                     <input type="radio" name="theme" value="light" checked class="sr-only peer">
                                     <div class="p-4 border-2 border-gray-300 rounded-xl peer-checked:border-yellow-600 peer-checked:bg-yellow-50 transition">
                                         <i class="fas fa-sun text-2xl text-yellow-600 mb-2"></i>
-                                        <p class="font-semibold text-sm">Clair</p>
+                                        <p class="font-semibold text-sm">Light</p>
                                     </div>
                                 </label>
                                 
@@ -574,7 +566,7 @@
                                     <input type="radio" name="theme" value="dark" class="sr-only peer">
                                     <div class="p-4 border-2 border-gray-300 rounded-xl peer-checked:border-yellow-600 peer-checked:bg-yellow-50 transition">
                                         <i class="fas fa-moon text-2xl text-gray-700 mb-2"></i>
-                                        <p class="font-semibold text-sm">Sombre</p>
+                                        <p class="font-semibold text-sm">Dark</p>
                                     </div>
                                 </label>
                                 
@@ -589,7 +581,7 @@
                         </div>
                         
                         <button type="submit" class="bg-yellow-600 hover:bg-yellow-700 text-black px-8 py-3 rounded-xl font-bold transition">
-                            Enregistrer les préférences
+                            Save Preferences
                         </button>
                     </div>
                 </div>
@@ -601,28 +593,28 @@
                     <div class="space-y-6">
                         <!-- Email Notifications -->
                         <div>
-                            <h3 class="font-bold text-black mb-4">Notifications par email</h3>
+                            <h3 class="font-bold text-black mb-4">Email Notifications</h3>
                             <div class="space-y-4">
                                 <label class="flex items-center justify-between p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-yellow-600 transition">
                                     <div>
-                                        <p class="font-semibold text-black">Confirmation de commande</p>
-                                        <p class="text-sm text-gray-600">Recevoir un email à chaque nouvelle commande</p>
+                                        <p class="font-semibold text-black">Order Confirmation</p>
+                                        <p class="text-sm text-gray-600">Receive an email for every new order</p>
                                     </div>
                                     <input type="checkbox" checked class="w-6 h-6 text-yellow-600 rounded focus:ring-yellow-500">
                                 </label>
                                 
                                 <label class="flex items-center justify-between p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-yellow-600 transition">
                                     <div>
-                                        <p class="font-semibold text-black">Mise à jour de livraison</p>
-                                        <p class="text-sm text-gray-600">Être informée du statut de livraison</p>
+                                        <p class="font-semibold text-black">Shipping Updates</p>
+                                        <p class="text-sm text-gray-600">Be notified of delivery status</p>
                                     </div>
                                     <input type="checkbox" checked class="w-6 h-6 text-yellow-600 rounded focus:ring-yellow-500">
                                 </label>
                                 
                                 <label class="flex items-center justify-between p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-yellow-600 transition">
                                     <div>
-                                        <p class="font-semibold text-black">Promotions et offres</p>
-                                        <p class="text-sm text-gray-600">Recevoir les offres spéciales et codes promo</p>
+                                        <p class="font-semibold text-black">Promotions and Offers</p>
+                                        <p class="text-sm text-gray-600">Receive special offers and promo codes</p>
                                     </div>
                                     <input type="checkbox" checked class="w-6 h-6 text-yellow-600 rounded focus:ring-yellow-500">
                                 </label>
@@ -630,7 +622,7 @@
                                 <label class="flex items-center justify-between p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-yellow-600 transition">
                                     <div>
                                         <p class="font-semibold text-black">Newsletter</p>
-                                        <p class="text-sm text-gray-600">Conseils beauté et nouveautés produits</p>
+                                        <p class="text-sm text-gray-600">Beauty tips and new product news</p>
                                     </div>
                                     <input type="checkbox" class="w-6 h-6 text-yellow-600 rounded focus:ring-yellow-500">
                                 </label>
@@ -639,20 +631,20 @@
                         
                         <!-- SMS Notifications -->
                         <div class="border-t-2 border-gray-200 pt-6">
-                            <h3 class="font-bold text-black mb-4">Notifications par SMS</h3>
+                            <h3 class="font-bold text-black mb-4">SMS Notifications</h3>
                             <div class="space-y-4">
                                 <label class="flex items-center justify-between p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-yellow-600 transition">
                                     <div>
-                                        <p class="font-semibold text-black">Alertes de livraison</p>
-                                        <p class="text-sm text-gray-600">SMS quand votre colis arrive</p>
+                                        <p class="font-semibold text-black">Delivery Alerts</p>
+                                        <p class="text-sm text-gray-600">SMS when your package arrives</p>
                                     </div>
                                     <input type="checkbox" checked class="w-6 h-6 text-yellow-600 rounded focus:ring-yellow-500">
                                 </label>
                                 
                                 <label class="flex items-center justify-between p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-yellow-600 transition">
                                     <div>
-                                        <p class="font-semibold text-black">Promotions flash</p>
-                                        <p class="text-sm text-gray-600">Offres limitées dans le temps</p>
+                                        <p class="font-semibold text-black">Flash Sales</p>
+                                        <p class="text-sm text-gray-600">Time-limited offers</p>
                                     </div>
                                     <input type="checkbox" class="w-6 h-6 text-yellow-600 rounded focus:ring-yellow-500">
                                 </label>
@@ -660,7 +652,7 @@
                         </div>
                         
                         <button type="submit" class="bg-yellow-600 hover:bg-yellow-700 text-black px-8 py-3 rounded-xl font-bold transition">
-                            Enregistrer les notifications
+                            Save Notifications
                         </button>
                     </div>
                 </div>
@@ -669,14 +661,14 @@
 
             <!-- Danger Zone -->
             <div class="mt-8 bg-red-50 border-2 border-red-200 rounded-2xl p-6">
-                <h2 class="text-xl font-bold text-red-900 mb-4">Zone dangereuse</h2>
-                <p class="text-red-700 mb-4">Les actions suivantes sont irréversibles. Soyez prudente.</p>
+                <h2 class="text-xl font-bold text-red-900 mb-4">Danger Zone</h2>
+                <p class="text-red-700 mb-4">The following actions are irreversible. Please be careful.</p>
                 <div class="flex flex-col sm:flex-row gap-4">
                     <button class="border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white px-6 py-3 rounded-xl font-semibold transition">
-                        Désactiver mon compte
+                        Deactivate my account
                     </button>
                     <button class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl font-semibold transition">
-                        Supprimer mon compte
+                        Delete my account
                     </button>
                 </div>
             </div>
@@ -732,7 +724,7 @@
         document.querySelectorAll('form').forEach(form => {
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
-                alert('Modifications enregistrées avec succès !');
+                alert('Changes saved successfully!');
             });
         });
     </script>

@@ -1,5 +1,5 @@
 {% extends "pages/dashboard/admin_base.html" %}
-{% load static %}
+{% load static humanize %}
 
 {% block dashboard_content %}
 <div class="space-y-10 animate-fadeIn">
@@ -7,14 +7,14 @@
     <!-- Header Section -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white/40 backdrop-blur-md p-8 rounded-3xl border border-white/20 shadow-xl">
         <div>
-            <h1 class="text-3xl lg:text-4xl font-serif font-bold text-gray-900 mb-2">Gestion du Catalogue</h1>
-            <p class="text-gray-600">Ajouter de nouvelles pièces d'exception à votre collection</p>
+            <h1 class="text-3xl lg:text-4xl font-serif font-bold text-gray-900 mb-2">Catalog Management</h1>
+            <p class="text-gray-600">Add new exceptional pieces to your collection</p>
         </div>
         <div class="flex items-center gap-3">
             <div class="px-4 py-2 bg-yellow-100/50 border border-yellow-200 rounded-full">
                 <span class="text-yellow-700 font-semibold flex items-center gap-2">
                     <i class="fas fa-box"></i>
-                    {{ products.count }} Produits
+                    {{ products.count }} Products
                 </span>
             </div>
         </div>
@@ -34,7 +34,7 @@
                     <span class="w-10 h-10 bg-black text-yellow-500 rounded-xl flex items-center justify-center text-base">
                         <i class="fas fa-plus"></i>
                     </span>
-                    Nouveau Produit
+                    New Product
                 </h2>
 
                 <form method="post" enctype="multipart/form-data" class="space-y-6 relative z-10">
@@ -53,7 +53,7 @@
 
                     <!-- Name Field -->
                     <div class="space-y-2">
-                        <label class="text-sm font-bold text-gray-700 uppercase tracking-wider ml-1">Nom du Produit</label>
+                        <label class="text-sm font-bold text-gray-700 uppercase tracking-wider ml-1">Product Name</label>
                         {{ form.name }}
                         {% if form.name.errors %}
                         <p class="text-red-500 text-xs mt-1 ml-1">{{ form.name.errors.0 }}</p>
@@ -63,14 +63,14 @@
                     <!-- Row 1: Category & Stock -->
                     <div class="grid grid-cols-2 gap-4">
                         <div class="space-y-2">
-                            <label class="text-sm font-bold text-gray-700 uppercase tracking-wider ml-1">Catégorie</label>
+                            <label class="text-sm font-bold text-gray-700 uppercase tracking-wider ml-1">Category</label>
                             {{ form.category }}
                             {% if form.category.errors %}
                             <p class="text-red-500 text-xs mt-1 ml-1">{{ form.category.errors.0 }}</p>
                             {% endif %}
                         </div>
                         <div class="space-y-2">
-                            <label class="text-sm font-bold text-gray-700 uppercase tracking-wider ml-1">Stock Initial</label>
+                            <label class="text-sm font-bold text-gray-700 uppercase tracking-wider ml-1">Initial Stock</label>
                             {{ form.stock }}
                             {% if form.stock.errors %}
                             <p class="text-red-500 text-xs mt-1 ml-1">{{ form.stock.errors.0 }}</p>
@@ -81,25 +81,25 @@
                     <!-- Row 2: Price & Old Price -->
                     <div class="grid grid-cols-2 gap-4">
                         <div class="space-y-2">
-                            <label class="text-sm font-bold text-gray-700 uppercase tracking-wider ml-1">Prix de Vente</label>
+                            <label class="text-sm font-bold text-gray-700 uppercase tracking-wider ml-1">Selling Price</label>
                             {{ form.price }}
                             {% if form.price.errors %}
                             <p class="text-red-500 text-xs mt-1 ml-1">{{ form.price.errors.0 }}</p>
                             {% endif %}
                         </div>
                         <div class="space-y-2">
-                            <label class="text-sm font-bold text-gray-700 uppercase tracking-wider ml-1">Ancien Prix</label>
+                            <label class="text-sm font-bold text-gray-700 uppercase tracking-wider ml-1">Old Price</label>
                             {{ form.old_price }}
                         </div>
                     </div>
 
                     <!-- Image Upload -->
                     <div class="space-y-2">
-                        <label class="text-sm font-bold text-gray-700 uppercase tracking-wider ml-1">Image Principale</label>
+                        <label class="text-sm font-bold text-gray-700 uppercase tracking-wider ml-1">Main Image</label>
                         <div class="relative group">
                             {{ form.main_image }}
                             <div id="imagePreview" class="hidden mt-4 rounded-2xl overflow-hidden border-2 border-yellow-600/30">
-                                <img src="" alt="Aperçu" class="w-full h-48 object-cover">
+                                <img src="" alt="Preview" class="w-full h-48 object-cover">
                             </div>
                         </div>
                         {% if form.main_image.errors %}
@@ -116,9 +116,9 @@
                     <!-- Gallery Section -->
                     <div class="space-y-4 pt-6 border-t border-gray-100">
                         <div class="flex items-center justify-between">
-                            <h3 class="text-lg font-serif font-bold text-gray-900">Galerie d'Images</h3>
+                            <h3 class="text-lg font-serif font-bold text-gray-900">Image Gallery</h3>
                             <button type="button" id="add-gallery-item" class="text-xs font-bold text-yellow-600 hover:text-yellow-700 flex items-center gap-1 uppercase tracking-wider transition-colors">
-                                <i class="fas fa-plus-circle"></i> Ajouter une image
+                                <i class="fas fa-plus-circle"></i> Add image
                             </button>
                         </div>
                         
@@ -131,18 +131,18 @@
                                 {% endfor %}
                                 <div class="grid grid-cols-1 gap-4">
                                     <div class="space-y-1">
-                                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Image Galerie</label>
+                                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Gallery Image</label>
                                         {{ galley_form.image }}
                                     </div>
                                     <div class="space-y-1">
-                                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Légende</label>
+                                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Caption</label>
                                         {{ galley_form.alt_text }}
                                     </div>
                                 </div>
                                 {% if image_formset.can_delete %}
                                 <div class="mt-2 flex items-center gap-2">
                                     {{ galley_form.DELETE }}
-                                    <label class="text-[10px] font-bold text-red-500 uppercase">Supprimer</label>
+                                    <label class="text-[10px] font-bold text-red-500 uppercase">Delete</label>
                                 </div>
                                 {% endif %}
                             </div>
@@ -154,11 +154,11 @@
                             <div class="gallery-item p-4 bg-gray-50 rounded-2xl border border-gray-100 relative group">
                                 <div class="grid grid-cols-1 gap-4">
                                     <div class="space-y-1">
-                                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Image Galerie</label>
+                                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Gallery Image</label>
                                         {{ image_formset.empty_form.image }}
                                     </div>
                                     <div class="space-y-1">
-                                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Légende</label>
+                                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Caption</label>
                                         {{ image_formset.empty_form.alt_text }}
                                     </div>
                                 </div>
@@ -172,14 +172,14 @@
                              {{ form.is_featured }}
                         </div>
                         <div>
-                            <p class="font-bold text-gray-900 text-sm">Produit en vedette</p>
-                            <p class="text-xs text-gray-500">Afficher en priorité sur la page d'accueil</p>
+                            <p class="font-bold text-gray-900 text-sm">Featured Product</p>
+                            <p class="text-xs text-gray-500">Show as priority on home page</p>
                         </div>
                     </div>
 
                     <!-- Submit Button -->
                     <button type="submit" class="w-full bg-black hover:bg-yellow-600 text-white hover:text-black py-4 rounded-2xl font-bold text-lg shadow-xl hover:shadow-yellow-600/20 transition-all duration-500 flex items-center justify-center gap-3 group">
-                        <span>Enregistrer l'Article</span>
+                        <span>Save Product</span>
                         <i class="fas fa-chevron-right group-hover:translate-x-1 transition-transform"></i>
                     </button>
                 </form>
@@ -203,9 +203,9 @@
                     <table class="w-full">
                         <thead class="bg-black text-white">
                             <tr>
-                                <th class="p-4 text-left text-xs font-bold uppercase tracking-widest">Article</th>
-                                <th class="p-4 text-left text-xs font-bold uppercase tracking-widest">Catégorie</th>
-                                <th class="p-4 text-left text-xs font-bold uppercase tracking-widest">Prix</th>
+                                <th class="p-4 text-left text-xs font-bold uppercase tracking-widest">Product</th>
+                                <th class="p-4 text-left text-xs font-bold uppercase tracking-widest">Category</th>
+                                <th class="p-4 text-left text-xs font-bold uppercase tracking-widest">Price</th>
                                 <th class="p-4 text-left text-xs font-bold uppercase tracking-widest">Stock</th>
                                 <th class="p-4 text-center text-xs font-bold uppercase tracking-widest">Actions</th>
                             </tr>
@@ -237,14 +237,14 @@
                                 </td>
                                 <td class="p-4">
                                     <span class="px-3 py-1 bg-gray-100 border border-gray-200 rounded-full text-[10px] font-bold text-gray-600 uppercase">
-                                        {{ product.category.name|default:"Sans catégorie" }}
+                                        {{ product.category.name|default:"Uncategorized" }}
                                     </span>
                                 </td>
                                 <td class="p-4">
                                     <div class="flex flex-col">
-                                        <span class="font-bold text-gray-900">{{ product.price }} FCFA</span>
+                                        <span class="font-bold text-gray-900">${{ product.price|floatformat:2|intcomma }}</span>
                                         {% if product.old_price %}
-                                        <span class="text-[10px] text-gray-400 line-through">{{ product.old_price }} FCFA</span>
+                                        <span class="text-[10px] text-gray-400 line-through">${{ product.old_price|floatformat:2|intcomma }}</span>
                                         {% endif %}
                                     </div>
                                 </td>
@@ -266,7 +266,7 @@
                                         <a href="{% url 'product:product_edit' product.id %}" class="w-9 h-9 flex items-center justify-center rounded-xl bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white transition-all duration-300">
                                             <i class="fas fa-edit text-sm"></i>
                                         </a>
-                                        <a href="{% url 'product:product_delete' product.id %}" onclick="return confirm('Confirmer la suppression ?')" class="w-9 h-9 flex items-center justify-center rounded-xl bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition-all duration-300">
+                                        <a href="{% url 'product:product_delete' product.id %}" onclick="return confirm('Confirm deletion?')" class="w-9 h-9 flex items-center justify-center rounded-xl bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition-all duration-300">
                                             <i class="fas fa-trash-alt text-sm"></i>
                                         </a>
                                     </div>
@@ -279,7 +279,7 @@
                                         <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center">
                                             <i class="fas fa-box-open text-4xl"></i>
                                         </div>
-                                        <p class="font-serif italic">Aucun article dans votre catalogue pour le moment.</p>
+                                        <p class="font-serif italic">No items in your catalog yet.</p>
                                     </div>
                                 </td>
                             </tr>

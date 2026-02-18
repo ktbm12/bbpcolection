@@ -19,7 +19,7 @@ class ProductForm(forms.ModelForm):
         widgets = {
             "name": forms.TextInput(attrs={
                 "class": "w-full px-4 py-2 border-2 border-gray-200 rounded-xl focus:border-yellow-600 focus:outline-none transition-all duration-300 bg-white/50 backdrop-blur-sm",
-                "placeholder": "Nom du produit"
+                "placeholder": "Product Name"
             }),
             "category": forms.Select(attrs={
                 "class": "w-full px-4 py-2 border-2 border-gray-200 rounded-xl focus:border-yellow-600 focus:outline-none transition-all duration-300 bg-white/50 backdrop-blur-sm"
@@ -29,20 +29,20 @@ class ProductForm(forms.ModelForm):
             }),
             "price": forms.NumberInput(attrs={
                 "class": "w-full px-4 py-2 border-2 border-gray-200 rounded-xl focus:border-yellow-600 focus:outline-none transition-all duration-300 bg-white/50 backdrop-blur-sm",
-                "placeholder": "Prix (FCFA)"
+                "placeholder": "Price (USD)"
             }),
             "old_price": forms.NumberInput(attrs={
                 "class": "w-full px-4 py-2 border-2 border-gray-200 rounded-xl focus:border-yellow-600 focus:outline-none transition-all duration-300 bg-white/50 backdrop-blur-sm",
-                "placeholder": "Ancien prix (facultatif)"
+                "placeholder": "Old price (optional)"
             }),
             "stock": forms.NumberInput(attrs={
                 "class": "w-full px-4 py-2 border-2 border-gray-200 rounded-xl focus:border-yellow-600 focus:outline-none transition-all duration-300 bg-white/50 backdrop-blur-sm",
-                "placeholder": "Quantité en stock"
+                "placeholder": "Stock Quantity"
             }),
             "description": forms.Textarea(attrs={
                 "class": "w-full px-4 py-2 border-2 border-gray-200 rounded-xl focus:border-yellow-600 focus:outline-none transition-all duration-300 bg-white/50 backdrop-blur-sm",
                 "rows": 4,
-                "placeholder": "Description détaillée du produit..."
+                "placeholder": "Detailed product description..."
             }),
             "is_featured": forms.CheckboxInput(attrs={
                 "class": "w-5 h-5 rounded border-gray-200 text-yellow-600 focus:ring-yellow-600 transition-all duration-300"
@@ -60,7 +60,7 @@ class ProductImageForm(forms.ModelForm):
             }),
             "alt_text": forms.TextInput(attrs={
                 "class": "w-full px-4 py-2 border-2 border-gray-200 rounded-xl focus:border-yellow-600 focus:outline-none transition-all duration-300 bg-white/50 backdrop-blur-sm",
-                "placeholder": "Texte alternatif (facultatif)"
+                "placeholder": "Alternative text (optional)"
             }),
         }
 
@@ -91,16 +91,16 @@ class ShippingForm(forms.ModelForm):
         widgets = {
             'shipping_address': forms.Textarea(attrs={
                 'class': 'w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-yellow-600 focus:border-transparent outline-none transition',
-                'placeholder': 'Adresse complète (Quartier, Rue, Porte...)',
+                'placeholder': 'Full Address (Street, House No, Apt...)',
                 'rows': 3
             }),
             'shipping_city': forms.TextInput(attrs={
                 'class': 'w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-yellow-600 focus:border-transparent outline-none transition',
-                'placeholder': 'Ville'
+                'placeholder': 'City'
             }),
             'shipping_phone': forms.TextInput(attrs={
                 'class': 'w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-yellow-600 focus:border-transparent outline-none transition',
-                'placeholder': 'Numéro de téléphone'
+                'placeholder': 'Phone Number'
             }),
         }
 
@@ -124,13 +124,13 @@ class ReviewForm(forms.ModelForm):
             }),
         }
         labels = {
-            'rating': 'Votre note',
-            'title': 'Titre',
-            'comment': 'Votre avis'
+            'rating': 'Your rating',
+            'title': 'Title',
+            'comment': 'Your review'
         }
 
     def clean_rating(self):
         rating = self.cleaned_data.get('rating')
         if not rating or rating < 1 or rating > 5:
-            raise forms.ValidationError("Veuillez sélectionner une note entre 1 et 5 étoiles.")
+            raise forms.ValidationError("Please select a rating between 1 and 5 stars.")
         return rating

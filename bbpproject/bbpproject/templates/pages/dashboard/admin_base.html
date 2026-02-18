@@ -147,10 +147,10 @@
         new Chart(salesCtx, {
             type: 'line',
             data: {
-                labels: ['Août', 'Sept', 'Oct', 'Nov', 'Déc', 'Jan'],
+                labels: ['Aug', 'Sept', 'Oct', 'Nov', 'Dec', 'Jan'],
                 datasets: [{
-                    label: 'Ventes (FCFA)',
-                    data: [1850000, 2100000, 1950000, 2300000, 2200000, 2450000],
+                    label: 'Sales ($)',
+                    data: [1850.00, 2100.00, 1950.00, 2300.00, 2200.00, 2450.00],
                     borderColor: '#d4af37',
                     backgroundColor: 'rgba(212, 175, 55, 0.1)',
                     tension: 0.4,
@@ -169,7 +169,7 @@
                 scales: {
                     y: {
                         beginAtZero: true,
-                        ticks: { callback: function(value) { return value.toLocaleString() + ' FCFA'; } }
+                        ticks: { callback: function(value) { return '$' + value.toLocaleString(); } }
                     }
                 }
             }
@@ -182,7 +182,7 @@
         new Chart(categoryCtx, {
             type: 'doughnut',
             data: {
-                labels: ['Lisses', 'Ondulées', 'Bouclées', 'Premium'],
+                labels: ['Straight', 'Wavy', 'Curly', 'Premium'],
                 datasets: [{
                     data: [40, 30, 20, 10],
                     backgroundColor: ['#d4af37', '#000000', '#6b7280', '#f4e5c3'],

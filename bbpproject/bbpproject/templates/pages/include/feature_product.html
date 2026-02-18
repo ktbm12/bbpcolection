@@ -1,3 +1,4 @@
+{% load humanize %}
 <section class="py-24 bg-white overflow-hidden">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-20 animate-reveal">
@@ -51,9 +52,9 @@
                     </div>
                     <div class="mt-auto flex items-center justify-between">
                         <div>
-                            <span class="text-2xl font-black text-black">{{ product.price }} FCFA</span>
+                            <span class="text-2xl font-black text-black">${{ product.price|floatformat:2|intcomma }}</span>
                             {% if product.old_price %}
-                            <span class="text-sm text-gray-400 line-through ml-2">{{ product.old_price }} FCFA</span>
+                            <span class="text-sm text-gray-400 line-through ml-2">${{ product.old_price|floatformat:2|intcomma }}</span>
                             {% endif %}
                         </div>
                         <a href="{% url 'product:product_detail' product.pk %}" class="text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-yellow-600 transition-colors">Details <i class="fas fa-arrow-right ml-1"></i></a>

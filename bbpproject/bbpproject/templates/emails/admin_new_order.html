@@ -2,18 +2,18 @@
 {% load humanize %}
 
 {% block content %}
-<h2 style="color: #000; font-size: 24px;">Nouvelle commande reçue ! 🔔</h2>
-<p>Une nouvelle commande vient d'être passée sur le site.</p>
+<h2 style="color: #000; font-size: 24px;">New order received! 🔔</h2>
+<p>A new order has just been placed on the site.</p>
 
 <div style="background-color: #f9f9f9; border-radius: 8px; padding: 20px; margin: 20px 0;">
-    <h3 style="margin-top: 0; font-size: 16px;">Détails de la commande</h3>
-    <p><strong>N° Commande :</strong> #{{ order.order_number }}</p>
-    <p><strong>Client :</strong> {{ order.user.email }} ({{ order.user.name|default:"Non renseigné" }})</p>
-    <p><strong>Montant :</strong> {{ order.total_amount|floatformat:0|intcomma }} FCFA</p>
-    <p><strong>Ville :</strong> {{ order.shipping_city }}</p>
+    <h3 style="margin-top: 0; font-size: 16px;">Order Details</h3>
+    <p><strong>Order No.:</strong> #{{ order.order_number }}</p>
+    <p><strong>Customer:</strong> {{ order.user.email }} ({{ order.user.name|default:"Not provided" }})</p>
+    <p><strong>Amount:</strong> ${{ order.total_amount|floatformat:2|intcomma }}</p>
+    <p><strong>City:</strong> {{ order.shipping_city }}</p>
 </div>
 
 <div style="text-align: center;">
-    <a href="{{ admin_url }}" class="btn">Gérer la commande</a>
+    <a href="{{ admin_url }}" class="btn">Manage Order</a>
 </div>
 {% endblock %}

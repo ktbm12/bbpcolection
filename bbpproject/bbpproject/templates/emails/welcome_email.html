@@ -1,26 +1,26 @@
 {% extends "emails/base_email.html" %}
 
 {% block content %}
-<h2 style="color: #000; font-size: 24px;">Bienvenue chez bbpcollection ! ✨</h2>
-<p>Bonjour {{ user.name|default:user.username }},</p>
-<p>Nous sommes ravis de vous compter parmi nos membres privilégiés. Votre compte a été créé avec succès.</p>
+<h2 style="color: #000; font-size: 24px;">Welcome to Bbpcollection! ✨</h2>
+<p>Hi {{ user.name|default:user.username }},</p>
+<p>We are delighted to have you as one of our privileged members. Your account has been successfully created.</p>
 
-<p>Chez bbpcollection, nous nous engageons à vous offrir le meilleur des produits cosmétiques et de beauté, avec un service irréprochable.</p>
+<p>At Bbpcollection, we are committed to offering you the best in cosmetic and beauty products, with irreproachable service.</p>
 
 <div style="background-color: #f9f9f9; border-radius: 8px; padding: 20px; margin: 20px 0;">
-    <h3 style="margin-top: 0; font-size: 16px;">Ce que vous pouvez faire maintenant :</h3>
+    <h3 style="margin-top: 0; font-size: 16px;">What you can do now:</h3>
     <ul style="padding-left: 20px;">
-        <li>Compléter votre profil pour des recommandations personnalisées.</li>
-        <li>Découvrir nos dernières collections.</li>
-        <li>Ajouter vos coups de cœur à votre liste de souhaits.</li>
+        <li>Complete your profile for personalized recommendations.</li>
+        <li>Discover our latest collections.</li>
+        <li>Add your favorites to your wishlist.</li>
     </ul>
 </div>
 
 <div style="text-align: center;">
-    <a href="{{ shop_url }}" class="btn">Commencer mes achats</a>
+    <a href="{{ shop_url }}" class="btn">Start Shopping</a>
 </div>
 
 <p style="margin-top: 40px; font-size: 14px; color: #666;">
-    Si vous n'êtes pas à l'origine de cette inscription, veuillez ignorer cet e-mail.
+    If you did not register for this account, please ignore this email.
 </p>
 {% endblock %}

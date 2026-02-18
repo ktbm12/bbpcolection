@@ -2,17 +2,17 @@
 {% load humanize %}
 
 {% block content %}
-<h2 style="color: #000; font-size: 24px;">Merci pour votre commande !</h2>
-<p>Bonjour {{ user.name|default:user.username }},</p>
-<p>Nous avons bien reçu votre commande <strong>#{{ order.order_number }}</strong>. Nous préparons actuellement vos articles avec le plus grand soin.</p>
+<h2 style="color: #000; font-size: 24px;">Thank you for your order!</h2>
+<p>Hi {{ user.name|default:user.username }},</p>
+<p>We have received your order <strong>#{{ order.order_number }}</strong>. We are currently preparing your items with the greatest care.</p>
 
 <div style="background-color: #f9f9f9; border-radius: 8px; padding: 20px; margin: 20px 0;">
-    <h3 style="margin-top: 0; font-size: 16px;">Résumé de la commande</h3>
+    <h3 style="margin-top: 0; font-size: 16px;">Order Summary</h3>
     <table class="order-summary">
         <thead>
             <tr>
-                <th>Produit</th>
-                <th style="text-align: center;">Qté</th>
+                <th>Product</th>
+                <th style="text-align: center;">Qty</th>
                 <th style="text-align: right;">Total</th>
             </tr>
         </thead>
@@ -21,29 +21,29 @@
             <tr>
                 <td>{{ item.product.name }}</td>
                 <td style="text-align: center;">{{ item.quantity }}</td>
-                <td style="text-align: right;">{{ item.subtotal|floatformat:0|intcomma }} FCFA</td>
+                <td style="text-align: right;">${{ item.subtotal|floatformat:2|intcomma }}</td>
             </tr>
             {% endfor %}
             <tr class="total-row">
                 <td colspan="2">Total</td>
-                <td style="text-align: right;">{{ order.total_amount|floatformat:0|intcomma }} FCFA</td>
+                <td style="text-align: right;">${{ order.total_amount|floatformat:2|intcomma }}</td>
             </tr>
         </tbody>
     </table>
 </div>
 
-<p><strong>Adresse de livraison :</strong><br>
+<p><strong>Shipping Address:</strong><br>
 {{ order.shipping_address }}<br>
 {{ order.shipping_city }}<br>
-Tél: {{ order.shipping_phone }}</p>
+Phone: {{ order.shipping_phone }}</p>
 
-<p>Vous recevrez un autre e-mail dès que votre commande aura été expédiée.</p>
+<p>You will receive another email as soon as your order has been shipped.</p>
 
 <div style="text-align: center;">
-    <a href="{{ dashboard_url }}" class="btn">Suivre ma commande</a>
+    <a href="{{ dashboard_url }}" class="btn">Track my order</a>
 </div>
 
 <p style="margin-top: 40px; font-size: 14px; color: #666;">
-    Si vous avez des questions, n'hésitez pas à répondre à cet e-mail.
+    If you have any questions, feel free to reply to this email.
 </p>
 {% endblock %}

@@ -1,15 +1,15 @@
 {% extends "emails/base_email.html" %}
 
 {% block content %}
-<h2 style="color: #d9534f; font-size: 24px;">Alerte de Stock Faible ⚠️</h2>
-<p>Certains produits ont atteint ou sont en dessous du seuil critique de <strong>{{ threshold }}</strong> unités.</p>
+<h2 style="color: #d9534f; font-size: 24px;">Low Stock Alert ⚠️</h2>
+<p>Some products have reached or are below the critical threshold of <strong>{{ threshold }}</strong> units.</p>
 
 <div style="background-color: #f9f9f9; border-radius: 8px; padding: 20px; margin: 20px 0;">
     <table style="width: 100%; border-collapse: collapse;">
         <thead>
             <tr style="border-bottom: 2px solid #ddd;">
-                <th style="padding: 10px; text-align: left;">Produit</th>
-                <th style="padding: 10px; text-align: center;">Stock actuel</th>
+                <th style="padding: 10px; text-align: left;">Product</th>
+                <th style="padding: 10px; text-align: center;">Current Stock</th>
             </tr>
         </thead>
         <tbody>
@@ -23,9 +23,9 @@
     </table>
 </div>
 
-<p>Veuillez réapprovisionner ces articles dès que possible pour éviter les ruptures de stock.</p>
+<p>Please restock these items as soon as possible to avoid stockouts.</p>
 
 <div style="text-align: center;">
-    <a href="{{ admin_url|default:'#' }}" class="btn" style="background-color: #000;">Gérer l'inventaire</a>
+    <a href="{{ admin_url|default:'#' }}" class="btn" style="background-color: #000;">Manage Inventory</a>
 </div>
 {% endblock %}

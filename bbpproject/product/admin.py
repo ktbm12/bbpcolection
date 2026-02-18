@@ -24,7 +24,7 @@ class CategoryAdmin(admin.ModelAdmin):
         if obj.image:
             return format_html('<img src="{}" style="max-height: 50px; border-radius: 8px;"/>', obj.image.url)
         return "-"
-    image_preview.short_description = _("Aperçu")
+    image_preview.short_description = _("Preview")
 
 
 class ProductImageInline(admin.TabularInline):
@@ -46,11 +46,11 @@ class ProductAdmin(admin.ModelAdmin):
         if obj.old_price and obj.old_price > obj.price:
             return format_html(
                 '{} <s class="text-gray-400">{}</s>',
-                f"{obj.price:,} FCFA",
-                f"{obj.old_price:,} FCFA"
+                f"${obj.price:,.2f}",
+                f"${obj.old_price:,.2f}"
             )
-        return f"{obj.price:,} FCFA"
-    price_display.short_description = _("Prix")
+        return f"${obj.price:,.2f}"
+    price_display.short_description = _("Price")
 
     def discount_percentage(self, obj):
         return f"{obj.discount_percentage}%"

@@ -1,14 +1,14 @@
 {% extends "pages/dashboard/admin_base.html" %}
 {% load humanize %}
 
-{% block title %}Gestion des Avis - Admin{% endblock %}
+{% block title %}Review Management - Admin{% endblock %}
 
 {% block dashboard_content %}
 <div class="mb-8">
     <div class="flex justify-between items-center mb-6">
         <div>
-            <h1 class="text-3xl font-black text-black tracking-tight">Gestion des Avis</h1>
-            <p class="text-gray-500 mt-1">Modérez les avis clients</p>
+            <h1 class="text-3xl font-black text-black tracking-tight">Review Management</h1>
+            <p class="text-gray-500 mt-1">Moderate customer reviews</p>
         </div>
         
         <!-- Quick Stats -->
@@ -18,11 +18,11 @@
                 <p class="text-2xl font-black text-black">{{ total_reviews }}</p>
             </div>
             <div class="bg-yellow-50 rounded-xl border border-yellow-200 px-4 py-3 text-center">
-                <p class="text-xs text-gray-500 uppercase tracking-wider">En attente</p>
+                <p class="text-xs text-gray-500 uppercase tracking-wider">Pending</p>
                 <p class="text-2xl font-black text-yellow-600">{{ pending_reviews }}</p>
             </div>
             <div class="bg-green-50 rounded-xl border border-green-200 px-4 py-3 text-center">
-                <p class="text-xs text-gray-500 uppercase tracking-wider">Approuvés</p>
+                <p class="text-xs text-gray-500 uppercase tracking-wider">Approved</p>
                 <p class="text-2xl font-black text-green-600">{{ approved_reviews }}</p>
             </div>
         </div>
@@ -33,27 +33,27 @@
         <form method="get" class="flex flex-wrap gap-4 items-end">
             <!-- Search -->
             <div class="flex-1 min-w-[300px]">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Recherche</label>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Search</label>
                 <input type="text" name="q" value="{{ request.GET.q|default:'' }}" 
-                       placeholder="Produit, utilisateur, commentaire..." 
+                       placeholder="Product, user, comment..." 
                        class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:border-yellow-600 focus:ring-1 focus:ring-yellow-600 outline-none">
             </div>
 
             <!-- Status Filter -->
             <div class="min-w-[180px]">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Statut</label>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
                 <select name="status" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:border-yellow-600 outline-none">
-                    <option value="">Tous</option>
-                    <option value="pending" {% if current_status == 'pending' %}selected{% endif %}>En attente</option>
-                    <option value="approved" {% if current_status == 'approved' %}selected{% endif %}>Approuvés</option>
+                    <option value="">All</option>
+                    <option value="pending" {% if current_status == 'pending' %}selected{% endif %}>Pending</option>
+                    <option value="approved" {% if current_status == 'approved' %}selected{% endif %}>Approved</option>
                 </select>
             </div>
 
             <!-- Rating Filter -->
             <div class="min-w-[150px]">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Note</label>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Rating</label>
                 <select name="rating" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:border-yellow-600 outline-none">
-                    <option value="">Toutes</option>
+                    <option value="">All</option>
                     {% for i in "54321" %}
                     <option value="{{ forloop.counter }}" {% if current_rating == forloop.counter|stringformat:"s" %}selected{% endif %}>{{ forloop.counter }}★</option>
                     {% endfor %}
@@ -61,12 +61,12 @@
             </div>
 
             <button type="submit" class="px-6 py-2 bg-black text-white rounded-lg font-bold hover:bg-gray-800 transition">
-                Filtrer
+                Filter
             </button>
             
             {% if request.GET.q or request.GET.status or request.GET.rating %}
             <a href="{% url 'users:admin_reviews' %}" class="px-4 py-2 border border-gray-200 rounded-lg text-gray-500 hover:bg-gray-50 transition">
-                Réinitialiser
+                Reset
             </a>
             {% endif %}
         </form>
@@ -112,12 +112,12 @@
 
                         <div class="flex items-center gap-2">
                             {% if review.is_verified_purchase %}
-                            <span class="text-xs bg-green-100 text-green-800 px-3 py-1 rounded-full font-bold">Achat vérifié</span>
+                            <span class="text-xs bg-green-100 text-green-800 px-3 py-1 rounded-full font-bold">Verified Purchase</span>
                             {% endif %}
                             {% if review.is_approved %}
-                            <span class="text-xs bg-green-100 text-green-800 px-3 py-1 rounded-full font-bold">Approuvé</span>
+                            <span class="text-xs bg-green-100 text-green-800 px-3 py-1 rounded-full font-bold">Approved</span>
                             {% else %}
-                            <span class="text-xs bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full font-bold">En attente</span>
+                            <span class="text-xs bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full font-bold">Pending</span>
                             {% endif %}
                         </div>
                     </div>
@@ -127,16 +127,16 @@
                         <button onclick="toggleApproval('{{ review.pk }}')" 
                                 class="px-4 py-2 {% if review.is_approved %}bg-yellow-600 hover:bg-yellow-700{% else %}bg-green-600 hover:bg-green-700{% endif %} text-white rounded-lg font-bold text-sm transition">
                             {% if review.is_approved %}
-                            <i class="fas fa-times mr-1"></i> Désapprouver
+                            <i class="fas fa-times mr-1"></i> Disapprove
                             {% else %}
-                            <i class="fas fa-check mr-1"></i> Approuver
+                            <i class="fas fa-check mr-1"></i> Approve
                             {% endif %}
                         </button>
 
                         <a href="{% url 'users:delete_review' review.pk %}" 
-                           onclick="return confirm('Supprimer cet avis ?')"
+                           onclick="return confirm('Delete this review?')"
                            class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold text-sm transition text-center">
-                            <i class="fas fa-trash mr-1"></i> Supprimer
+                            <i class="fas fa-trash mr-1"></i> Delete
                         </a>
                     </div>
                 </div>
@@ -171,8 +171,8 @@
             <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
                 <i class="fas fa-star text-gray-300 text-3xl"></i>
             </div>
-            <h3 class="text-xl font-bold text-gray-900 mb-2">Aucun avis trouvé</h3>
-            <p class="text-gray-500">Les avis clients apparaîtront ici.</p>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">No reviews found</h3>
+            <p class="text-gray-500">Customer reviews will appear here.</p>
         </div>
         {% endif %}
     </div>
@@ -197,11 +197,11 @@ async function toggleApproval(reviewId) {
             }
             setTimeout(() => window.location.reload(), 800);
         } else {
-            alert('Erreur lors de la mise à jour');
+            alert('Error during update');
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('Erreur réseau');
+        alert('Network error');
     }
 }
 </script>

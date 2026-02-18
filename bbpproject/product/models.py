@@ -26,8 +26,8 @@ class Product(CFPBaseModel):
     slug = models.SlugField(unique=True)
     category = models.ForeignKey("Category", on_delete=models.PROTECT, related_name="products")
     main_image = models.ImageField(upload_to="products/main/%Y/%m/%d/", blank=True, null=True)
-    price = models.DecimalField(max_digits=10, decimal_places=0, validators=[MinValueValidator(3000)])
-    old_price = models.DecimalField(max_digits=10, decimal_places=0, null=True, blank=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(5.00)])
+    old_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     stock = models.PositiveIntegerField(default=10)
     is_featured = models.BooleanField(default=False)
     description = models.TextField(blank=True)
@@ -133,7 +133,7 @@ class CartItem(CFPBaseModel):
 class Order(CFPBaseModel):
     user = models.ForeignKey(User, on_delete=models.PROTECT, related_name="orders")
     order_number = models.CharField(max_length=20, unique=True, editable=False)
-    total_amount = models.DecimalField(max_digits=12, decimal_places=0)
+    total_amount = models.DecimalField(max_digits=12, decimal_places=2)
     shipping_address = models.TextField()
     shipping_city = models.CharField(max_length=100)
     shipping_phone = models.CharField(max_length=20)
@@ -193,8 +193,8 @@ class OrderItem(CFPBaseModel):
     order = models.ForeignKey(Order, on_delete=models.PROTECT, related_name="items")
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
     quantity = models.PositiveIntegerField()
-    unit_price = models.DecimalField(max_digits=10, decimal_places=0)
-    subtotal = models.DecimalField(max_digits=12, decimal_places=0)
+    unit_price = models.DecimalField(max_digits=10, decimal_places=2)
+    subtotal = models.DecimalField(max_digits=12, decimal_places=2)
 
 
 class Wishlist(CFPBaseModel):
@@ -267,7 +267,7 @@ class Promotion(CFPBaseModel):
 class PromotionItem(CFPBaseModel):
     promotion = models.ForeignKey(Promotion, on_delete=models.CASCADE, related_name="items")
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="promotion_items")
-    promotion_price = models.DecimalField(max_digits=10, decimal_places=0)
+    promotion_price = models.DecimalField(max_digits=10, decimal_places=2)
     special_label = models.CharField(max_length=50, blank=True, help_text="Ex: Flash Sale, -50%, etc.")
 
     class Meta(CFPBaseModel.Meta):

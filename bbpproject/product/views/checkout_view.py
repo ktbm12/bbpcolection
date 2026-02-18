@@ -30,14 +30,14 @@ class CheckoutView(LoginRequiredMixin, FormView):
     def get(self, request, *args, **kwargs):
         cart = get_or_create_cart(request)
         if not cart or cart.items.count() == 0:
-            messages.warning(request, "Votre panier est vide.")
+            messages.warning(request, "Your cart is empty.")
             return redirect("product:cart_detail")
         return super().get(request, *args, **kwargs)
 
     def form_valid(self, form):
         cart = get_or_create_cart(self.request)
         if not cart or cart.items.count() == 0:
-             messages.error(self.request, "Panier vide.")
+             messages.error(self.request, "Empty cart.")
              return redirect("product:cart_detail")
 
         try:
@@ -89,7 +89,7 @@ class CheckoutView(LoginRequiredMixin, FormView):
                     return redirect('product:paypal_checkout', order_id=order.id)
 
         except Exception as e:
-            messages.error(self.request, f"Erreur lors de la commande: {str(e)}")
+            messages.error(self.request, f"Error during order: {str(e)}")
             return self.form_invalid(form)
             
         return super().form_valid(form)
@@ -110,7 +110,7 @@ class CheckoutView(LoginRequiredMixin, FormView):
             'dashboard_url': f"{protocol}://{domain}{reverse('users:user_orders')}"
         }
         send_templated_email(
-            subject=f"Confirmation de commande #{order.order_number} - bbpcollection",
+            subject=f"Order Confirmation #{order.order_number} - bbpcollection",
             to_email=self.request.user.email,
             template_name='emails/order_confirmation.html',
             context=user_context
@@ -124,7 +124,7 @@ class CheckoutView(LoginRequiredMixin, FormView):
         if hasattr(settings, 'ADMINS') and settings.ADMINS:
             admin_email = settings.ADMINS[0][1]
             send_templated_email(
-                subject=f"🔔 Nouvelle commande: #{order.order_number}",
+                subject=f"🔔 New order: #{order.order_number}",
                 to_email=admin_email,
                 template_name='emails/admin_new_order.html',
                 context=admin_context

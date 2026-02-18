@@ -1,17 +1,17 @@
 {% extends "pages/dashboard/admin_base.html" %}
 
 {% block dashboard_content %}
-    <h1 class="text-2xl font-bold mb-6">Gestion des catégories</h1>
+    <h1 class="text-2xl font-bold mb-6">Category Management</h1>
 
-    <!-- Formulaire ajout -->
+    <!-- Add Form -->
     <div class="bg-white p-5 rounded-lg shadow mb-8">
-        <h2 class="text-lg font-semibold mb-4">Nouvelle catégorie</h2>
+        <h2 class="text-lg font-semibold mb-4">New Category</h2>
 
         <form method="post" class="space-y-4">
             {% csrf_token %}
 
             <div>
-                <label class="block text-sm mb-1">Nom</label>
+                <label class="block text-sm mb-1">Name</label>
                 <input type="text" name="name"
                        class="w-full border rounded-lg p-2"
                        required>
@@ -24,17 +24,17 @@
             </div>
 
             <button class="bg-yellow-600 text-black px-4 py-2 rounded-lg">
-                Ajouter
+                Add
             </button>
         </form>
     </div>
 
-    <!-- Liste -->
+    <!-- List -->
     <div class="bg-white rounded-lg shadow">
         <table class="w-full">
             <thead class="bg-gray-100">
                 <tr>
-                    <th class="p-3 text-left">Nom</th>
+                    <th class="p-3 text-left">Name</th>
                     <th class="p-3 text-left">Slug</th>
                     <th class="p-3 text-left">Description</th>
                 </tr>
@@ -52,7 +52,7 @@
                 {% empty %}
                 <tr>
                     <td colspan="3" class="p-6 text-center text-gray-500">
-                        Aucune catégorie trouvée
+                        No categories found
                     </td>
                 </tr>
                 {% endfor %}

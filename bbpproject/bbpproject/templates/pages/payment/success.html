@@ -36,7 +36,7 @@
                     <div class="space-y-4">
                         <div class="flex justify-between">
                             <span class="text-gray-500">Amount Paid</span>
-                            <span class="text-xl font-black text-gray-900">{{ order.total_amount|intcomma }} FCFA</span>
+                            <span class="text-xl font-black text-gray-900">${{ order.total_amount|floatformat:2|intcomma }}</span>
                         </div>
                         <div class="flex justify-between">
                             <span class="text-gray-500">Payment Method</span>

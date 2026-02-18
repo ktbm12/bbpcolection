@@ -10,22 +10,22 @@ from ..models import Product, Category
 
 class ProductListView(ListView):
     """
-    Vue CBV qui affiche la liste paginée des produits avec filtres et tri.
-    Supporte :
-    - Filtre par catégorie (via query param ?category=...)
-    - Tri par popularité, prix, nouveautés, avis
-    - Pagination (12 produits par page par défaut)
-    - Recherche contextuelle simple (optionnel)
+    CBV view that displays the paginated list of products with filters and sorting.
+    Supports:
+    - Filter by category (via query param ?category=...)
+    - Sort by popularity, price, newness, reviews
+    - Pagination (12 products per page by default)
+    - Simple contextual search (optional)
     """
     model = Product
     template_name = "pages/product/product.html"     # adapte si le template est ailleurs
     context_object_name = "products"
-    paginate_by = 12                                # 12 produits par page (bon équilibre mobile/desktop)
-    ordering = ['-created']                         # défaut : les plus récents
+    paginate_by = 12                                # 12 products per page (good mobile/desktop balance)
+    ordering = ['-created']                         # default: newest first
 
     def get_queryset(self):
         """
-        Construit le queryset dynamique selon les filtres et le tri
+        Builds the dynamic queryset according to filters and sorting
         """
         qs = Product.objects.filter(is_active=True)
 
@@ -57,7 +57,7 @@ class ProductListView(ListView):
                 Q(category__name__icontains=q)
             )
 
-        # 5. Tri dynamique
+        # 5. Dynamic Sorting
         sort = self.request.GET.get('sort')
         if sort:
             if sort == 'price_asc':
@@ -67,17 +67,17 @@ class ProductListView(ListView):
             elif sort == 'newest':
                 qs = qs.order_by('-created')
             elif sort == 'rating':
-                # On garde l'option mais sans tri réel tant que Review n'existe pas
+                # Keep option but no real sorting until Review model is integrated
                 pass
         
         return qs
 
     def get_context_data(self, **kwargs):
         """
-        Ajoute des variables utiles au template :
-        - catégories pour les filtres
-        - catégorie active
-        - paramètre de tri actif
+        Adds useful variables to the template:
+        - categories for filters
+        - active category
+        - active sorting parameter
         """
         context = super().get_context_data(**kwargs)
 
@@ -101,8 +101,8 @@ class ProductListView(ListView):
 
     def get_paginate_by(self, queryset):
         """
-        Permet de surcharger le nombre par page via query param ?page_size=...
-        (optionnel – utile pour tests ou mode "voir plus")
+        Allows overriding the number per page via query param ?page_size=...
+        (optional – useful for tests or "see more" mode)
         """
         page_size = self.request.GET.get('page_size')
         if page_size and page_size.isdigit():

@@ -94,9 +94,9 @@
                     <h1 class="text-4xl sm:text-5xl font-serif font-bold text-gray-900 mb-6 leading-tight">{{ product.name }}</h1>
                     
                     <div class="flex items-baseline gap-6 mb-8">
-                        <span class="text-4xl font-black text-black">{{ product.price|floatformat:0|intcomma }} FCFA</span>
+                        <span class="text-4xl font-black text-black">${{ product.price|floatformat:2|intcomma }}</span>
                         {% if product.old_price %}
-                            <span class="text-xl text-gray-400 line-through font-medium">{{ product.old_price|floatformat:0|intcomma }} FCFA</span>
+                            <span class="text-xl text-gray-400 line-through font-medium">${{ product.old_price|floatformat:2|intcomma }}</span>
                             <div class="bg-red-500 text-white px-3 py-1 rounded-lg text-xs font-black">
                                 -{{ product.discount_percentage }}%
                             </div>
@@ -243,7 +243,7 @@
                 {% else %}
                 <div class="mb-12 bg-green-50 rounded-2xl p-6 border border-green-200 text-center">
                     <i class="fas fa-check-circle text-green-600 text-3xl mb-2"></i>
-                    <p class="text-green-800 font-bold">Merci ! Vous avez déjà laissé un avis pour ce produit.</p>
+                    <p class="text-green-800 font-bold">Thank you! You have already left a review for this product.</p>
                 </div>
                 {% endif %}
             {% else %}
@@ -309,7 +309,7 @@
         <div class="mt-24">
             <div class="flex items-end justify-between mb-12">
                 <div>
-                    <p class="text-yellow-600 font-black uppercase tracking-[0.3em] text-xs mb-3">Recommandations</p>
+                    <p class="text-yellow-600 font-black uppercase tracking-[0.3em] text-xs mb-3">Recommendations</p>
                     <h2 class="text-4xl font-serif font-bold text-gray-900">Complete Your Style</h2>
                 </div>
                 <a href="{% url 'product:product_list' %}" class="hidden sm:inline-flex items-center gap-2 text-black font-black uppercase tracking-widest text-xs hover:text-yellow-600 transition">
@@ -331,7 +331,7 @@
                     </div>
                     <p class="text-gray-400 font-black uppercase tracking-widest text-[9px] mb-2">{{ item.category.name }}</p>
                     <h3 class="text-lg font-bold text-gray-900 group-hover:text-yellow-600 transition mb-1">{{ item.name }}</h3>
-                    <p class="font-bold text-gray-500 text-sm">{{ item.price|floatformat:0|intcomma }} FCFA</p>
+                    <p class="font-bold text-gray-500 text-sm">${{ item.price|floatformat:2|intcomma }}</p>
                 </a>
                 {% endfor %}
             </div>
@@ -370,9 +370,9 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Utiliser le nouveau système de notification (implémenté dans base.html ensuite)
+                // Use the new notification system
                 if (window.showPremiumNotification) {
-                    window.showPremiumNotification('Produit ajouté au panier !', 'success');
+                    window.showPremiumNotification('Product added to cart!', 'success');
                 }
                 // Update navbar count if possible
                 document.querySelectorAll('.cart-items-badge').forEach(badge => {
@@ -380,7 +380,7 @@
                 });
             }
         })
-        .catch(error => console.error('Erreur:', error));
+        .catch(error => console.error('Error:', error));
     }
 </script>
 {% endblock %}
