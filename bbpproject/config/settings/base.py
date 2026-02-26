@@ -95,6 +95,7 @@ LOCAL_APPS = [
     "bbpproject.users",
     "core",
     "product",
+    "blog",
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
