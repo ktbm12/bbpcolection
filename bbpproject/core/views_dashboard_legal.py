@@ -2,8 +2,8 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from .models import LegalPage
-from .forms import LegalPageForm
+from .models import LegalPage, PrivacyPolicy
+from .forms import LegalPageForm, PrivacyPolicyForm
 
 class AdminRequiredMixin(UserPassesTestMixin):
     def test_func(self):
