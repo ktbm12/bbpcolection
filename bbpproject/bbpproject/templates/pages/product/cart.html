@@ -79,8 +79,8 @@
 <!-- Breadcrumb -->
 <nav class="bg-white py-6 mt-20 border-b border-gray-100">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:text-left">
-        <h1 class="text-3xl md:text-4xl font-serif font-black text-gray-900 mb-2">Votre Panier d'Apprentissage</h1>
-        <p class="text-gray-500 font-medium capitalize">Vous êtes presque prêt à commencer votre parcours d'apprentissage !</p>
+        <h1 class="text-3xl md:text-4xl font-serif font-black text-gray-900 mb-2">Votre Panier Luxe</h1>
+        <p class="text-gray-500 font-medium capitalize">Préparez votre commande exclusive BBP Collection.</p>
     </div>
 </nav>
 
@@ -111,7 +111,7 @@
             <div class="lg:col-span-8 space-y-8">
                 <div class="flex items-center justify-between bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
                     <span class="text-lg font-black text-gray-900">
-                        {{ cart_items_count }} cours dans le panier
+                        {{ cart_items_count }} article{{ cart_items_count|pluralize }} dans le panier
                     </span>
                     <button id="clear-cart-btn" class="text-sm font-black text-red-500 hover:text-red-600 transition flex items-center gap-2 group">
                         <i class="fas fa-trash-alt group-hover:animate-bounce"></i>
@@ -154,24 +154,18 @@
                                     </div>
 
                                     <p class="text-sm font-bold text-gray-500">
-                                        par <span class="text-black">{{ item.product.brand.name|default:"Mathieu Tchoupe" }}</span>
+                                        par <span class="text-black">BBP Collection</span>
                                     </p>
 
                                     <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-[11px] font-black uppercase tracking-widest text-gray-400">
                                         <span class="flex items-center gap-1.5 text-blue-600 bg-blue-50 px-3 py-1 rounded-full border border-blue-100/50">
                                             <i class="fas fa-layer-group"></i> {{ item.product.category.name }}
                                         </span>
-                                        <span class="flex items-center gap-1.5">
-                                            <i class="far fa-clock"></i> 2h30m
-                                        </span>
-                                        <span class="flex items-center gap-1.5">
-                                            <i class="fas fa-signal"></i> Beginner
-                                        </span>
                                         <span class="flex items-center gap-1.5 text-yellow-600">
-                                            <i class="fas fa-star"></i> 4.9 (1.2k)
+                                            <i class="fas fa-certificate"></i> Qualité Premium
                                         </span>
                                         <span class="flex items-center gap-1.5 text-green-600">
-                                            <i class="fas fa-certificate"></i> Certificat
+                                            <i class="fas fa-truck"></i> Expédition Rapide
                                         </span>
                                     </div>
                                 </div>
@@ -212,7 +206,7 @@
                 <div class="mt-12 bg-white p-6 rounded-2xl border border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-6">
                     <a href="{% url 'product:product_list' %}" class="flex items-center gap-3 text-black font-black uppercase tracking-widest text-sm group">
                         <i class="fas fa-arrow-left transition-transform group-hover:-translate-x-2"></i> 
-                        Continuer à explorer les cours
+                        Continuer vos achats
                     </a>
                 </div>
             </div>
@@ -224,7 +218,7 @@
 
                     <div class="space-y-4">
                         <div class="flex justify-between text-gray-500 font-bold">
-                            <span>Sous-total ({{ cart_items_count }} cours)</span>
+                            <span>Sous-total ({{ cart_items_count }} article{{ cart_items_count|pluralize }})</span>
                             <span id="subtotal" class="text-black">${{ subtotal|floatformat:2|intcomma }}</span>
                         </div>
 
@@ -295,11 +289,6 @@
                     <div class="relative h-48 overflow-hidden">
                         <img src="{{ prod.get_main_image_url }}" alt="{{ prod.name }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                        <div class="absolute bottom-4 left-4 flex gap-2">
-                            <span class="px-2 py-1 bg-white/90 backdrop-blur-sm text-black text-[10px] font-black rounded uppercase">
-                                8h20m
-                            </span>
-                        </div>
                     </div>
                     <div class="p-6 space-y-4">
                         <h3 class="font-serif font-black text-gray-900 line-clamp-2 leading-snug group-hover:text-yellow-600 transition-colors">
@@ -328,10 +317,10 @@
             </div>
             <h2 class="text-4xl font-serif font-black text-gray-900 mb-4">Votre panier est vide</h2>
             <p class="text-gray-500 font-medium mb-12">
-                Le paysage du développement est en pleine mutation. Ne restez pas à la traîne, commencez votre parcours dès aujourd'hui.
+                Sublimez votre style avec nos collections exclusives de mèches et perruques de luxe.
             </p>
             <a href="{% url 'product:product_list' %}" class="inline-flex items-center gap-3 bg-black text-white hover:bg-yellow-600 hover:text-black px-12 py-5 rounded-2xl font-black uppercase tracking-widest transition-all duration-500 shadow-2xl shadow-black/20 group">
-                Explorer les cours
+                Explorer nos collections
                 <i class="fas fa-arrow-right transition-transform group-hover:translate-x-2"></i>
             </a>
         </div>
