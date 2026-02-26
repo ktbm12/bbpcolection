@@ -1,0 +1,102 @@
+{% extends "pages/dashboard/admin_base.html" %}
+
+{% block dashboard_content %}
+<div class="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+    <div>
+        <h1 class="text-3xl lg:text-4xl font-serif font-bold text-gray-900 mb-2">Blog Journal</h1>
+        <p class="text-gray-600">Manage your luxury hair care articles and style tips</p>
+    </div>
+    <a href="{% url 'blog:post_create' %}" class="flex items-center gap-2 bg-black text-white px-6 py-3 rounded-xl font-bold hover:bg-gray-800 transition shadow-lg">
+        <i class="fas fa-plus"></i>
+        <span>Create New Article</span>
+    </a>
+</div>
+
+<div class="bg-white rounded-3xl border-2 border-gray-100 overflow-hidden shadow-sm">
+    <div class="overflow-x-auto">
+        <table class="w-full text-left">
+            <thead class="bg-gray-50 border-b border-gray-100">
+                <tr>
+                    <th class="px-8 py-5 text-xs font-black uppercase tracking-widest text-gray-400">Article</th>
+                    <th class="px-8 py-5 text-xs font-black uppercase tracking-widest text-gray-400">Author</th>
+                    <th class="px-8 py-5 text-xs font-black uppercase tracking-widest text-gray-400">Status</th>
+                    <th class="px-8 py-5 text-xs font-black uppercase tracking-widest text-gray-400">Date</th>
+                    <th class="px-8 py-5 text-xs font-black uppercase tracking-widest text-gray-400 text-right">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50">
+                {% for post in posts %}
+                <tr class="hover:bg-gray-50 transition-colors group">
+                    <td class="px-8 py-6">
+                        <div class="flex items-center gap-4">
+                            <div class="w-16 h-12 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                                {% if post.image %}
+                                    <img src="{{ post.image.url }}" alt="" class="w-full h-full object-cover">
+                                {% else %}
+                                    <div class="w-full h-full flex items-center justify-center text-gray-300">
+                                        <i class="fas fa-image"></i>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="max-w-xs md:max-w-sm">
+                                <h3 class="font-bold text-gray-900 truncate">{{ post.title }}</h3>
+                                <p class="text-xs text-gray-500 truncate">{{ post.excerpt|default:"No summary provided" }}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-8 py-6">
+                        <div class="flex items-center gap-2 text-sm text-gray-600">
+                            <div class="w-6 h-6 bg-gold-100 text-gold-600 rounded-full flex items-center justify-center text-[10px] font-bold">
+                                {{ post.author.username|first|upper }}
+                            </div>
+                            <span>{{ post.author.username }}</span>
+                        </div>
+                    </td>
+                    <td class="px-8 py-6">
+                        {% if post.is_published %}
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-green-50 text-green-600 rounded-full text-[10px] font-black uppercase tracking-widest">
+                            <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                            Published
+                        </span>
+                        {% else %}
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-gray-100 text-gray-500 rounded-full text-[10px] font-black uppercase tracking-widest">
+                            <span class="w-1.5 h-1.5 bg-gray-400 rounded-full"></span>
+                            Draft
+                        </span>
+                        {% endif %}
+                    </td>
+                    <td class="px-8 py-6">
+                        <p class="text-sm font-medium text-gray-900">{{ post.created|date:"M j, Y" }}</p>
+                        <p class="text-xs text-gray-400">{{ post.created|time:"H:i" }}</p>
+                    </td>
+                    <td class="px-8 py-6 text-right">
+                        <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <a href="{% url 'blog:post_edit' post.pk %}" class="p-2 text-gray-400 hover:text-gold-600 transition">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="{% url 'blog:post_delete' post.pk %}" onclick="return confirm('Are you sure you want to delete this article?')" class="p-2 text-gray-400 hover:text-red-500 transition">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="px-8 py-20 text-center">
+                        <div class="mb-4 inline-flex w-16 h-16 bg-gray-50 rounded-full items-center justify-center text-gray-300">
+                            <i class="fas fa-feather text-2xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-1">No articles found</h3>
+                        <p class="text-gray-500 max-w-xs mx-auto mb-8">Start sharing your hair care expertise and tips with your customers today.</p>
+                        <a href="{% url 'blog:post_create' %}" class="inline-flex items-center gap-2 text-gold-600 font-bold hover:text-gold-700">
+                            <span>Create your first post</span>
+                            <i class="fas fa-arrow-right text-xs"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,93 @@
+{% extends "pages/dashboard/admin_base.html" %}
+
+{% block dashboard_content %}
+<div class="mb-10">
+    <a href="{% url 'blog:dashboard_blog_list' %}" class="inline-flex items-center gap-2 text-gray-500 font-bold hover:text-black transition mb-6">
+        <i class="fas fa-arrow-left text-xs"></i>
+        <span>Back to Articles</span>
+    </a>
+    <h1 class="text-3xl lg:text-4xl font-serif font-bold text-gray-900 mb-2">
+        {% if form.instance.pk %}Edit Article{% else %}New Article{% endif %}
+    </h1>
+    <p class="text-gray-600">Share your style expertise with your audience</p>
+</div>
+
+<div class="max-w-4xl">
+    <form method="post" enctype="multipart/form-data" class="space-y-8">
+        {% csrf_token %}
+        
+        <div class="bg-white rounded-3xl border-2 border-gray-100 p-8 shadow-sm">
+            <div class="grid grid-cols-1 gap-8">
+                <!-- Title -->
+                <div>
+                    <label class="block text-xs font-black uppercase tracking-widest text-gray-400 mb-3">Article Title</label>
+                    {{ form.title }}
+                    {% if form.title.errors %}
+                        <p class="mt-2 text-sm text-red-500">{{ form.title.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Excerpt -->
+                <div>
+                    <label class="block text-xs font-black uppercase tracking-widest text-gray-400 mb-3">Short Summary (Excerpt)</label>
+                    {{ form.excerpt }}
+                    <p class="mt-2 text-[10px] text-gray-400">Brief introduction shown on the homepage and list pages.</p>
+                    {% if form.excerpt.errors %}
+                        <p class="mt-2 text-sm text-red-500">{{ form.excerpt.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Image -->
+                <div>
+                    <label class="block text-xs font-black uppercase tracking-widest text-gray-400 mb-3">Featured Image</label>
+                    <div class="mt-1 flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-200 rounded-2xl hover:border-gold-300 transition-colors group relative overflow-hidden">
+                        {% if form.instance.image %}
+                            <img src="{{ form.instance.image.url }}" alt="" class="absolute inset-0 w-full h-full object-cover opacity-10 group-hover:opacity-20 transition-opacity">
+                        {% endif %}
+                        <div class="text-center relative z-10">
+                            <i class="fas fa-cloud-upload-alt text-3xl text-gray-300 group-hover:text-gold-500 transition-colors mb-3"></i>
+                            <div class="flex text-sm text-gray-600">
+                                {{ form.image }}
+                            </div>
+                            <p class="mt-1 text-xs text-gray-500">PNG, JPG, WEBP up to 5MB</p>
+                        </div>
+                    </div>
+                    {% if form.image.errors %}
+                        <p class="mt-2 text-sm text-red-500">{{ form.image.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Content -->
+                <div>
+                    <label class="block text-xs font-black uppercase tracking-widest text-gray-400 mb-3">Full Content</label>
+                    {{ form.content }}
+                    {% if form.content.errors %}
+                        <p class="mt-2 text-sm text-red-500">{{ form.content.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Publish Status -->
+                <div class="flex items-center gap-4 bg-gray-50 p-6 rounded-2xl">
+                    <div class="flex-1">
+                        <h4 class="font-bold text-gray-900 mb-1">Visibility</h4>
+                        <p class="text-xs text-gray-500">When enabled, this article will be visible to everyone on the homepage.</p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        {{ form.is_published }}
+                        <span class="ml-3 text-sm font-medium text-gray-900">Publish Article</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-4">
+            <button type="submit" class="bg-black text-white px-10 py-4 rounded-2xl font-black uppercase tracking-widest text-sm hover:bg-gray-800 transition shadow-xl hover:shadow-2xl active:scale-95 duration-200">
+                {% if form.instance.pk %}Save Changes{% else %}Publish Article{% endif %}
+            </button>
+            <a href="{% url 'blog:dashboard_blog_list' %}" class="px-10 py-4 rounded-2xl font-black uppercase tracking-widest text-sm text-gray-400 hover:text-black transition">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

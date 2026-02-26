@@ -23,7 +23,7 @@ urlpatterns = [
     
     path("accounts/", include("allauth.urls")),
     path("legal/", include("core.urls")),
-    # path("legal/<slug:slug>/", LegalPageView.as_view(), name="legal_page"), # Removed
+    path("blog/", include("blog.urls")),
     # Your stuff: custom urls includes go here
     # ...
     # Media files
