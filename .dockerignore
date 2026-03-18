@@ -1,0 +1,15 @@
+.git
+.gitignore
+.envs
+.venv
+venv
+node_modules
+bbpproject/node_modules
+bbpproject/.venv
+bbpproject/staticfiles
+bbpproject/media
+*.pyc
+__pycache__
+.DS_Store
+Dockerfile
+render.yaml
