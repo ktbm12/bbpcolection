@@ -6,6 +6,7 @@ from .base import env
 # GENERAL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
+DEBUG = True
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = env(
@@ -13,8 +14,7 @@ SECRET_KEY = env(
     default="4MQN9L7TG3BkBBl0e9Q8x9gEO5FN7wHIWtbYgzHsGiqrl15SySgDRyQoA1JMyW7U",
 )
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-DEBUG = False
-ALLOWED_HOSTS = [".onrender.com"]
+ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1", ".onrender.com"]
 # CACHES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#caches

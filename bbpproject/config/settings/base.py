@@ -56,6 +56,7 @@ import dj_database_url
 DATABASES = {
     "default": dj_database_url.config(default=os.environ.get("DATABASE_URL"))
 }
+DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
 # https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
