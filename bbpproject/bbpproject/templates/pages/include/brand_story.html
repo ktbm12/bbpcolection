@@ -1,56 +1,396 @@
 {% load static %}
-<section class="py-24 bg-gray-50 overflow-hidden">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <!-- Image Column -->
-            <div class="relative group order-2 lg:order-1">
-                <div class="aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl relative skeleton">
-                    <img src="https://images.unsplash.com/photo-1595152772835-219674b2a8a6?auto=format&fit=crop&q=80&w=1000" 
-                         alt="Premium Hair Bundles" 
-                         class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 img-fade-in"
-                         onload="this.classList.add('img-loaded'); this.parentElement.classList.remove('skeleton')">
-                    <div class="absolute inset-0 bg-black/10 transition-opacity group-hover:opacity-0"></div>
-                </div>
-                <!-- Decorative element -->
-                <div class="absolute -bottom-10 -right-10 w-48 h-48 bg-yellow-600/10 rounded-full blur-3xl -z-10 animate-pulse"></div>
-            </div>
 
-            <!-- Content Column -->
-            <div class="order-1 lg:order-2">
-                <p class="text-yellow-600 font-black uppercase tracking-[0.4em] text-xs mb-6 px-4 py-1 bg-yellow-600/5 rounded-full w-fit">The Signature Experience</p>
-                <h2 class="text-5xl sm:text-6xl font-serif font-bold text-gray-900 mb-8 leading-tight">Crafted for the <br> <span class="text-yellow-600 italic">Discerning Woman</span></h2>
-                <p class="text-xl text-gray-600 mb-10 leading-relaxed font-light">
-                    Every bundle in our collection undergoes a rigorous selection process. We don't just sell hair; we provide a symbol of confidence and uncompromising luxury.
-                </p>
-                
-                <div class="space-y-6 mb-12">
-                    <div class="flex items-start gap-4">
-                        <div class="w-12 h-12 bg-white rounded-2xl shadow-lg flex items-center justify-center flex-shrink-0 text-yellow-600">
-                            <i class="fas fa-gem"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-gray-900 uppercase tracking-tighter">Raw Virgin Sourcing</h4>
-                            <p class="text-sm text-gray-500">Untouched by chemicals, maintaining natural strength and luster.</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start gap-4">
-                        <div class="w-12 h-12 bg-white rounded-2xl shadow-lg flex items-center justify-center flex-shrink-0 text-yellow-600">
-                            <i class="fas fa-magic"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-gray-900 uppercase tracking-tighter">Artisan Wefted</h4>
-                            <p class="text-sm text-gray-500">Double-drawn wefts designed for maximum fullness and zero shedding.</p>
-                        </div>
-                    </div>
-                </div>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:wght@300;400;500;600&display=swap');
 
-                <a href="{% url 'users:about' %}" class="inline-flex items-center gap-4 text-black font-black uppercase tracking-widest text-xs group">
-                    <span>Explore Our Legacy</span>
-                    <div class="w-12 h-12 rounded-full border border-black flex items-center justify-center group-hover:bg-black group-hover:text-white transition-all duration-500">
-                        <i class="fas fa-arrow-right transform -rotate-45 group-hover:rotate-0 transition-transform"></i>
-                    </div>
-                </a>
-            </div>
+  .sig-section * { box-sizing: border-box; }
+
+  .sig-section {
+    font-family: 'DM Sans', sans-serif;
+    background: #faf8f4;
+    padding: 7rem 0;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .sig-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: radial-gradient(circle at 80% 20%, rgba(180,140,60,0.06) 0%, transparent 50%),
+                      radial-gradient(circle at 10% 80%, rgba(180,140,60,0.04) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .sig-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+  }
+
+  /* ── IMAGE COLUMN ── */
+  .sig-image-col {
+    position: relative;
+    order: 2;
+  }
+
+  .sig-image-wrap {
+    position: relative;
+    border-radius: 2.5rem 2.5rem 2.5rem 0.5rem;
+    overflow: hidden;
+    aspect-ratio: 4/5;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.18), 0 8px 24px rgba(0,0,0,0.08);
+  }
+
+  .sig-image-wrap img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    display: block;
+  }
+
+  .sig-image-wrap:hover img { transform: scale(1.07); }
+
+  .sig-image-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(160deg, transparent 50%, rgba(10,8,5,0.35) 100%);
+    pointer-events: none;
+  }
+
+  /* Badge flottant */
+  .sig-badge {
+    position: absolute;
+    bottom: 2rem;
+    left: -1.5rem;
+    background: #fff;
+    border-radius: 1rem;
+    padding: 1rem 1.25rem;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.12);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    animation: float 4s ease-in-out infinite;
+  }
+
+  .sig-badge-icon {
+    width: 2.5rem; height: 2.5rem;
+    background: #b8900a;
+    border-radius: 0.75rem;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
+
+  .sig-badge-text { line-height: 1.3; }
+  .sig-badge-text strong { display: block; font-size: 0.85rem; font-weight: 600; color: #1a1a1a; }
+  .sig-badge-text span { font-size: 0.75rem; color: #888; }
+
+  /* Stars badge */
+  .sig-stars {
+    position: absolute;
+    top: 2rem;
+    right: -1rem;
+    background: #1a1a1a;
+    border-radius: 0.875rem;
+    padding: 0.75rem 1rem;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+    color: #fff;
+    text-align: center;
+  }
+
+  .sig-stars-row { color: #f0a500; font-size: 0.7rem; letter-spacing: 1px; margin-bottom: 2px; }
+  .sig-stars-label { font-size: 0.7rem; color: rgba(255,255,255,0.6); white-space: nowrap; }
+
+  /* Decorative orb */
+  .sig-orb {
+    position: absolute;
+    bottom: -3rem; right: -3rem;
+    width: 14rem; height: 14rem;
+    background: radial-gradient(circle, rgba(184,144,10,0.12) 0%, transparent 70%);
+    border-radius: 50%;
+    z-index: -1;
+  }
+
+  /* ── CONTENT COLUMN ── */
+  .sig-content-col { order: 1; }
+
+  .sig-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: #b8900a;
+    margin-bottom: 1.5rem;
+  }
+
+  .sig-eyebrow::before, .sig-eyebrow::after {
+    content: '';
+    display: block;
+    width: 2rem; height: 1px;
+    background: #b8900a;
+    opacity: 0.5;
+  }
+
+  .sig-heading {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(2.8rem, 4.5vw, 4rem);
+    font-weight: 700;
+    line-height: 1.1;
+    color: #0f0e0c;
+    margin: 0 0 1.75rem;
+  }
+
+  .sig-heading em {
+    font-style: italic;
+    color: #b8900a;
+    font-weight: 400;
+  }
+
+  .sig-lead {
+    font-size: 1.05rem;
+    color: #6b6560;
+    line-height: 1.85;
+    font-weight: 300;
+    margin-bottom: 2.5rem;
+    max-width: 48ch;
+  }
+
+  /* Feature items */
+  .sig-features { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2.75rem; }
+
+  .sig-feature {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.1rem 1.25rem;
+    background: #fff;
+    border-radius: 1rem;
+    border: 1px solid rgba(184,144,10,0.1);
+    transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+    cursor: default;
+  }
+
+  .sig-feature:hover {
+    border-color: rgba(184,144,10,0.3);
+    box-shadow: 0 8px 24px rgba(184,144,10,0.08);
+    transform: translateX(4px);
+  }
+
+  .sig-feature-icon {
+    width: 2.75rem; height: 2.75rem;
+    background: linear-gradient(135deg, #fdf4e0, #f5e0a8);
+    border-radius: 0.75rem;
+    display: flex; align-items: center; justify-content: center;
+    color: #b8900a;
+    font-size: 0.95rem;
+    flex-shrink: 0;
+  }
+
+  .sig-feature-body { flex: 1; }
+
+  .sig-feature-title {
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #1a1a1a;
+    margin: 0 0 0.2rem;
+  }
+
+  .sig-feature-desc {
+    font-size: 0.85rem;
+    color: #888;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* Divider */
+  .sig-divider {
+    width: 3rem; height: 1px;
+    background: rgba(184,144,10,0.25);
+    margin-bottom: 2.5rem;
+  }
+
+  /* CTA */
+  .sig-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    text-decoration: none;
+    overflow: hidden;
+    border-radius: 0.75rem;
+    border: 1.5px solid #0f0e0c;
+    transition: border-color 0.3s;
+  }
+
+  .sig-cta:hover { border-color: #b8900a; }
+
+  .sig-cta-label {
+    padding: 0.9rem 1.5rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #0f0e0c;
+    background: transparent;
+    transition: background 0.4s, color 0.4s;
+    white-space: nowrap;
+  }
+
+  .sig-cta:hover .sig-cta-label {
+    background: #b8900a;
+    color: #fff;
+  }
+
+  .sig-cta-arrow {
+    width: 3rem; height: 3rem;
+    background: #0f0e0c;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff;
+    font-size: 0.8rem;
+    transition: background 0.4s, transform 0.4s;
+    flex-shrink: 0;
+  }
+
+  .sig-cta:hover .sig-cta-arrow {
+    background: #b8900a;
+    transform: rotate(45deg);
+  }
+
+  .sig-cta-arrow i { transition: inherit; }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+  .reveal-left { opacity: 0; transform: translateX(-40px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .reveal-left.visible { opacity: 1; transform: none; }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .sig-inner {
+      grid-template-columns: 1fr;
+      gap: 3.5rem;
+    }
+    .sig-image-col { order: 1; max-width: 500px; margin: 0 auto; width: 100%; }
+    .sig-content-col { order: 2; }
+    .sig-badge { left: 0; }
+    .sig-stars { right: 0; }
+  }
+
+  @media (max-width: 640px) {
+    .sig-section { padding: 5rem 0; }
+    .sig-badge { display: none; }
+  }
+</style>
+
+<section class="sig-section">
+  <div class="sig-inner">
+
+    <!-- Image Column -->
+    <div class="sig-image-col reveal-left">
+      <div class="sig-image-wrap">
+        <img
+          src="https://images.unsplash.com/photo-1595152772835-219674b2a8a6?auto=format&fit=crop&q=80&w=1000"
+          alt="Mèches premium — collection signature"
+          loading="lazy"
+        >
+      </div>
+
+      <!-- Social proof badge -->
+      <div class="sig-badge">
+        <div class="sig-badge-icon"><i class="fas fa-check"></i></div>
+        <div class="sig-badge-text">
+          <strong>+12 000 clientes</strong>
+          <span>satisfaites dans le monde</span>
         </div>
+      </div>
+
+      <!-- Stars badge -->
+      <div class="sig-stars">
+        <div class="sig-stars-row">★★★★★</div>
+        <div class="sig-stars-label">4.9 / 5 • 3 200 avis</div>
+      </div>
+
+      <div class="sig-orb"></div>
     </div>
+
+    <!-- Content Column -->
+    <div class="sig-content-col">
+
+      <div class="sig-eyebrow reveal">The Signature Experience</div>
+
+      <h2 class="sig-heading reveal" style="transition-delay: 0.1s;">
+        Sublimez votre<br>
+        beauté avec <em>l'excellence</em>
+      </h2>
+
+      <p class="sig-lead reveal" style="transition-delay: 0.2s;">
+        Chaque mèche de notre collection est sélectionnée à la source pour préserver son éclat naturel. Nous ne vendons pas seulement des mèches — nous vous offrons confiance et élégance au quotidien.
+      </p>
+
+      <div class="sig-features">
+        <div class="sig-feature reveal" style="transition-delay: 0.3s;">
+          <div class="sig-feature-icon"><i class="fas fa-gem"></i></div>
+          <div class="sig-feature-body">
+            <p class="sig-feature-title">100 % Cheveux Vierges</p>
+            <p class="sig-feature-desc">Non traités, non teints — force et brillance naturelles intactes.</p>
+          </div>
+        </div>
+        <div class="sig-feature reveal" style="transition-delay: 0.4s;">
+          <div class="sig-feature-icon"><i class="fas fa-magic"></i></div>
+          <div class="sig-feature-body">
+            <p class="sig-feature-title">Tissage Artisanal</p>
+            <p class="sig-feature-desc">Doubles trames pour un volume maximal, zéro chute garantie.</p>
+          </div>
+        </div>
+        <div class="sig-feature reveal" style="transition-delay: 0.5s;">
+          <div class="sig-feature-icon"><i class="fas fa-shipping-fast"></i></div>
+          <div class="sig-feature-body">
+            <p class="sig-feature-title">Livraison Express</p>
+            <p class="sig-feature-desc">Expédiées en 24 h, emballage discret et soigné.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="sig-divider reveal" style="transition-delay: 0.55s;"></div>
+
+      <div class="reveal" style="transition-delay: 0.6s;">
+        <a href="{% url 'users:about' %}" class="sig-cta">
+          <span class="sig-cta-label">Découvrir notre histoire</span>
+          <span class="sig-cta-arrow"><i class="fas fa-arrow-right"></i></span>
+        </a>
+      </div>
+
+    </div>
+  </div>
 </section>
+
+<script>
+(function() {
+  const els = document.querySelectorAll('.reveal, .reveal-left');
+  if (!els.length) return;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  els.forEach(el => io.observe(el));
+})();
+</script>
