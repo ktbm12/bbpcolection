@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 set -o errexit
 
-# Installer les dépendances
+echo "Installing dependencies..."
 pip install -r requirements.txt
 
-# Appliquer les migrations
+echo "Applying migrations..."
 python manage.py migrate
 
-# Collecter les fichiers statiques
+echo "Collecting static files..."
 python manage.py collectstatic --noinput
