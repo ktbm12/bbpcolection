@@ -21,10 +21,13 @@ RUN pip install --no-cache-dir --upgrade pip \
 COPY . .
 
 # Définir la commande pour lancer l'application
-# Migration + collectstatic + gunicorn
+# Migrations + collectstatic + gunicorn
 CMD ["bash", "-c", "\
+    echo 'Lancement des migrations et collectstatic...' && \
     python bbpproject/manage.py migrate --noinput && \
     python bbpproject/manage.py collectstatic --noinput && \
-    gunicorn config.wsgi:application --bind 0.0.0.0:$PORT \
+    echo 'Démarrage de Gunicorn...' && \
+    gunicorn config.wsgi:application --bind 0.0.0.0:${PORT:-10000} --workers 3 \
 "]
+
 EXPOSE 10000
