@@ -21,7 +21,8 @@ SECRET_KEY = env("DJANGO_SECRET_KEY")
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["example.com"])
 ADMIN_URL = env("DJANGO_ADMIN_URL", default="admin/")
-
+# production.py
+SENTRY_DSN = env("SENTRY_DSN", default="")
 # DATABASES
 # ------------------------------------------------------------------------------
 DATABASES["default"]["CONN_MAX_AGE"] = env.int("CONN_MAX_AGE", default=60)
