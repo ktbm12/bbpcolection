@@ -28,7 +28,7 @@ if render_external_url:
     host = urlparse(render_external_url).hostname
     ALLOWED_HOSTS = [host]
 else:
-    ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=env.list("ALLOWED_HOSTS", default=["example.com"]))
+    ALLOWED_HOSTS = [h.strip("/") for h in env.list("DJANGO_ALLOWED_HOSTS", default=env.list("ALLOWED_HOSTS", default=["example.com"]))]
 ADMIN_URL = env("DJANGO_ADMIN_URL", default="admin/")
 # production.py
 SENTRY_DSN = env("SENTRY_DSN", default="")
@@ -65,6 +65,8 @@ SESSION_COOKIE_NAME = "__Secure-sessionid"
 CSRF_COOKIE_SECURE = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#csrf-cookie-name
 CSRF_COOKIE_NAME = "__Secure-csrftoken"
+# https://docs.djangoproject.com/en/dev/ref/settings/#csrf-trusted-origins
+CSRF_TRUSTED_ORIGINS = [f"https://{host.strip('/')}" for host in ALLOWED_HOSTS if host]
 # https://docs.djangoproject.com/en/dev/topics/security/#ssl-https
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-hsts-seconds
 # TODO: set this to 60 seconds first and then to 518400 once you prove the former works
@@ -89,7 +91,7 @@ STORAGES = {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     },
 }
 
@@ -112,7 +114,7 @@ ACCOUNT_EMAIL_SUBJECT_PREFIX = EMAIL_SUBJECT_PREFIX
 # ADMIN
 # ------------------------------------------------------------------------------
 # Django Admin URL regex.
-ADMIN_URL = env("DJANGO_ADMIN_URL")
+# URL definition is already done above.
 
 # Anymail
 # ------------------------------------------------------------------------------
@@ -193,8 +195,9 @@ sentry_sdk.init(
 # django-rest-framework
 # -------------------------------------------------------------------------------
 # Tools that generate code samples can use SERVERS to point to the correct domain
-SPECTACULAR_SETTINGS["SERVERS"] = [
-    {"url": "https://example.com", "description": "Production server"},
-]
+if ALLOWED_HOSTS:
+    SPECTACULAR_SETTINGS["SERVERS"] = [
+        {"url": f"https://{ALLOWED_HOSTS[0].strip('/')}", "description": "Production server"},
+    ]
 # Your stuff...
 # ------------------------------------------------------------------------------
