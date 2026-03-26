@@ -19,14 +19,16 @@ from .base import env
 # GENERAL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
-SECRET_KEY = env("DJANGO_SECRET_KEY")
+SECRET_KEY = env("DJANGO_SECRET_KEY", default=env("SECRET_KEY", default=None))
+if not SECRET_KEY:
+    raise Exception("DJANGO_SECRET_KEY (or SECRET_KEY) doit être défini en production")
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
 render_external_url = os.environ.get('RENDER_EXTERNAL_URL')
 if render_external_url:
     host = urlparse(render_external_url).hostname
     ALLOWED_HOSTS = [host]
 else:
-    ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["example.com"])
+    ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=env.list("ALLOWED_HOSTS", default=["example.com"]))
 ADMIN_URL = env("DJANGO_ADMIN_URL", default="admin/")
 # production.py
 SENTRY_DSN = env("SENTRY_DSN", default="")
