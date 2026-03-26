@@ -1,5 +1,7 @@
 # ruff: noqa: E501
 import logging
+import os
+from urllib.parse import urlparse
 
 import sentry_sdk
 from sentry_sdk.integrations.celery import CeleryIntegration
@@ -19,9 +21,6 @@ from .base import env
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = env("DJANGO_SECRET_KEY")
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-import os
-from urllib.parse import urlparse
-
 render_external_url = os.environ.get('RENDER_EXTERNAL_URL')
 if render_external_url:
     host = urlparse(render_external_url).hostname
