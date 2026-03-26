@@ -146,10 +146,15 @@ LOGGING = {
             "formatter": "verbose",
         },
     },
-    "root": {"level": "INFO", "handlers": ["console"]},
+    "root": {"level": "DEBUG", "handlers": ["console"]},
     "loggers": {
         "django.db.backends": {
-            "level": "ERROR",
+            "level": "DEBUG",
+            "handlers": ["console"],
+            "propagate": False,
+        },
+        "django": {
+            "level": "DEBUG",
             "handlers": ["console"],
             "propagate": False,
         },
