@@ -28,7 +28,7 @@ python bbpproject/manage.py migrate --noinput && \
 echo 'Collectstatic...' && \
 python bbpproject/manage.py collectstatic --noinput && \
 echo 'Démarrage de Gunicorn...' && \
-gunicorn bbpproject.config.wsgi:application --bind 0.0.0.0:$PORT \
+gunicorn config.wsgi:application --chdir bbpproject --bind 0.0.0.0:$PORT \
 "]
 
 EXPOSE 10000
