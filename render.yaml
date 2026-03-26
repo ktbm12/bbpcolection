@@ -6,6 +6,8 @@ services:
     dockerfilePath: Dockerfile
     plan: free # Change to starter/pro for production
     envVars:
+      - key: PORT
+        value: "10000"
       - key: DJANGO_SETTINGS_MODULE
         value: config.settings.production
       - key: DJANGO_SECRET_KEY
@@ -25,29 +27,6 @@ services:
         value: 4
       - key: DJANGO_SECURE_SSL_REDIRECT
         value: "True"
-
-  - type: worker
-    name: bbp-worker
-    env: docker
-    dockerContext: .
-    dockerfilePath: Dockerfile
-    dockerCommand: /start-celeryworker
-    plan: free
-    envVars:
-      - key: DJANGO_SETTINGS_MODULE
-        value: config.settings.production
-      - key: DATABASE_URL
-        fromDatabase:
-          name: bbp-db
-          property: connectionString
-      - key: REDIS_URL
-        fromService:
-          type: redis
-          name: bbp-redis
-          property: connectionString
-
-  - type: worker
-    name: bbp-beat
     env: docker
     dockerContext: .
     dockerfilePath: Dockerfile

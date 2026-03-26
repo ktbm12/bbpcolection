@@ -22,13 +22,4 @@ COPY . .
 
 # Définir la commande pour lancer l'application
 # Migrations + collectstatic + gunicorn
-CMD ["sh", "-c", "\
-echo 'Lancement des migrations...' && \
-python bbpproject/manage.py migrate --noinput && \
-echo 'Collectstatic...' && \
-python bbpproject/manage.py collectstatic --noinput && \
-echo 'Démarrage de Gunicorn...' && \
-gunicorn config.wsgi:application --chdir bbpproject --bind 0.0.0.0:$PORT \
-"]
-
-EXPOSE 10000
+CMD ["sh", "-c", "python bbpproject/manage.py migrate --noinput && python bbpproject/manage.py collectstatic --noinput && gunicorn config.wsgi:application --chdir bbpproject --bind 0.0.0.0:${PORT:-10000}"]
