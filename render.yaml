@@ -24,7 +24,7 @@ services:
           name: bbp-redis
           property: connectionString
       - key: WEB_CONCURRENCY
-        value: 4
+        value: 1
       - key: DJANGO_SECURE_SSL_REDIRECT
         value: "True"
     env: docker
