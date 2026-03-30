@@ -119,11 +119,9 @@
                         <div class="flex gap-4">
                             <div class="w-16 h-16 rounded-lg bg-gray-100 overflow-hidden flex-shrink-0">
                                 {% if item.product.main_image %}
-                                <img src="{{ item.product.main_image.url }}" class="w-full h-full object-cover">
+                                <img src="{{ item.product.main_image.url }}" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='/static/images/t3.png';">
                                 {% else %}
-                                <div class="w-full h-full flex items-center justify-center text-gray-300">
-                                    <i class="fas fa-image"></i>
-                                </div>
+                                <img src="/static/images/t3.png" class="w-full h-full object-cover">
                                 {% endif %}
                             </div>
                             <div class="flex-1">

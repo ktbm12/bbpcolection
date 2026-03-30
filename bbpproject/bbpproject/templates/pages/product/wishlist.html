@@ -81,11 +81,10 @@
                         <a href="{% url 'product:product_detail' product.id %}" class="absolute inset-0">
                             {% if product.get_main_image_url %}
                                 <img src="{{ product.get_main_image_url }}" alt="{{ product.name }}"
-                                     class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                                     class="w-full h-full object-cover group-hover:scale-110 transition duration-700"
+                                     onerror="this.onerror=null;this.src='/static/images/t3.png';">
                             {% else %}
-                                <div class="absolute inset-0 bg-gray-100 flex items-center justify-center">
-                                    <i class="fas fa-image text-gray-300 text-7xl"></i>
-                                </div>
+                                <img src="/static/images/t3.png" alt="{{ product.name }}" class="w-full h-full object-cover">
                             {% endif %}
                         </a>
                         

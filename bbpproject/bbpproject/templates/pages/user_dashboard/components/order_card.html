@@ -6,11 +6,9 @@
                 <div class="absolute inset-0 bg-yellow-600/10 rounded-2xl -rotate-3 group-hover:rotate-3 transition-transform"></div>
                 <div class="relative h-full w-full bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
                     {% if order.first_item_image %}
-                        <img src="{{ order.first_item_image.url }}" alt="{{ order.first_item_name }}" class="w-full h-full object-cover">
+                        <img src="{{ order.first_item_image.url }}" alt="{{ order.first_item_name }}" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='/static/images/t3.png';">
                     {% else %}
-                        <div class="w-full h-full bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
-                            <i class="fas fa-image text-gray-200 text-2xl"></i>
-                        </div>
+                        <img src="/static/images/t3.png" alt="{{ order.first_item_name }}" class="w-full h-full object-cover">
                     {% endif %}
                 </div>
                 {% if order.items_count > 1 %}

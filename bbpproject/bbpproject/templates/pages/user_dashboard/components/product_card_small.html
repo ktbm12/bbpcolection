@@ -1,9 +1,11 @@
 <div class="border border-gray-200 rounded-xl overflow-hidden hover:border-yellow-600 transition group">
     <div class="relative h-44 bg-gray-100">
-        {% if product.image %}
-            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+        {% if product.main_image %}
+            <img src="{{ product.main_image.url }}" alt="{{ product.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.onerror=null;this.src='/static/images/t3.png';">
+        {% elif product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.onerror=null;this.src='/static/images/t3.png';">
         {% else %}
-            <div class="w-full h-full bg-gradient-to-br from-yellow-50 to-gray-100"></div>
+            <img src="/static/images/t3.png" alt="{{ product.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
         {% endif %}
     </div>
     <div class="p-4">
