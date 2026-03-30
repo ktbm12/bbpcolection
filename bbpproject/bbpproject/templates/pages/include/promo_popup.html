@@ -10,11 +10,9 @@
         <!-- Banner Image -->
         <div class="relative h-48 bg-gray-100 overflow-hidden">
             {% if active_promo.image %}
-                <img src="{{ active_promo.image.url }}" alt="{{ active_promo.name }}" class="w-full h-full object-cover">
+                <img src="{{ active_promo.image.url }}" alt="{{ active_promo.name }}" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='{% static '/images/promotional.png' %}';">
             {% else %}
-                <div class="w-full h-full bg-gradient-to-br from-yellow-400 via-yellow-500 to-yellow-600 flex items-center justify-center">
-                    <span class="font-display text-4xl text-black/20 uppercase tracking-widest">BBP Flash Sale</span>
-                </div>
+                <img src="{% static '/images/promotional.png' %}" alt="{{ active_promo.name }}" class="w-full h-full object-cover">
             {% endif %}
             <!-- Overlay -->
             <div class="absolute inset-x-0 bottom-0 p-8 bg-gradient-to-t from-white to-transparent">
